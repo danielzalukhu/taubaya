@@ -19,6 +19,8 @@ class CreateAktivitasSiswaTable extends Migration
             $table->foreign('STUDENTS_ID')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('ACTIVITIES_ID')->unsigned();
             $table->foreign('ACTIVITIES_ID')->references('id')->on('activities')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('SUBJECTS_ID')->unsigned();
+            $table->foreign('SUBJECTS_ID')->references('id')->on('subjects')->onDelete('cascade')->onUpdate('cascade');
             $table->double('SCORE');
             $table->timestamps();
         });

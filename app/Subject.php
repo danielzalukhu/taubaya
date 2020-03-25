@@ -8,6 +8,7 @@ class Subject extends Model
 {
     protected $table = 'subjects';
     protected $fillable = ['CODE', 'DESCRIPTION', 'MINIMALPOIN', 'TYPES'];
+    protected $guarded = [];
 
     public function report()
     {
@@ -17,5 +18,10 @@ class Subject extends Model
     public function kd()
     {
         return $this->hasMany('App\KD');
+    }
+
+    public function activityStudent()
+    {
+        return $this->hasMany('App\ActivityStudent');
     }
 }

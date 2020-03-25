@@ -9,9 +9,10 @@
     <div class="main">
         <div class="main-content">
             <div class="container-fluid">
-                @if(session('sukses'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('sukses') }}
+                @if ($sukses = Session::get('sukses'))
+                    <div class="alert alert-success alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button> 
+                        <strong>{{ $sukses }}</strong>
                     </div>
                 @endif
                 <div class="row">
@@ -42,6 +43,52 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel-heading">
+                            <h3 class="box-title">ACTIVITIES STUDENTS SCORE</h3>            
+                        </div>
+                        <div class="box">                        
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>STUDENTS_ID</th>
+                                            <th>ACTIVITES_ID</th>
+                                            <th>SUBJECTS_ID</th>
+                                            <th>SCORE</th>
+                                            <th>EDIT</th>
+                                            <th>DELETE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($aktivitas_siswa as $as)
+                                        <tr>
+                                            <td>{{$as->STUDENTS_ID}}</td>
+                                            <td>{{$as->ACTIVITIES_ID}}</td>
+                                            <td>{{$as->SUBJECTS_ID}}</td>
+                                            <td>{{$as->SCORE}}</td>
+                                            <td><a href= "#" class="btn btn-primary btn-sm">EDIT</td>
+                                            <td>
+                                                <form action="#" method="POST">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    {{ method_field("DELETE" )}}
+                                                    {{ csrf_field() }}
+                                                    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

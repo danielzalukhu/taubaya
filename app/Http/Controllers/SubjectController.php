@@ -9,6 +9,7 @@ use App\Student;
 use App\Staff;
 use App\Violation;
 use App\AcademicYear;
+use App\ActivityStudent;
 use DB;
 
 class SubjectController extends Controller
@@ -190,7 +191,9 @@ class SubjectController extends Controller
 
     public function assesmentimport() 
     {
-        return view('subject.assesment');
+        $aktivitas_siswa = ActivityStudent::all();
+        // dd($aktivitas_siswa);
+        return view('subject.assesment', compact('aktivitas_siswa'));
     }
 }
  

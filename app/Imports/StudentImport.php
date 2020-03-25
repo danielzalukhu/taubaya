@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use App\Student;
 use Hash;
-
+use DB;
 
 class StudentImport implements ToCollection
 {
@@ -21,7 +21,7 @@ class StudentImport implements ToCollection
             if($key >= 5)
             {
                 $studentName = explode(" ", $row[5], 2);
-                //dd($studentName);
+                // dd($studentName);
                 Student::create([
                     'NISN' => $row[4],
                     'FNAME' => $studentName[0],

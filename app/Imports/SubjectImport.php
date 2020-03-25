@@ -6,8 +6,10 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use App\Subject;
 use App\Student;
-use DB;
 use App\Activity;
+use App\ActivityStudent;
+use DB;
+
 
 class SubjectImport implements ToCollection
 {
@@ -16,29 +18,28 @@ class SubjectImport implements ToCollection
     */
     public function collection(Collection $collection)
     {
-        //dd($collection);        
+        // dd($collection);   
         foreach($collection as $key => $row)
-        {          
-            // if($key >= 1)
-            // {
-            //     $subjects_id = $this->selectSubjectId($row[4]);
-            //     dd($subjects_id);
-            // }
-            
-            if($key >= 5)
+        {           
+            if($key >=1 && $key >= 5)
             {
-                $id_siswa = $this->selectStudentId($row[4]);
-                dd($id_siswa);
+                $subject_id = $row[4];
+                $id_mapel = $this->selectSubjectId($subject_id);
+
+                $student_id = $row[4];
+                $id_siswa = $this->selectStudentId($student_id);    
+
                 $activity_id = explode("; ", $row[6])[1];
-                // dd($activity_id);
                 $id_aktivitas = $this->selectActivityId($activity_id);
-                //dd($id_aktivitas);
-                
-                // ActivityStudent::create([
-                //     'STUDENTS_ID' => $id_siswa,
-                //     'ACTIVITIES_ID' => 'ID',
-                //     'SCORE' => '8',
-                // ]);
+
+                $nilai = $row[8];                
+
+                ActivityStudent::create([
+                    'STUDENTS_ID' => $id_siswa,
+                    'ACTIVITIES_ID' => $id_aktivitas,
+                    'SUBJECTS_ID' => $id_mapel,
+                    'SCORE' => $nilai,
+                ]);
             }   
         }
     }
@@ -55,7 +56,7 @@ class SubjectImport implements ToCollection
     {
         $aktivitas = DB::SELECT('SELECT id
                                  FROM activities 
-                                 WHERE activities.MODULE = ' . $value);
+                                 WHERE activities.MODULE = "' . $value . '"');
         return $aktivitas;
     }
 
@@ -63,7 +64,7 @@ class SubjectImport implements ToCollection
     {
         $mapel = DB::SELECT('SELECT id
                              FROM subjects 
-                             WHERE subjects.DESCRIPTION = ' . $value);
+                             WHERE subjects.DESCRIPTION = "' . $value . '"');
         return $mapel;
     }
 }
