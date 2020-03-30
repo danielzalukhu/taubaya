@@ -28,6 +28,7 @@ class SubjectImport implements ToCollection
             {
                 $subject_id = $row[4];
                 $tmp_id_mapel = $this->selectSubjectId($subject_id);
+                
                 foreach($tmp_id_mapel as $im)
                 {
                     $id_mapel = $im->id;
