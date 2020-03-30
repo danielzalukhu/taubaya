@@ -192,8 +192,9 @@ class SubjectController extends Controller
     public function assesmentimport() 
     {
         $aktivitas_siswa = ActivityStudent::all();
+        $mata_pelajaran = Subject::all();
         // dd($aktivitas_siswa);
-        return view('subject.assesment', compact('aktivitas_siswa'));
+        return view('subject.assesment', compact('aktivitas_siswa', 'mata_pelajaran'));
     }
 }
  

@@ -15,17 +15,28 @@
                         <strong>{{ $sukses }}</strong>
                     </div>
                 @endif
+
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">INPUT STUDENT ASSESMENT</h3>            
+                            <h3 class="box-title">IMPORT STUDENT ASSESMENT</h3>            
                         </div>
                         <div class="box">
                             <div class="box-body">
                                 <form action="{{ route('subject.importAssesment') }}" method="POST"  enctype="multipart/form-data">
                                     
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        
+                                    
+                                    <!-- <div class="form-group{{ $errors->has('assesment_subject_name') ? 'has-error' : '' }} ">
+                                        <label>Subject Name</label>
+                                        <select name="assesment_subject_name" class="form-control">
+                                           
+                                        </select>
+                                        @if($errors->has('assesment_subject_name'))
+                                            <span class="help-block">{{$errors->first('assesment_subject_name')}}</span>
+                                        @endif
+                                    </div>              -->
+
                                     <div class="form-group{{ $errors->has('assesment_import') ? 'has-error' : '' }} ">
                                         <label>Import file (.xls/.csv)</label>
                                         <input name="assesment_import" type="file" class="form-control">
@@ -55,6 +66,7 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th>NO</th>
                                             <th>STUDENTS_ID</th>
                                             <th>ACTIVITES_ID</th>
                                             <th>SUBJECTS_ID</th>
@@ -64,8 +76,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @php $i=1 @endphp
                                     @foreach($aktivitas_siswa as $as)
                                         <tr>
+                                            <td>{{ $i++ }}</td>
                                             <td>{{$as->STUDENTS_ID}}</td>
                                             <td>{{$as->ACTIVITIES_ID}}</td>
                                             <td>{{$as->SUBJECTS_ID}}</td>
