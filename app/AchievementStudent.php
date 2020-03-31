@@ -9,7 +9,7 @@ class AchievementStudent extends Model
     protected $table = 'achievements_students';
     protected $fillable = ['STUDENTS_ID', 'ACHIEVEMENTS_ID', 'DATE', 'DESCRIPTION', 'RANK', 'ACADEMIC_YEAR_ID' ,'STAFFS_ID'];
 
-    public function achievement_student()
+    public function staff()
     {
         return $this->belongsTo('App\Staff', 'STAFFS_ID');
     }

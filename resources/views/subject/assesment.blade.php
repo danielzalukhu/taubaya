@@ -17,28 +17,56 @@
                 @endif
 
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-xs-7">
                         <div class="panel-heading">
-                            <h3 class="box-title">IMPORT STUDENT ASSESMENT</h3>            
+                            <h3 class="box-title">INPUT PENILAIAN SISWA (IMPORT EXCEL)</h3>
                         </div>
-                        <div class="box">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">PERSENTASE PENILAIAN</h3>
+                            </div>
+                            <form class="form-horizontal" action="{{ route('subject.assesmentPercentage') }}" method="POST">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Tugas <b>(%)</b> </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="input_persentase_tugas" placeholder="25">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">PH (Ulangan Harian) <b>(%)</b> </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="input_persentase_ph" placeholder="25">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">PTS (Ulangan Tengah Semester) <b>(%)</b> </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="input_persentase_pts" placeholder="25">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">PAS (Ulangan Akhir Semester) <b>(%)</b> </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="input_persentase_pas" placeholder="25">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">IMPORT (XLSX/XLS/CSV)</h3>
+                            </div>
                             <div class="box-body">
                                 <form action="{{ route('subject.importAssesment') }}" method="POST"  enctype="multipart/form-data">
                                     
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    
-                                    <!-- <div class="form-group{{ $errors->has('assesment_subject_name') ? 'has-error' : '' }} ">
-                                        <label>Subject Name</label>
-                                        <select name="assesment_subject_name" class="form-control">
-                                           
-                                        </select>
-                                        @if($errors->has('assesment_subject_name'))
-                                            <span class="help-block">{{$errors->first('assesment_subject_name')}}</span>
-                                        @endif
-                                    </div>              -->
 
                                     <div class="form-group{{ $errors->has('assesment_import') ? 'has-error' : '' }} ">
-                                        <label>Import file (.xls/.csv)</label>
                                         <input name="assesment_import" type="file" class="form-control">
                                         @if($errors->has('assesment_import'))
                                             <span class="help-block">{{$errors->first('assesment_import')}}</span>
@@ -52,6 +80,41 @@
                                 </form>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="col-xs-5">
+                        <div class="panel-heading">
+                            <h3 class="box-title">DETAIL PENILAIAN</h3>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"></h3>
+                            </div>
+                            <form role="form">
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>TUGAS</th>
+                                                <th>PH</th>
+                                                <th>PTS</th>
+                                                <th>PAS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                        </table>
+                                    </div>                                    
+                                </div>
+                            </form>
+                        </div>                    
                     </div>
                 </div>
                 
@@ -67,12 +130,10 @@
                                     <thead>
                                         <tr>
                                             <th>NO</th>
-                                            <th>STUDENTS_ID</th>
-                                            <th>ACTIVITES_ID</th>
-                                            <th>SUBJECTS_ID</th>
+                                            <th>SUBJECT NAME</th>
+                                            <th>STUDENT NAME</th>
+                                            <th>ACTIVITY NAME</th>
                                             <th>SCORE</th>
-                                            <th>EDIT</th>
-                                            <th>DELETE</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -80,19 +141,10 @@
                                     @foreach($aktivitas_siswa as $as)
                                         <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td>{{$as->STUDENTS_ID}}</td>
-                                            <td>{{$as->ACTIVITIES_ID}}</td>
-                                            <td>{{$as->SUBJECTS_ID}}</td>
+                                            <td><b>{{$as->subject->DESCRIPTION}}</b></td>
+                                            <td>{{$as->student->FNAME}}{{" "}}{{$as->student->LNAME}}</td>
+                                            <td>{{$as->activity->MODULE}}</td>
                                             <td>{{$as->SCORE}}</td>
-                                            <td><a href= "#" class="btn btn-primary btn-sm">EDIT</td>
-                                            <td>
-                                                <form action="#" method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    {{ method_field("DELETE" )}}
-                                                    {{ csrf_field() }}
-                                                    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                </form>
-                                            </td>
                                         </tr>
                                     @endforeach
                                     </tbody>

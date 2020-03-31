@@ -18,7 +18,7 @@ Route::get('achievement/chart', 'StudentController@returnDataAchievementChart')-
 Route::get('/student/{id}/profile', 'StudentController@profile')->middleware('auth')->name('student.profile');
 Route::get('/student/detailabsent' , 'StudentController@showDetailAbsent')->middleware('auth')->name('student.detailAbsent');
 Route::resource('student', 'StudentController')->middleware('auth');
-Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
+
 
 // ACHIEVEMENT & ACHIEVEMENT RECORD
 Route::resource('achievement', 'AchievementController')->middleware('auth');
@@ -41,8 +41,12 @@ Route::get('incomplete/{id}/edit', 'SubjectController@editIncomplete')->name('su
 Route::post('incomplete/{id}/update', 'SubjectController@updateIncomplete')->name('subject.updateIncomplete');
 Route::get('incomplete{id}/delete', 'SubjectController@destroyIncomplete')->name('subject.destroyIncomplete');
 
-Route::get('assesment', 'SubjectController@assesmentimport')->middleware('auth')->name('subject.assesment');
+// IMPORT
+Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
+Route::get('assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
 Route::post('assesment', 'ImportController@importAssesment')->name('subject.importAssesment');
+Route::post('assesment', 'ImportController@assesmentPercentage')->name('subject.assesmentPercentage');
+
 
 Route::resource('subject', 'SubjectController')->middleware('auth');
 

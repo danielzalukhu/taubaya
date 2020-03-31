@@ -13,4 +13,14 @@ class ActivityStudent extends Model
     {
         return $this->belongsTo('App\Subject', 'SUBJECTS_ID');
     }
+
+    public function activity()
+    {
+        return $this->belongsTo('App\Activity' ,'ACTIVITIES_ID');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo('App\Student', 'STUDENTS_ID');
+    }
 }

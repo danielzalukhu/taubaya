@@ -10,6 +10,15 @@ use App\Imports\StudentImport;
 
 class ImportController extends Controller
 {
+    public function assesmentPercentage(Request $request)
+    {
+        $p_tugas = $request->get('input_persentase_tugas');
+        $p_ph = $request->get('input_persentase_ph');
+        $p_pts = $request->get('input_persentase_pts');
+        $p_pas = $request->get('input_persentase_pas');
+        dd($request->all());
+    }
+
     public function importAssesment(Request $request)
     {
         //dd($request->all());

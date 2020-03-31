@@ -189,7 +189,7 @@ class SubjectController extends Controller
         return redirect(action('SubjectController@incomplete'))->with('sukses', 'Incomplete report has been chaged');
     }
 
-    public function assesmentimport() 
+    public function assesmentImport() 
     {
         $aktivitas_siswa = ActivityStudent::all();
         $mata_pelajaran = Subject::all();

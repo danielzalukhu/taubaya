@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use App\Subject;
 use App\Student;
@@ -10,6 +11,7 @@ use App\Activity;
 use App\ActivityStudent;
 use App\ActivityKD;
 use App\KD;
+use App\Imports\SubjectImport;
 use DB;
 
 
@@ -62,7 +64,7 @@ class SubjectImport implements ToCollection
             }            
         }
     }
-   
+
     public function selectStudentId($value)
     {
         $siswa = DB::SELECT('SELECT id
