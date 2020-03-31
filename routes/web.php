@@ -42,17 +42,14 @@ Route::post('incomplete/{id}/update', 'SubjectController@updateIncomplete')->nam
 Route::get('incomplete{id}/delete', 'SubjectController@destroyIncomplete')->name('subject.destroyIncomplete');
 
 // IMPORT
+
 Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
 Route::get('assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
-Route::post('assesment', 'ImportController@importAssesment')->name('subject.importAssesment');
-Route::post('assesment', 'ImportController@assesmentPercentage')->name('subject.assesmentPercentage');
+Route::post('assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
+Route::post('assesment/percentage', 'ImportController@assesmentPercentage')->middleware('auth')->name('subject.assesmentPercentage');
 
 
 Route::resource('subject', 'SubjectController')->middleware('auth');
-
-
-
-
 
 Auth::routes();
 

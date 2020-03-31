@@ -16,7 +16,9 @@ class ImportController extends Controller
         $p_ph = $request->get('input_persentase_ph');
         $p_pts = $request->get('input_persentase_pts');
         $p_pas = $request->get('input_persentase_pas');
-        dd($request->all());
+        $percentage = array($p_tugas, $p_ph, $p_pts, $p_pas);
+
+        return $percentage;
     }
 
     public function importAssesment(Request $request)
