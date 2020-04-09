@@ -154,7 +154,7 @@
 @stop
 
 @section('footer')
-<script>
+<!-- <script>
     var tmp = <?php echo json_encode($siswa_bermasalah) ?>;
     var arrID = "";
 
@@ -178,6 +178,6 @@
     {
       location.replace("http://localhost/tugasakhir/public/violationrecord");
     }    
-</script>   
+</script>    -->
 @stop 
 
