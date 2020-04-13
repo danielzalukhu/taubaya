@@ -561,7 +561,6 @@
     $('#select-dropdown-academicyear-graph-achievement').val({{$academic_year_id}})
 
     var types = {!!json_encode($type)!!}
-    console.log(types);
     var dataGraph = {!!json_encode($data)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
 
