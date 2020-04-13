@@ -13,10 +13,11 @@ class CreateKelasTable extends Migration
      */
     public function up()
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('grades', function (Blueprint $table) {
             $table->increments('id');
             $table->string('NAME', 45);
             $table->text('DESCRIPTION');
+            $table->ENUM('GRADE', ['10', '11', '12']);
             $table->unsignedInteger('PROGRAMS_ID');
             $table->foreign('PROGRAMS_ID')->references('id')->on('programs')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('STAFFS_ID');

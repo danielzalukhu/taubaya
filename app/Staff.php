@@ -20,9 +20,9 @@ class Staff extends Model
         return $this->hasMany('App\Absent');
     }      
 
-    public function classes()
+    public function grade()
     {
-        return $this->hasMany('App\Staff');
+        return $this->hasMany('App\Grade', 'GRADES_ID');
     }
 
     public function user()

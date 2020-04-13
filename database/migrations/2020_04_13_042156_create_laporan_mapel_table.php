@@ -13,13 +13,14 @@ class CreateLaporanMapelTable extends Migration
      */
     public function up()
     {
-        Schema::create('reports_subjects', function (Blueprint $table) {
+        Schema::create('subject_reports', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('SUBJECTS_ID')->unsigned();
             $table->foreign('SUBJECTS_ID')->references('id')->on('subjects')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('REPORTS_ID')->unsigned();
-            $table->foreign('REPORTS_ID')->references('id')->on('reports')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('SUBJECT_RECORD_ID')->unsigned();
+            $table->foreign('SUBJECT_RECORD_ID')->references('id')->on('subject_records')->onDelete('cascade')->onUpdate('cascade');
             $table->double('FINAL_SCORE');
+            $table->tinyInteger('IS_VERIFIED');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateLaporanMapelTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reports_subjects');
+        Schema::dropIfExists('subject_reports');
     }
 }

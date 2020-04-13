@@ -4,14 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Classes extends Model
+class Grade extends Model
 {
-    protected $table= 'classes';
-
-    public function student()
-    {
-        return $this->belongsToMany('App\Student', 'classes_students', 'STUDENTS_ID', 'CLASSES_ID');
-    }    
+    protected $table= 'grades';
 
     public function program()
     {

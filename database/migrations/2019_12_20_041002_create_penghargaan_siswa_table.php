@@ -13,7 +13,7 @@ class CreatePenghargaanSiswaTable extends Migration
      */
     public function up()
     {
-        Schema::create('achievements_students', function (Blueprint $table) {
+        Schema::create('achievements_records', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('STUDENTS_ID')->unsigned();
             $table->foreign('STUDENTS_ID')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
@@ -21,7 +21,6 @@ class CreatePenghargaanSiswaTable extends Migration
             $table->foreign('ACHIEVEMENTS_ID')->references('id')->on('achievements')->onDelete('cascade')->onUpdate('cascade');
             $table->date('DATE');
             $table->text('DESCRIPTION');
-            $table->string('RANK', 45);
             $table->integer('ACADEMIC_YEAR_ID')->unsigned();
             $table->foreign('ACADEMIC_YEAR_ID')->references('id')->on('academic_years')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('STAFFS_ID')->unsigned();

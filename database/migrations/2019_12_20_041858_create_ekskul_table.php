@@ -17,7 +17,6 @@ class CreateEkskulTable extends Migration
             $table->increments('id');
             $table->string('NAME', 45);
             $table->text('DESCRIPTION');
-            $table->ENUM('TYPE', ['required', 'optional']);
             $table->integer('STAFFS_ID')->unsigned();
             $table->foreign('STAFFS_ID')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

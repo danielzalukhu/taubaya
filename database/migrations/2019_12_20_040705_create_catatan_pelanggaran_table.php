@@ -13,7 +13,7 @@ class CreateCatatanPelanggaranTable extends Migration
      */
     public function up()
     {
-        Schema::create('violationRecords', function (Blueprint $table) {
+        Schema::create('violation_records', function (Blueprint $table) {
             $table->increments('id');
             $table->date('DATE');
             $table->double('TOTAL');

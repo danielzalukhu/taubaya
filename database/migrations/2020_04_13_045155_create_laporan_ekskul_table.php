@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEkskulRaporTable extends Migration
+class CreateLaporanEkskulTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateEkskulRaporTable extends Migration
      */
     public function up()
     {
-        Schema::create('extracurriculars_reports', function (Blueprint $table) {
+        Schema::create('extracurricular_reports', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('REPORTS_ID')->unsigned();
-            $table->foreign('REPORTS_ID')->references('id')->on('reports')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('EXTRACURRICULARS_ID')->unsigned();
             $table->foreign('EXTRACURRICULARS_ID')->references('id')->on('extracurriculars')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('EXTRACURRICULAR_REPORT_ID')->unsigned();
+            $table->foreign('EXTRACURRICULAR_REPORT_ID')->references('id')->on('extracurricular_records')->onDelete('cascade')->onUpdate('cascade');
+            $table->double('SCORE');
             $table->text('DESCRIPTION');
             $table->timestamps();
         });
@@ -31,6 +32,6 @@ class CreateEkskulRaporTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('extracurriculars_reports');
+        Schema::dropIfExists('extracurricular_reports');
     }
 }

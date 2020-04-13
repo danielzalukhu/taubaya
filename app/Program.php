@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Program extends Model
 {
-    public function classes()
+    public function grade()
     {
-        return $this->hasMany('App\Classes');
+        return $this->hasMany('App\Grade', 'GRADES_ID');
     }
     
 }

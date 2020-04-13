@@ -17,6 +17,7 @@ class CreatePenghargaanTable extends Migration
             $table->increments('id');
             $table->text('DESCRIPTION');
             $table->double('POINT');
+            $table->text('GRADE', 45);
             $table->ENUM('TYPE', ['PR','NPR']);
             $table->timestamps();
         });

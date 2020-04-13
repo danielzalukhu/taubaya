@@ -10,7 +10,7 @@ class Student extends Model
     protected $fillable = ['ATT_ID', 'CARD_NUM', 'NIS', 'PASSWORD', 'NISN', 'NIK', 'FNAME', 'LNAME', 'GENDER',
                            'BPLACE', 'BDATE', 'MAIL', 'PHONE', 'ADDRESS', 'RT', 'RW', 'DISTRICT', 'SUBDISTRICT',
                            'CITY', 'PROVINCE', 'GR_FROM', 'BANK_ACC', 'STATUS', 'NOTES', 'IMG_PATH', 'BANKS_ID',
-                           'RELIGIONS_ID', 'YEAR_IN', 'TOKENS_ID', 'USERS_EMAIL'];
+                           'RELIGIONS_ID', 'TOKENS_ID', 'USERS_EMAIL', 'GRADES_ID'];
 
     public function violationRecord()
     {
@@ -32,19 +32,19 @@ class Student extends Model
         return $this->belongsTo('App\Religion', 'RELIGIONS_ID');
     }
 
-    public function classes()
+    public function grade()
     {
-        return $this->belongsToMany('App\Classes', 'classes_students', 'STUDENTS_ID', 'CLASSES_ID');
+        return $this->belongsToMany('App\Grade', 'GRADES_ID');
     }
 
-    public function report()
+    public function subjectrecord()
     {
-        return $this->hasMany('App\Report');
+        return $this->hasMany('App\SubjectRecord');
     }
 
     public function achivement()
     {
-        return $this->belongsToMany('App\Achivement', 'achievements_students')->withPivot(['DATE', 'DESCRIPTION', 'RANK']);
+        return $this->belongsToMany('App\Achivement', 'achievements_records')->withPivot(['DATE', 'DESCRIPTION']);
     }
 
     public function activity()

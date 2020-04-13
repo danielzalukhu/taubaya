@@ -11,7 +11,7 @@ use App\ViolationRecord;
 
 class ViolationRecord extends Model
 {
-    protected $table = 'violationRecords';
+    protected $table = 'violation_records';
     protected $fillable = ['DATE', 'TOTAL', 'DESCRIPTION', 'PUNISHMENT', 'STUDENTS_ID', 'ACADEMIC_YEAR_ID',  'VIOLATIONS_ID', 'STAFFS_ID'];
 
     public function student()
