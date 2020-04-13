@@ -17,7 +17,6 @@ class CreateKdTable extends Migration
             $table->increments('id');
             $table->string('NUMBER', 45);
             $table->string('DESCRIPTION', 45);
-            $table->ENUM('TYPE', ['NTS', 'NAS']);
             $table->integer('SUBJECTS_ID')->unsigned();
             $table->foreign('SUBJECTS_ID')->references('id')->on('subjects')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

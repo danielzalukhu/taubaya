@@ -13,7 +13,7 @@ class CreatePenghargaanSiswaTable extends Migration
      */
     public function up()
     {
-        Schema::create('achievements_records', function (Blueprint $table) {
+        Schema::create('achievement_records', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('STUDENTS_ID')->unsigned();
             $table->foreign('STUDENTS_ID')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');

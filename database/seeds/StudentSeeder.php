@@ -20,9 +20,9 @@ class StudentSeeder extends Seeder
         DB::table('students')->insert([
             'ATT_ID' => '101',
             'CARD_NUM' => '4F9899A6',
-            'NIS' => '1600701',
+            'NIS' => '',
             'PASSWORD' => 'sdfa7#2ksdv*&af',
-            'NISN' =>  '200',
+            'NISN' =>  '0047723307',
             'NIK' =>  '3178010108990002',
             'FNAME' =>  'Ahmad',
             'LNAME' => 'Abdul',
@@ -45,17 +45,17 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'abdul.jpg',
             'BANKS_ID' => '1',
             'RELIGIONS_ID' => '3',
-            'YEAR_IN' => '1',
             'TOKENS_ID' => '1',
-            'USERS_EMAIL' => '7'
+            'USERS_EMAIL' => '7',
+            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
             'ATT_ID' => '102',
             'CARD_NUM' => '5F43231CV',
-            'NIS' => '1600702',
+            'NIS' => '',
             'PASSWORD' => 'DAFop88&%4KL12f',
-            'NISN' =>  '201',
+            'NISN' =>  '0034711217',
             'NIK' =>  '3178050608990012',
             'FNAME' =>  'Marion',
             'LNAME' => 'Jola',
@@ -78,17 +78,17 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'marion.jpg',
             'BANKS_ID' => '3',
             'RELIGIONS_ID' => '1',
-            'YEAR_IN' => '1',
             'TOKENS_ID' => '1',
-            'USERS_EMAIL' => '5'
+            'USERS_EMAIL' => '5',
+            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
             'ATT_ID' => '103',
             'CARD_NUM' => '69G234TV',
-            'NIS' => '1600703',
+            'NIS' => '',
             'PASSWORD' => 'gwob##2v%%op',
-            'NISN' =>  '202',
+            'NISN' =>  '0024524884',
             'NIK' =>  '3175050506996616',
             'FNAME' =>  'Wilhelm',
             'LNAME' => 'Mozes',
@@ -111,17 +111,17 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'mozes.jpg',
             'BANKS_ID' => '2',
             'RELIGIONS_ID' => '5',
-            'YEAR_IN' => '1',
             'TOKENS_ID' => '1',
-            'USERS_EMAIL' => '8'
+            'USERS_EMAIL' => '8',
+            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
             'ATT_ID' => '104',
             'CARD_NUM' => '159898YYYE',
-            'NIS' => '1600704',
+            'NIS' => '',
             'PASSWORD' => 'ADFsehy&*&*@dafa',
-            'NISN' =>  '204',
+            'NISN' =>  '0023671289',
             'NIK' =>  '317707777790012',
             'FNAME' =>  'Alan',
             'LNAME' => 'Budiman',
@@ -144,17 +144,17 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'alan.jpg',
             'BANKS_ID' => '2',
             'RELIGIONS_ID' => '2',
-            'YEAR_IN' => '1',
             'TOKENS_ID' => '1',
-            'USERS_EMAIL' => '9'
+            'USERS_EMAIL' => '9',
+            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
             'ATT_ID' => '105',
             'CARD_NUM' => 'P123HUJADN',
-            'NIS' => '1600705',
+            'NIS' => '',
             'PASSWORD' => 'NBBHH901ia',
-            'NISN' =>  '205',
+            'NISN' =>  '0052398765',
             'NIK' =>  '3181248900012',
             'FNAME' =>  'Daniel',
             'LNAME' => 'Suparto',
@@ -177,9 +177,9 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'suparto.jpg',
             'BANKS_ID' => '1',
             'RELIGIONS_ID' => '1',
-            'YEAR_IN' => '1',
             'TOKENS_ID' => '2',
-            'USERS_EMAIL' => '6'
+            'USERS_EMAIL' => '6',
+            'GRADES_ID' => '1'
         ]);
     }
 }

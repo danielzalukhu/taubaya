@@ -9,6 +9,11 @@ class AcademicYear extends Model
     protected $table = 'academic_years';
     protected $fillable = ['TYPE', 'START_DATE', 'END_DATE'];
 
+    public function absent()
+    {
+        return $this->hasMany('App\Absent');
+    }
+
     public function violationrecord()
     {
         return $this->hasMany('App\ViolationRecord');
@@ -22,5 +27,10 @@ class AcademicYear extends Model
     public function extracurricularrecord()
     {
         return $this->hasMany('App\ExtracurricularRecord');
+    }
+
+    public function subjectrecord()
+    {
+        return $this->hasMany('App\SubjectRecord');
     }
 }

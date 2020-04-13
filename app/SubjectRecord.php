@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubjectRecord extends Model
 {
+    public function subject()
+    {
+        return $this->belongsToMany('App\Subject', 'subject_reports')->withPivot(['FINAL_SCORE', 'IS_VERIFIED']);
+    }
+
     public function student()
     {
         return $this->belongsTo('App\Student', 'STUDENTS_ID');

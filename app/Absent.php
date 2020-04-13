@@ -19,4 +19,9 @@ class Absent extends Model
     {
         return $this->belongsTo('App\Staff', 'STAFFS_ID');
     }
+
+    public function academicyear()
+    {
+        return $this->belongsTo('App\AcademicYear', 'ACADEMIC_YEAR_ID');
+    }
 }
