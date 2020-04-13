@@ -9,9 +9,9 @@ class DashboardController extends Controller
     public function index()
     {
         $jumlah_siswa = $this->countStudent()->js;
-        $siswa_bermasalah = $this->getTroubleStudent()->siswa;                
+        // $siswa_bermasalah = $this->getTroubleStudent()->siswa;                
 
-        return view('dashboard.index', compact('jumlah_siswa', 'siswa_bermasalah'));
+        return view('dashboard.index', compact('jumlah_siswa'));
     }
 
     public function countStudent()
@@ -26,13 +26,13 @@ class DashboardController extends Controller
         return view('dashboard.index', compact('js'));
     }
 
-    public function getTroubleStudent()
-    {
-        $siswa = DB::select('SELECT STUDENTS_ID AS IDSISWA
-                FROM violationrecords
-                GROUP BY STUDENTS_ID
-                HAVING SUM(TOTAL) >= "50"');
-        //dd($siswa);
-        return view('dashboard.index', compact('siswa'));
-    }
+    // public function getTroubleStudent()
+    // {
+    //     $siswa = DB::select('SELECT STUDENTS_ID AS IDSISWA
+    //             FROM violationrecords
+    //             GROUP BY STUDENTS_ID
+    //             HAVING SUM(TOTAL) >= "50"');
+    //     //dd($siswa);
+    //     return view('dashboard.index', compact('siswa'));
+    // }
 }

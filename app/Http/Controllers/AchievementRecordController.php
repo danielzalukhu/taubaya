@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\AchievementStudent;
+use App\AchievementRecord;
 use App\Staff;
 use App\Student;
 use App\Achievement;
@@ -19,7 +19,7 @@ class AchievementRecordController extends Controller
      */
     public function index(Request $request)
     {
-        $catatan_penghargaan = AchievementStudent::all(); 
+        $catatan_penghargaan = AchievementRecord::all(); 
         
         $siswa = Student::all();
         $penghargaan = Achievement::all();
@@ -43,7 +43,7 @@ class AchievementRecordController extends Controller
                                 GROUP BY TIPE");
         
         $data = DB::select("SELECT a.TYPE AS TIPE, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                            FROM achievements a INNER JOIN achievements_students ass ON a.id = ass.ACHIEVEMENTS_ID
+                            FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                             WHERE ACADEMIC_YEAR_ID = " . $academic_year_id ." 
                             GROUP BY TIPE, BULAN
                             ORDER BY BULAN ASC");                             
@@ -73,7 +73,7 @@ class AchievementRecordController extends Controller
      */
     public function store(Request $request)
     {
-        $catatan_penghargaan = new AchievementStudent([
+        $catatan_penghargaan = new AchievementRecord([
             'STUDENTS_ID' => $request->get('ar_student_name'),
             'ACHIEVEMENTS_ID' => $request->get('ar_achievement_name'),
             'DATE' => $request->get('ar_date'),
@@ -107,7 +107,7 @@ class AchievementRecordController extends Controller
      */
     public function edit($id)
     {
-        $catatan_penghargaan = AchievementStudent::find($id);
+        $catatan_penghargaan = AchievementRecord::find($id);
         
         $siswa = Student::all();
         $penghargaan = Achievement::all();
@@ -126,7 +126,7 @@ class AchievementRecordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $catatan_penghargaan = AchievementStudent::find($id);
+        $catatan_penghargaan = AchievementRecord::find($id);
         
         $catatan_penghargaan->STUDENTS_ID = $request->get('ar_student_name');
         $catatan_penghargaan->ACHIEVEMENTS_ID = $request->get('ar_achievement_name');
@@ -150,7 +150,7 @@ class AchievementRecordController extends Controller
      */
     public function destroy($id)
     {
-        $catatan_penghargaan = AchievementStudent::whereId($id)->firstOrFail();
+        $catatan_penghargaan = AchievementRecord::whereId($id)->firstOrFail();
         $catatan_penghargaan->delete();
         return redirect(action('AchievementRecordController@index'))->with('sukses', 'Achievement Record has been deleted');
     }
@@ -158,7 +158,7 @@ class AchievementRecordController extends Controller
     public function ajaxChangeAchievementRecord(Request $request)
     {
         $ajaxPenghargaan = DB::select('SELECT ass.DATE, a.TYPE, ass.DESCRIPTION, a.POINT
-                                       FROM achievements_students ass INNER JOIN achievements a ON ass.ACHIEVEMENTS_ID = a.id
+                                       FROM achievement_records ass INNER JOIN achievements a ON ass.ACHIEVEMENTS_ID = a.id
                                        WHERE ass.ACADEMIC_YEAR_ID = ' . $request->academicYearId . ' AND  ass.STUDENTS_ID = "' . $request->studentId .'"');    
 
         return $ajaxPenghargaan;

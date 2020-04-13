@@ -154,30 +154,30 @@
 @stop
 
 @section('footer')
-<!-- <script>
-    var tmp = <?php echo json_encode($siswa_bermasalah) ?>;
-    var arrID = "";
+<script>
+    // var tmp = <//?//php echo json_encode($siswa_bermasalah) ?>;
+    // var arrID = "";
 
-    for(i = 0; i < tmp.length; i++)
-    {
-      arrID = tmp[i]["IDSISWA"];
-      console.log(arrID);
-      if(arrID > 0)
-      {
-        $(document).ready(function(){
-          //var hasShow = localStorage.getItem("is_dashboard_popup");
-          // if(!hasShow){
-          $('#alertModal').modal('show');
-          //  localStorage.setItem("is_dashboard_popup", true);
-          // }
-        })
-      }
-    }
+    // for(i = 0; i < tmp.length; i++)
+    // {
+    //   arrID = tmp[i]["IDSISWA"];
+    //   console.log(arrID);
+    //   if(arrID > 0)
+    //   {
+    //     $(document).ready(function(){
+    //       //var hasShow = localStorage.getItem("is_dashboard_popup");
+    //       // if(!hasShow){
+    //       $('#alertModal').modal('show');
+    //       //  localStorage.setItem("is_dashboard_popup", true);
+    //       // }
+    //     })
+    //   }
+    // }
 
-    function alertFunction()
-    {
-      location.replace("http://localhost/tugasakhir/public/violationrecord");
-    }    
-</script>    -->
+    // function alertFunction()
+    // {
+    //   location.replace("http://localhost/tugasakhir/public/violationrecord");
+    // }    
+</script>
 @stop 
 

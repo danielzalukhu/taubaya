@@ -43,7 +43,7 @@ class ViolationRecordController extends Controller
                                         WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
                                         WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
                                 END) AS KATEGORI
-                                FROM violationrecords vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
+                                FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
                                 GROUP BY KATEGORI ");
 
         $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
@@ -51,7 +51,7 @@ class ViolationRecordController extends Controller
                                         WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
                                         WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
                                 END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                                FROM violationrecords vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
+                                FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
                                 WHERE ACADEMIC_YEAR_ID = " . $academic_year_id . "
                                 GROUP BY KATEGORI, BULAN
                                 ORDER BY BULAN ASC");
@@ -84,7 +84,7 @@ class ViolationRecordController extends Controller
     {   
         // $s_id = $request->get('vr_student_name');
         // $point_record = DB::select('SELECT SUM(vr.TOTAL) as pointRecord
-        //                      FROM violationrecords as vr 
+        //                      FROM violation_records as vr 
         //                      WHERE vr.STUDENTS_ID = ' . $s_id);
         // echo json_encode($point_record);
         
@@ -190,7 +190,7 @@ class ViolationRecordController extends Controller
     public function ajaxChangeViolationRecord(Request $request)
     {
         $ajaxPelanggaran = DB::select('SELECT vr.DATE, v.NAME, v.DESCRIPTION, vr.TOTAL
-                                       FROM violationrecords vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
+                                       FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
                                        WHERE vr.ACADEMIC_YEAR_ID = ' . $request->academicYearId . ' AND  vr.STUDENTS_ID = "' . $request->studentId .'"');
 
         return $ajaxPelanggaran;

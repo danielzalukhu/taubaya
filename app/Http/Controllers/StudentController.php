@@ -110,11 +110,11 @@ class StudentController extends Controller
         $tahun_ajaran = AcademicYear::all();
 
         $catatan_pelanggaran = DB::select('SELECT *
-                                        FROM violationrecords vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
+                                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
                                         WHERE STUDENTS_ID = '. $id);
 
         $point = DB::select('SELECT SUM(TOTAL) as point
-                            FROM violationrecords
+                            FROM violation_records
                             WHERE STUDENTS_ID = ' . $id);
 
         for($i = 0; $i < count($point); $i++){
@@ -122,7 +122,7 @@ class StudentController extends Controller
         } 
 
         $achievement_point = DB::select('SELECT POINT
-                                         FROM achievements_students JOIN achievements on achievements.id = achievements_students.ACHIEVEMENTS_ID 
+                                         FROM achievement_records JOIN achievements on achievements.id = achievement_records.ACHIEVEMENTS_ID 
                                          WHERE STUDENTS_ID = ' . $id);
         
         $total_achievement_point = 0;
@@ -132,7 +132,7 @@ class StudentController extends Controller
         } 
 
         $catatan_penghargaan = DB::select('SELECT *
-                                        FROM achievements_students JOIN achievements on achievements.id = achievements_students.ACHIEVEMENTS_ID 
+                                        FROM achievement_records JOIN achievements on achievements.id = achievement_records.ACHIEVEMENTS_ID 
                                         WHERE STUDENTS_ID = ' . $id);
 
         // GRAFIK TAB VIOLATION
@@ -153,7 +153,7 @@ class StudentController extends Controller
                                         WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
                                         WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
                                 END) AS KATEGORI
-                                FROM violationrecords vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
+                                FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
                                 GROUP BY KATEGORI ");
 
         $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
@@ -161,7 +161,7 @@ class StudentController extends Controller
                                     WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
                                     WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
                             END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                            FROM violationrecords vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
+                            FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
                             WHERE ACADEMIC_YEAR_ID = " . $academic_year_id . " AND STUDENTS_ID = " . $id . "
                             GROUP BY KATEGORI, BULAN
                             ORDER BY BULAN ASC");
@@ -177,7 +177,7 @@ class StudentController extends Controller
                                 GROUP BY TIPE");
         
         $dataAchievement = DB::select("SELECT a.TYPE AS TIPE, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                                       FROM achievements a INNER JOIN achievements_students ass ON a.id = ass.ACHIEVEMENTS_ID
+                                       FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                                        WHERE ACADEMIC_YEAR_ID = " . $academic_year_id ."  AND STUDENTS_ID = " . $id . "
                                        GROUP BY TIPE, BULAN
                                        ORDER BY BULAN ASC");    
@@ -222,7 +222,7 @@ class StudentController extends Controller
                                 GROUP BY TIPE");
         
         $dataAchievement = DB::select("SELECT a.TYPE AS TIPE, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                            FROM achievements a INNER JOIN achievements_students ass ON a.id = ass.ACHIEVEMENTS_ID
+                            FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                             WHERE ACADEMIC_YEAR_ID = " . $request->academicYearId ."  AND STUDENTS_ID = " . $request->studentId . "
                             GROUP BY TIPE, BULAN
                             ORDER BY BULAN ASC");    

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AchievementRecord extends Model
 {
-    protected $table = 'achievements_records';
+    protected $table = 'achievement_records';
     protected $fillable = ['STUDENTS_ID', 'ACHIEVEMENTS_ID', 'DATE', 'DESCRIPTION', 'ACADEMIC_YEAR_ID' ,'STAFFS_ID'];
 
     public function staff()
