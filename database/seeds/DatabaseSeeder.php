@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder
         $this->call(AchievementSeeder::class);
         $this->call(SubjectSeeder::class);
         $this->call(AbsentSeeder::class);
-        
+        $this->call(ActivitySeeder::class);        
+        $this->call(KdSeeder::class);   
+
         Model::reguard();
     }
 }
