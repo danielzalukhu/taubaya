@@ -17,52 +17,7 @@
                 @endif
  
                 <div class="row">
-                    <div class="col-xs-4">
-                        <div class="panel-heading">
-                            <h3 class="box-title">INPUT PERSENTASE PENILAIAN</h3>
-                        </div>
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">PERSENTASE PENILAIAN</h3>
-                            </div>
-                            <form class="form-horizontal" id="form-input-percentage" action="{{ route('subject.assesmentPercentage') }}" method="POST">
-                                
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">Tugas <b>(%)</b> </label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="input_persentase_tugas" id="input_persentase_tugas" placeholder="25">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">PH (Ulangan Harian) <b>(%)</b> </label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="input_persentase_ph" id="input_persentase_ph" placeholder="25">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">PTS (Ulangan Tengah Semester) <b>(%)</b> </label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="input_persentase_pts" id="input_persentase_pts" placeholder="25">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">PAS (Ulangan Akhir Semester) <b>(%)</b> </label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control"  name="input_persentase_pas" id="input_persentase_pas" placeholder="25">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary pull-right button-detail-percentage">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-8">
+                    <div class="col-xs-12">
                         <div class="panel-heading">
                             <h3 class="box-title">IMPORT FILE</h3>
                         </div>
@@ -84,7 +39,7 @@
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary" onClick="showDetailPercentage()">Submit</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
                                 </form>
                             </div>

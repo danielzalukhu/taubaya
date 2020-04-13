@@ -652,39 +652,39 @@
     })
     // console.log(dataGraph);
 
-    // Highcharts.chart('chartAbsent', {
-    //     chart: {
-    //         plotBackgroundColor: null,
-    //         plotBorderWidth: null,
-    //         plotShadow: false,
-    //         type: 'pie'
-    //     },
-    //     credits: {
-    //         enabled: false
-    //     },
-    //     title: {
-    //         text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
-    //     },
-    //     tooltip: {
-    //         pointFormat: '{series.name}: <b>{point.percentage}%</b>'
-    //     },
-    //     plotOptions: {
-    //         pie: {
-    //             allowPointSelect: true,
-    //             cursor: 'pointer',
-    //             dataLabels: {
-    //                 enabled: true,
-    //                 format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-    //             },
-    //             showInLegend: true
-    //         }
-    //     },
-    //     series: [{
-    //         name: 'TYPE',
-    //         colorByPoint: true,
-    //         data: dataSeries
-    //     }]
-    // });
+    Highcharts.chart('chartAbsent', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            name: 'TYPE',
+            colorByPoint: true,
+            data: dataSeries
+        }]
+    });
 </script>
 @Stop
 
