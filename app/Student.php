@@ -12,7 +12,7 @@ class Student extends Model
                            'CITY', 'PROVINCE', 'GR_FROM', 'BANK_ACC', 'STATUS', 'NOTES', 'IMG_PATH', 'BANKS_ID',
                            'RELIGIONS_ID', 'TOKENS_ID', 'USERS_EMAIL', 'GRADES_ID'];
 
-    public function violationRecord()
+    public function violationrecord()
     {
         return $this->hasMany('App\ViolationRecord');
     }

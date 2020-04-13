@@ -10,7 +10,7 @@ class Violation extends Model
     protected $table = 'violations';
     protected $fillable = ['NAME', 'DESCRIPTION', 'POINT', 'STAFFS_ID'];
     
-    public function violationRecord()
+    public function violationrecord()
     {
         return $this->hasMany('App\ViolationRecord');
     }
