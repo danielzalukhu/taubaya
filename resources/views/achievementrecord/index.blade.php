@@ -233,7 +233,7 @@
     var types = {!!json_encode($type)!!}
     var dataGraph = {!!json_encode($data)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
-    // console.log(dataGraph)
+    console.log(types)
 
     var startMonth = selectedTahunAjaran.STARTMONTH;
     var endMonth = selectedTahunAjaran.ENDMONTH;
@@ -248,13 +248,13 @@
         }
 
         dataGraph.forEach(function(obj){
-            if(obj.TIPE == item.TIPE){
+            if(obj.TINGKAT == item.TINGKAT){
                 values[obj.BULAN - startMonth] = obj.JUMLAH
             }
         })
 
         dataSeries.push({
-            name: item.TIPE,
+            name: item.TINGKAT,
             data: values
         })
     })
@@ -263,7 +263,7 @@
 
     Highcharts.chart('achievementChartStatistic', {
         chart: {
-            type: 'bar'
+            type: 'column'
         },
         title: {
             text: 'STATISTIK PENGHARGAAN YANG TERCATAT BERDASARKAN JENIS PENGHARGAAN'

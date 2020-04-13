@@ -561,6 +561,7 @@
     $('#select-dropdown-academicyear-graph-achievement').val({{$academic_year_id}})
 
     var types = {!!json_encode($type)!!}
+    console.log(types);
     var dataGraph = {!!json_encode($data)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
 
@@ -582,20 +583,20 @@
             }
 
             dataGraph.forEach(function(obj){
-                if(obj.TIPE == item.TIPE){
+                if(obj.TINGKAT == item.TINGKAT){
                     values[obj.BULAN - startMonth] = obj.JUMLAH
                 }
             })
 
             dataSeries.push({
-                name: item.TIPE,
+                name: item.TINGKAT,
                 data: values
             })
         })
         
         Highcharts.chart('chartAchievement', {
             chart: {
-                type: 'bar'
+                type: 'column'
             },
             title: {
                 text: 'STATISTIK PENGHARGAAN YANG TERCATAT BERDASARKAN JENIS PENGHARGAAN'

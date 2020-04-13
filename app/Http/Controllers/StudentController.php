@@ -172,14 +172,14 @@ class StudentController extends Controller
 
         // GRAFIK TAB ACHIEVEMENT
 
-        $type = DB::select("SELECT a.TYPE as TIPE
+        $type = DB::select("SELECT a.GRADE as TINGKAT
                                 FROM achievements a
-                                GROUP BY TIPE");
+                                GROUP BY TINGKAT");
         
-        $dataAchievement = DB::select("SELECT a.TYPE AS TIPE, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+        $dataAchievement = DB::select("SELECT a.GRADE AS TINGKAT, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
                                        FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                                        WHERE ACADEMIC_YEAR_ID = " . $academic_year_id ."  AND STUDENTS_ID = " . $id . "
-                                       GROUP BY TIPE, BULAN
+                                       GROUP BY TINGKAT, BULAN
                                        ORDER BY BULAN ASC");    
                                         
         // GRAFIK TAB ABSENT 
@@ -217,14 +217,14 @@ class StudentController extends Controller
 
     public function returnDataAchievementChart(Request $request)
     {
-        $type = DB::select("SELECT a.TYPE as TIPE
+        $type = DB::select("SELECT a.GRADE as TINGKAT
                                 FROM achievements a
-                                GROUP BY TIPE");
+                                GROUP BY TINGKAT");
         
-        $dataAchievement = DB::select("SELECT a.TYPE AS TIPE, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+        $dataAchievement = DB::select("SELECT a.GRADE AS TINGKAT, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
                             FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                             WHERE ACADEMIC_YEAR_ID = " . $request->academicYearId ."  AND STUDENTS_ID = " . $request->studentId . "
-                            GROUP BY TIPE, BULAN
+                            GROUP BY TINGKAT, BULAN
                             ORDER BY BULAN ASC");    
         
         $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH

@@ -38,14 +38,14 @@ class AchievementRecordController extends Controller
             $academic_year_id = $maxId;
         }
 
-        $type = DB::select("SELECT a.TYPE as TIPE
-                                FROM achievements a
-                                GROUP BY TIPE");
+        $type = DB::select("SELECT a.GRADE as TINGKAT
+                            FROM achievements a
+                            GROUP BY TINGKAT");
         
-        $data = DB::select("SELECT a.TYPE AS TIPE, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+        $data = DB::select("SELECT a.GRADE AS TINGKAT, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
                             FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                             WHERE ACADEMIC_YEAR_ID = " . $academic_year_id ." 
-                            GROUP BY TIPE, BULAN
+                            GROUP BY TINGKAT, BULAN
                             ORDER BY BULAN ASC");                             
         
         $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH

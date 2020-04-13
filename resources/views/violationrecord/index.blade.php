@@ -257,7 +257,7 @@
     var categories = {!!json_encode($kategori)!!}
     var dataGraph = {!!json_encode($data)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
-    // console.log(selectedTahunAjaran)
+    // console.log(dataGraph);
 
     var startMonth = selectedTahunAjaran.STARTMONTH;
     var endMonth = selectedTahunAjaran.ENDMONTH;
