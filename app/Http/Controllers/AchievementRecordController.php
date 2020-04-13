@@ -78,7 +78,6 @@ class AchievementRecordController extends Controller
             'ACHIEVEMENTS_ID' => $request->get('ar_achievement_name'),
             'DATE' => $request->get('ar_date'),
             'DESCRIPTION' => $request->get('ar_desc'),
-            'RANK' => $request->get('ar_rank'),
             'ACADEMIC_YEAR_ID' => $request->get('ar_academic_year'),
             'STAFFS_ID' => $request->get('ar_noted_by')
         ]);
@@ -132,7 +131,6 @@ class AchievementRecordController extends Controller
         $catatan_penghargaan->ACHIEVEMENTS_ID = $request->get('ar_achievement_name');
         $catatan_penghargaan->DATE = $request->get('ar_date');
         $catatan_penghargaan->DESCRIPTION = $request->get('ar_desc');
-        $catatan_penghargaan->RANK = $request->get('ar_rank');
         $catatan_penghargaan->ACADEMIC_YEAR_ID = $request->get('ar_academic_year');
         $catatan_penghargaan->STAFFS_ID = $request->get('ar_noted_by');
 

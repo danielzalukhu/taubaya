@@ -76,7 +76,6 @@
                                             <th>DATE</th>
                                             <th>ACHIVEMENT NAME</th>
                                             <th>DESCRIPTION</th>
-                                            <th>RANK</th>
                                             <th>EDIT</th>
                                             <th>DELETE</th>
                                         </tr>
@@ -88,7 +87,6 @@
                                             <td>{{date('d-m-Y', strtotime($cp->DATE))}}</td>
                                             <td>{{$cp->achievement->TYPE}}{{" - "}}{{$cp->achievement->DESCRIPTION}}</td>
                                             <td>{{$cp->DESCRIPTION}}</td>
-                                            <td>{{$cp->RANK}}</td>
                                             <td><a href= "{{ route ('achievementrecord.edit', $cp->id )}}" class="btn btn-primary btn-sm">EDIT</td>
                                             <td>
                                                 <form action="{{ route ('achievementrecord.destroy', $cp->id )}}" method="POST">
@@ -181,14 +179,6 @@
                             <textarea name="ar_desc" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('ar_desc')}}</textarea>
                             @if($errors->has('ar_desc'))
                                 <span class="help-block">{{$errors->first('ar_desc')}}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group{{ $errors->has('ar_rank') ? 'has-error' : '' }} ">
-                            <label>Rank</label>
-                            <input name="ar_rank"type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{old('ar_rank')}}">            
-                            @if($errors->has('ar_rank'))
-                                <span class="help-block">{{$errors->first('ar_rank')}}</span>
                             @endif
                         </div>
 

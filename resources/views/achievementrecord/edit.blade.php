@@ -3,12 +3,12 @@
 @section('content')
     <div class="main">
         <div class="main-content">
+            @if(session('sukses'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('sukses') }}
+                </div>
+            @endif
             <div class="container-fluid">
-                @if(session('sukses'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('sukses') }}
-                    </div>
-                @endif
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
@@ -78,14 +78,6 @@
                                         <textarea name="ar_desc" class="form-control" rows="3">{{ $catatan_penghargaan->DESCRIPTION }}</textarea>
                                         @if($errors->has('ar_desc'))
                                             <span class="help-block">{{$errors->first('ar_desc')}}</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('ar_rank') ? 'has-error' : '' }} ">
-                                        <label>Rank</label>
-                                        <input name="ar_rank" type="text" class="form-control"  value="{{$catatan_penghargaan->RANK}}">            
-                                        @if($errors->has('ar_rank'))
-                                            <span class="help-block">{{$errors->first('ar_rank')}}</span>
                                         @endif
                                     </div>
 

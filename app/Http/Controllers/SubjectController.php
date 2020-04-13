@@ -115,8 +115,8 @@ class SubjectController extends Controller
 
     public function incomplete()
     {
-        $ketidaktuntasan = ViolationRecord::join('violations','violationrecords.VIOLATIONS_ID','=','violations.id')
-                            ->select('violationrecords.*')
+        $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
+                            ->select('violation_records.*')
                             ->where('violations.NAME','TTS')
                             ->get();
 
