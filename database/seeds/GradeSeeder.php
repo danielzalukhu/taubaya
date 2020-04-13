@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Grades;
 
 class GradeSeeder extends Seeder
 {
