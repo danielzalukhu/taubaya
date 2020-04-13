@@ -42,6 +42,11 @@ class Student extends Model
         return $this->hasMany('App\SubjectRecord');
     }
 
+    public function extracurricularrecord()
+    {
+        return $this->hasMany('App\ExtracurricularRecord');
+    }
+
     public function achivement()
     {
         return $this->belongsToMany('App\Achivement', 'achievements_records')->withPivot(['DATE', 'DESCRIPTION']);

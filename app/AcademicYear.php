@@ -18,4 +18,9 @@ class AcademicYear extends Model
     {
         return $this->hasMany('App\AchievementRecord');
     }
+
+    public function extracurricularrecord()
+    {
+        return $this->hasMany('App\ExtracurricularRecord');
+    }
 }
