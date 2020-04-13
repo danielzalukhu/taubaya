@@ -10,7 +10,7 @@ class Staff extends Model
 {
     protected $table = 'staffs';
 
-    public function violationRecord()
+    public function violationrecord()
     {
         return $this->hasMany('App\ViolationRecord');
     }
@@ -40,8 +40,8 @@ class Staff extends Model
         return $this->hasMany('App\Extracurricular');
     }
 
-    public function achievement_student()
+    public function achievementrecord()
     {
-        return $this->hasMany('App\AchievementStudent');
+        return $this->hasMany('App\AchievementRecord');
     }
 }

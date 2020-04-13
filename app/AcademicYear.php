@@ -9,18 +9,13 @@ class AcademicYear extends Model
     protected $table = 'academic_years';
     protected $fillable = ['TYPE', 'START_DATE', 'END_DATE'];
 
-    public function violationRecord()
+    public function violationrecord()
     {
         return $this->hasMany('App\ViolationRecord');
     }
 
-    public function report()
+    public function achievementrecord()
     {
-        return $this->hasMany('App\Report');
-    }
-
-    public function student_class()
-    {
-        return $this->hasMany('App\StudentClasses');
+        return $this->hasMany('App\AchievementRecord');
     }
 }
