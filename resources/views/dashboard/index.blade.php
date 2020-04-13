@@ -74,7 +74,7 @@
                     <!-- small box -->
                     <div class="small-box bg-green">
                       <div class="inner">
-                        <h3>TROPHY</h3>
+                        <h3>{{$jumlah_penghargaan}}</h3>
                         <p>Student Achievements</p>
                       </div>
                       <div class="icon">
@@ -89,8 +89,7 @@
                     <!-- small box -->
                     <div class="small-box bg-yellow">
                       <div class="inner">
-                        <h3>POINT</h3>
-
+                        <h3>{{$jumlah_pelanggaran}}</h3>
                         <p>Record Violations</p>
                       </div>
                       <div class="icon">
