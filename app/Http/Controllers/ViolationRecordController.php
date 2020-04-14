@@ -20,7 +20,10 @@ class ViolationRecordController extends Controller
     public function index(Request $request)
     {
         $catatan_pelanggaran = ViolationRecord::all(); 
-        
+        // $catatan_pelanggaran = DB::SELECT('SELECT "s.*", COUNT("violation_records.*") as BANYAKPELANGGARAN, SUM(TOTAL) as JUMLAHPOIN
+        //                   FROM violation_records vr INNER JOIN students s ON vr.STUDENTS_ID = s.id 
+        //                   GROUP BY s.id') ;                        
+
         $tahun_ajaran = AcademicYear::all();
         $siswa = Student::all();
         $pelanggaran = Violation::all();
