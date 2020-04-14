@@ -15,9 +15,9 @@ class DashboardController extends Controller
         $jumlah_siswa = $this->countStudent()->siswa;
         $jumlah_penghargaan = $this->countAchievement()->penghargaan;
         $jumlah_pelanggaran = $this->countViolation()->pelanggaran;
-        // $siswa_bermasalah = $this->getTroubleStudent()->siswa;                
+        $siswa_bermasalah = ViolationRecord::orderBy('id', 'DESC')->take(5)->get();
 
-        return view('dashboard.index', compact('jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran'));
+        return view('dashboard.index', compact('jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
     }
 
     public function countStudent()
@@ -38,12 +38,17 @@ class DashboardController extends Controller
         return view('dashboard.index', compact('pelanggaran'));
     }
 
+    public function troubleStudent()
+    {
+        
+    }
+
     // public function getTroubleStudent()
     // {
     //     $siswa = DB::select('SELECT STUDENTS_ID AS IDSISWA
-    //             FROM violationrecords
-    //             GROUP BY STUDENTS_ID
-    //             HAVING SUM(TOTAL) >= "50"');
+    //                          FROM violationrecords
+    //                          GROUP BY STUDENTS_ID
+    //                          HAVING SUM(TOTAL) >= "50"');
     //     //dd($siswa);
     //     return view('dashboard.index', compact('siswa'));
     // }
