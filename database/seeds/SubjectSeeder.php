@@ -196,21 +196,21 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => 'C3-MM-4',
+            'CODE' => 'C3-TAV-4',
             'DESCRIPTION' => 'Penerapan Sistem Radio dan Televisi',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK'
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => 'C3-MM-5',
+            'CODE' => 'C3-TAV-5',
             'DESCRIPTION' => 'Perawatan dan Perbaikan Peralatan Audio dan Video',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK'
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => 'C3-MM-6',
+            'CODE' => 'C3-TAV-6',
             'DESCRIPTION' => 'Produk Kreatifitas dan Kewirausahaan',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK'

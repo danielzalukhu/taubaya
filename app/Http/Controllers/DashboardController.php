@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Student;
 use App\AchievementRecord;
 use App\ViolationRecord;
+use App\Subject;
 use DB;
 
 class DashboardController extends Controller
@@ -34,7 +35,7 @@ class DashboardController extends Controller
 
     public function countViolation()
     {
-        $pelanggaran = VIolationRecord::all()->count();
+        $pelanggaran = ViolationRecord::all()->count();
         return view('dashboard.index', compact('pelanggaran'));
     }
 

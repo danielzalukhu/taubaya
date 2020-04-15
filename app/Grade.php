@@ -17,4 +17,9 @@ class Grade extends Model
     {
         return $this->belongsTo('App\Staff', 'STAFFS_ID');
     }
+
+    public function student()
+    {
+        return $this->hasMany('App\Student');
+    }
 }

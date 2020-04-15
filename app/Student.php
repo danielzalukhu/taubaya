@@ -29,7 +29,7 @@ class Student extends Model
 
     public function grade()
     {
-        return $this->belongsToMany('App\Grade', 'GRADES_ID');
+        return $this->belongsTo('App\Grade', 'GRADES_ID');
     }
                            
     public function violationrecord()
