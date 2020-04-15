@@ -144,23 +144,6 @@
                             @endif
                         </div>
 
-                        <div class="form-group{{ $errors->has('ar_academic_year') ? 'has-error' : '' }} ">
-                            <label>Academic Year</label>
-                            <select name="ar_academic_year" class="form-control" id="inputGroupSelect01">
-                                @foreach($tahun_ajaran as $ta)
-                                    <option value='{{ $ta->id }}'>
-                                        {{ $ta->TYPE}}
-                                        {{ " - " }}
-                                        {{ strtok($ta->START_DATE, '-') }}
-                                        {{ " / " }}
-                                        {{ strtok($ta->END_DATE, '-') }}
-                                    </option>                                                                        
-                                @endforeach
-                            </select>
-                            @if($errors->has('ar_academic_year'))
-                                <span class="help-block">{{$errors->first('ar_academic_year')}}</span>
-                            @endif
-                        </div>
 
                         <div class="form-group{{ $errors->has('ar_achievement_name') ? 'has-error' : '' }} ">
                             <label>Achievement Name</label>

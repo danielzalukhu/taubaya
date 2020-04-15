@@ -34,8 +34,7 @@ class ViolationRecordController extends Controller
         // utk grafik
         $academic_year_id = 0;
         $maxId = DB::select('SELECT max(id) as id
-                             FROM academic_years')[0]->id;
-
+                             FROM academic_years')[0]->id;        
         if($request->has('academicYearId')){
             $academic_year_id = $request->academicYearId;
         }
@@ -115,13 +114,13 @@ class ViolationRecordController extends Controller
                     'PUNISHMENT' => $request->get('vr_punishment'),
                     'STUDENTS_ID' => $request->get('vr_student_name'),
                     'VIOLATIONS_ID' => $v_id,
-                    'ACADEMIC_YEAR_ID' => $request->get('vr_academic_year'),
+                    'ACADEMIC_YEAR_ID' => $request->session()->get('session_academic_year_id'),
                     'STAFFS_ID' => $request->get('vr_noted_by')
                 ]);
             }
         }
 
-        //dd($request->all());
+        // dd($request->all());
         $catatan_pelanggaran->save();
         return redirect('violationrecord')->with('sukses', 'Record Violation has been created');
     }

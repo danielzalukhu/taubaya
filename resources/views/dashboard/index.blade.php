@@ -46,7 +46,15 @@
 <div class="main">
     <div class="main-content">
         <section class="content-header">
-          <h1>SISTEM MONITORING PRESTASI SISWA</h1>
+          <h1>SISTEM MONITORING PRESTASI SISWA
+              <small>
+                  {{$tahun_ajaran[0]->TYPE}}
+                  {{" - "}}
+                  {{ strtok($tahun_ajaran[0]->START_DATE, '-') }}
+                  {{ " / " }}
+                  {{ strtok($tahun_ajaran[0]->END_DATE, '-') }}
+              </small>
+          </h1>
           <ol class="breadcrumb">
             <li><a href="{{route('dashboard.index')}}"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Dashboard</li>

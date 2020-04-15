@@ -78,10 +78,10 @@ class AchievementRecordController extends Controller
             'ACHIEVEMENTS_ID' => $request->get('ar_achievement_name'),
             'DATE' => $request->get('ar_date'),
             'DESCRIPTION' => $request->get('ar_desc'),
-            'ACADEMIC_YEAR_ID' => $request->get('ar_academic_year'),
+            'ACADEMIC_YEAR_ID' => $request->session()->get('session_academic_year_id'),
             'STAFFS_ID' => $request->get('ar_noted_by')
         ]);
-        
+
         // dd($request->all());
         $catatan_penghargaan->save();
         return redirect('achievementrecord')->with('sukses', 'New achivement record has been created');

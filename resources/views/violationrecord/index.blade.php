@@ -147,24 +147,6 @@
                             @endif
                         </div>
 
-                        <div class="form-group{{ $errors->has('vr_academic_year') ? 'has-error' : '' }} ">
-                            <label>Academic Year</label>
-                            <select name="vr_academic_year" class="form-control" id="inputGroupSelect01">
-                                @foreach($tahun_ajaran as $ta)
-                                    <option value='{{ $ta->id }}'>
-                                        {{ $ta->TYPE}}
-                                        {{ " - " }}
-                                        {{ strtok($ta->START_DATE, '-') }}
-                                        {{ " / " }}
-                                        {{ strtok($ta->END_DATE, '-') }}
-                                    </option>                                                                        
-                                @endforeach
-                            </select>
-                            @if($errors->has('vr_academic_year'))
-                                <span class="help-block">{{$errors->first('vr_academic_year')}}</span>
-                            @endif
-                        </div>
-
                         <div class="form-group{{ $errors->has('vr_student_name') ? 'has-error' : '' }} ">
                             <label>Student Name</label>
                             <select name="vr_student_name" class="form-control" id="inputGroupSelect01">
