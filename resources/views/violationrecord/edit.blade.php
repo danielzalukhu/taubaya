@@ -4,9 +4,9 @@
     <div class="main">
         <div class="main-content">
             <div class="container-fluid">
-                @if(session('sukses'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('sukses') }}
+                @if(session('error'))
+                    <div class="alert alert-warning" role="alert">
+                        {{ session('error') }}
                     </div>
                 @endif
                 <div class="row">

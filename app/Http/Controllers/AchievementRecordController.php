@@ -9,6 +9,7 @@ use App\Student;
 use App\Achievement;
 use App\AcademicYear;
 use DB;
+use Carbon\Carbon;
 
 class AchievementRecordController extends Controller
 {
@@ -73,14 +74,34 @@ class AchievementRecordController extends Controller
      */
     public function store(Request $request)
     {
-        $catatan_penghargaan = new AchievementRecord([
-            'STUDENTS_ID' => $request->get('ar_student_name'),
-            'ACHIEVEMENTS_ID' => $request->get('ar_achievement_name'),
-            'DATE' => $request->get('ar_date'),
-            'DESCRIPTION' => $request->get('ar_desc'),
-            'ACADEMIC_YEAR_ID' => $request->session()->get('session_academic_year_id'),
-            'STAFFS_ID' => $request->session()->get('session_user_id')
-        ]);
+        $date = $request->get('ar_date');
+        $request_date = Carbon::parse($date);
+
+        $session_start_ay = $request->session()->get('session_start_ay');
+        $start_ay = Carbon::parse($session_start_ay);
+
+        $session_end_ay = $request->session()->get('session_end_ay');
+        $end_ay = Carbon::parse($session_end_ay);
+
+        $check = $request_date->between($start_ay,$end_ay);
+        // $a = array($request_date, $start_ay, $end_ay);
+        // dd($a);
+        
+        if($check == false)
+        {
+            return redirect('achievementrecord')->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+        }
+        else
+        {
+            $catatan_penghargaan = new AchievementRecord([
+                'STUDENTS_ID' => $request->get('ar_student_name'),
+                'ACHIEVEMENTS_ID' => $request->get('ar_achievement_name'),
+                'DATE' => $request->get('ar_date'),
+                'DESCRIPTION' => $request->get('ar_desc'),
+                'ACADEMIC_YEAR_ID' => $request->session()->get('session_academic_year_id'),
+                'STAFFS_ID' => $request->session()->get('session_user_id')
+            ]);
+        }
 
         // dd($request->all());
         $catatan_penghargaan->save();
@@ -126,17 +147,33 @@ class AchievementRecordController extends Controller
     public function update(Request $request, $id)
     {
         $catatan_penghargaan = AchievementRecord::find($id);
-        
-        $catatan_penghargaan->STUDENTS_ID = $request->get('ar_student_name');
-        $catatan_penghargaan->ACHIEVEMENTS_ID = $request->get('ar_achievement_name');
-        $catatan_penghargaan->DATE = $request->get('ar_date');
-        $catatan_penghargaan->DESCRIPTION = $request->get('ar_desc');
-        $catatan_penghargaan->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
-        $catatan_penghargaan->STAFFS_ID = $request->session()->get('session_user_id');
 
+        $date = $request->get('ar_date');
+        $request_date = Carbon::parse($date);
+
+        $session_start_ay = $request->session()->get('session_start_ay');
+        $start_ay = Carbon::parse($session_start_ay);
+
+        $session_end_ay = $request->session()->get('session_end_ay');
+        $end_ay = Carbon::parse($session_end_ay);
+
+        $check = $request_date->between($start_ay,$end_ay);
+
+        if($check == false)
+        {
+            return redirect(action('AchievementRecordController@edit', $catatan_penghargaan->id))->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+        }
+        else
+        {                                
+            $catatan_penghargaan->STUDENTS_ID = $request->get('ar_student_name');
+            $catatan_penghargaan->ACHIEVEMENTS_ID = $request->get('ar_achievement_name');
+            $catatan_penghargaan->DATE = $request->get('ar_date');
+            $catatan_penghargaan->DESCRIPTION = $request->get('ar_desc');
+            $catatan_penghargaan->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
+            $catatan_penghargaan->STAFFS_ID = $request->session()->get('session_user_id');
+        }
         //dd($request->all());
         $catatan_penghargaan->save();
-
         return redirect(action('AchievementRecordController@index', $catatan_penghargaan->id))->with('sukses', 'Achievement Record has been chaged');
     }
 
