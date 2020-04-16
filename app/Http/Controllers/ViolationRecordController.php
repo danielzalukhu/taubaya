@@ -116,7 +116,7 @@ class ViolationRecordController extends Controller
                     'STUDENTS_ID' => $request->get('vr_student_name'),
                     'VIOLATIONS_ID' => $v_id,
                     'ACADEMIC_YEAR_ID' => $request->session()->get('session_academic_year_id'),
-                    'STAFFS_ID' => $request->get('vr_noted_by')
+                    'STAFFS_ID' => $request->session()->get('session_user_id')
                 ]);
             }
         }
@@ -178,8 +178,8 @@ class ViolationRecordController extends Controller
         $catatan_pelanggaran->PUNISHMENT = $request->get('vr_punishment');
         $catatan_pelanggaran->STUDENTS_ID = $request->get('vr_student_name');
         $catatan_pelanggaran->VIOLATIONS_ID = $request->get('vr_violation_name');
-        $catatan_pelanggaran->ACADEMIC_YEAR_ID = $request->get('vr_academic_year');
-        $catatan_pelanggaran->STAFFS_ID = $request->get('vr_noted_by');
+        $catatan_pelanggaran->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
+        $catatan_pelanggaran->STAFFS_ID = $request->session()->get('session_user_id');
 
         $catatan_pelanggaran->save();
 

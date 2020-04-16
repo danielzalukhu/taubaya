@@ -173,18 +173,6 @@
                             @endif
                         </div>
 
-                        <div class="form-group{{ $errors->has('ar_noted_by') ? 'has-error' : '' }} ">
-                            <label>Noted By</label>
-                            <select name="ar_noted_by" class="form-control" id="inputGroupSelect01">
-                                @foreach($karyawan as $k)
-                                    <option value='{{ $k->id }}'>{{ $k->NAME }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('ar_noted_by'))
-                                <span class="help-block">{{$errors->first('ar_noted_by')}}</span>
-                            @endif
-                        </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Submit</button>

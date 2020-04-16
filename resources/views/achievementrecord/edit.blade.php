@@ -42,25 +42,6 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('ar_academic_year') ? 'has-error' : '' }} ">
-                                        <label>Academic Year</label>
-                                        <select name="ar_academic_year" class="form-control" id="inputGroupSelect01">
-                                            @foreach($tahun_ajaran as $ta)
-                                                <option value="{{ $ta->id }}" 
-                                                    @if($catatan_penghargaan->ACADEMIC_YEAR_ID == $ta->id) selected @endif>
-                                                        {{ $ta->TYPE }}
-                                                        {{ " - " }}
-                                                        {{ strtok($ta->START_DATE, '-') }}
-                                                        {{ " / " }}
-                                                        {{ strtok($ta->END_DATE, '-') }}
-                                                </option> 
-                                            @endforeach  
-                                        </select>
-                                        @if($errors->has('ar_academic_year'))
-                                            <span class="help-block">{{$errors->first('ar_academic_year')}}</span>
-                                        @endif
-                                    </div>
-
                                     <div class="form-group{{ $errors->has('ar_achievement_name') ? 'has-error' : '' }} ">
                                         <label>Achievement Name</label>
                                         <select name="ar_achievement_name" class="form-control">
@@ -78,18 +59,6 @@
                                         <textarea name="ar_desc" class="form-control" rows="3">{{ $catatan_penghargaan->DESCRIPTION }}</textarea>
                                         @if($errors->has('ar_desc'))
                                             <span class="help-block">{{$errors->first('ar_desc')}}</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('ar_noted_by') ? 'has-error' : '' }} ">
-                                        <label>Noted By</label>
-                                        <select name="ar_noted_by" class="form-control">
-                                            @foreach($karyawan as $k)
-                                                <option value="{{ $k->id }}" @if($catatan_penghargaan->STAFFS_ID == $k->id) selected @endif>{{ $k->NAME }}</option>                                                    
-                                            @endforeach                                                
-                                        </select>
-                                        @if($errors->has('ar_noted_by'))
-                                            <span class="help-block">{{$errors->first('ar_noted_by')}}</span>
                                         @endif
                                     </div>
 

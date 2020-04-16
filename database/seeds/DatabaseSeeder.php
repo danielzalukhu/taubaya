@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call(ReligionSeeder::class);
         $this->call(BankSeeder::class);
         $this->call(ProgramSeeder::class);
-        $this->call(UserSeeder::class);
         $this->call(DepartmentSeeder::class);
         $this->call(StaffSeeder::class);
         $this->call(AcademicYearSeeder::class);
         $this->call(GradeSeeder::class);
         $this->call(TokenSeeder::class);
+        $this->call(UserSeeder::class);
         $this->call(StudentSeeder::class);
         $this->call(ViolationSeeder::class);
         $this->call(AchievementSeeder::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 use App\Student;
 use App\AchievementRecord;
 use App\ViolationRecord;
@@ -14,12 +15,16 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // GLOBAL SESSION FOR WHOLE SYSTEM (SESSION ACADEMIC YEAR, SESSION USER LOGIN)
         $tahun_ajaran = DB::select('SELECT *
                                     FROM `academic_years`
                                     WHERE id = (SELECT MAX(id) as id 
                                                 FROM academic_years)');
 
         $request->session()->put('session_academic_year_id', $tahun_ajaran[0]->id);
+        $request->session()->put('session_user_id', Auth::user()->id);
+        // dd($request->session()->get('session_user_id'));
+        //END GLOBAL SESSION 
 
         $jumlah_siswa = $this->countStudent()->siswa;
         $jumlah_penghargaan = $this->countAchievement()->penghargaan;

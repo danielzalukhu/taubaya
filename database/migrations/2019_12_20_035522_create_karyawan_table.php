@@ -17,9 +17,7 @@ class CreateKaryawanTable extends Migration
             $table->increments('id');
             $table->string('NIK', 45);
             $table->string('NAME',45);
-            $table->enum('ROLE', ['TEACHER', 'ADMIN', 'MEDICAL', 'ADVISOR']);
-            $table->unsignedInteger('USERS_EMAIL');
-            $table->foreign('USERS_EMAIL')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->enum('ROLE', ['TEACHER', 'ADMIN', 'MEDICAL', 'ADVISOR', 'HEADMASTER']);
             $table->unsignedInteger('DEPARTMENTS_ID');
             $table->foreign('DEPARTMENTS_ID')->references('id')->on('departments')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

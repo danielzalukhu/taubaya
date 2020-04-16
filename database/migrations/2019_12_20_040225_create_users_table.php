@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->ENUM('ROLE', ['STAFF', 'STUDENT', 'PARENT']);
+            $table->unsignedInteger('STAFFS_ID')->nullable();
+            $table->foreign('STAFFS_ID')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
