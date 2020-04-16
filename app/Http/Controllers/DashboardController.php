@@ -18,19 +18,14 @@ class DashboardController extends Controller
                                     FROM `academic_years`
                                     WHERE id = (SELECT MAX(id) as id 
                                                 FROM academic_years)');
-        // dd($tahun_ajaran[0]->id);
+
         $request->session()->put('session_academic_year_id', $tahun_ajaran[0]->id);
-        // $request->session()->put('session_user_id', Auth::guard('web')->user()->name);
-        // if($request->session()->has('session_user_id'))
-        //     echo $request->session()->get('session_user_id');
-        // else
-        //     echo 'No data in the session';
 
         $jumlah_siswa = $this->countStudent()->siswa;
         $jumlah_penghargaan = $this->countAchievement()->penghargaan;
         $jumlah_pelanggaran = $this->countViolation()->pelanggaran;
-        $siswa_bermasalah = ViolationRecord::orderBy('id', 'DESC')->take(5)->get();
-        // $siswa_bermasalah = $this->getTroubleStudent()->siswa;
+        $siswa_bermasalah = $this->getTroubleStudent()->siswa;
+        // dd($siswa_bermasalah);
 
         return view('dashboard.index', compact('tahun_ajaran', 'jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
     }
@@ -55,10 +50,14 @@ class DashboardController extends Controller
 
     public function getTroubleStudent()
     {
-        $siswa = DB::select('SELECT students.NISN, students.FNAME, students.LNAME, count(*) as BANYAKPELANGGARAN, sum(violation_records.TOTAL) as TOTALPOIN
-                             FROM violation_records INNER JOIN students ON violation_records.STUDENTS_ID = students.id
-                             GROUP BY students.id
-                             HAVING SUM(TOTAL) >= "50"');
+        $siswa = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')                           
+                            ->select('students.*', 
+                                     DB::raw('COUNT(*) as BANYAKPELANGGARAN'), 
+                                     DB::raw('SUM(violation_records.TOTAL) as TOTALPOIN')) 
+                            ->groupBy('students.id')
+                            ->having('TOTALPOIN', ">=", 50 )
+                            ->get();                             
+
         //dd($siswa);
         return view('dashboard.index', compact('siswa'));
     }

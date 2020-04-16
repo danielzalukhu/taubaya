@@ -19,12 +19,13 @@ class ViolationRecordController extends Controller
      */
     public function index(Request $request)
     {
-        $catatan_pelanggaran = ViolationRecord::all(); 
-        // $catatan_pelanggaran = DB::table('violation_records')                       
-        //                     ->join('students', 'violation_records.STUDENTS_ID', '=', 'students.id')
-        //                     ->select(DB::raw('students.*, count(*) as BANYAKPELANGGARAN', 'SUM(TOTAL) as JUMLAHPOIN'))
+        $catatan_pelanggaran = ViolationRecord::all();
+        // $catatan_pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')                           
+        //                     ->select('students.*', 
+        //                              DB::raw('COUNT(*) as BANYAKPELANGGARAN'), 
+        //                              DB::raw('SUM(violation_records.TOTAL) as TOTALPOIN')) 
         //                     ->groupBy('students.id')
-        //                     ->get();
+        //                     ->get();                             
         // dd($catatan_pelanggaran);
         $tahun_ajaran = AcademicYear::all();
         $siswa = Student::all();
@@ -119,10 +120,17 @@ class ViolationRecordController extends Controller
                 ]);
             }
         }
-
+        
         // dd($request->all());
-        $catatan_pelanggaran->save();
-        return redirect('violationrecord')->with('sukses', 'Record Violation has been created');
+        if($request->get('vr_date') < $request->session()->get('session_start_ay') && $request->get('vr_date') > $request->session()->get('session_end_ay'))
+        {
+            return redirect('violationrecord')->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+        }
+        else
+        {
+            $catatan_pelanggaran->save();
+            return redirect('violationrecord')->with('sukses', 'Record Violation has been created');
+        }
     }
 
     /**
@@ -133,7 +141,7 @@ class ViolationRecordController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**

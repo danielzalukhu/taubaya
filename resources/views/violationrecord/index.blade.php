@@ -13,6 +13,10 @@
                     <div class="alert alert-success" role="alert">
                         {{ session('sukses') }}
                     </div>
+                @elseif(session('error'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('error') }}
+                    </div>                    
                 @endif
                 <div class="row">
                     
@@ -82,7 +86,6 @@
                                         <th>VIOLATION NAME</th>
                                         <th>PUNISHMENT</th>
                                         <th>POINT</th>
-                                        <th>NOTED BY</th>
                                         <th>EDIT</th>
                                         <th>DELETE</th>
                                     </tr>
@@ -102,7 +105,6 @@
                                             <td>{{$cp->violation->DESCRIPTION}}</td>
                                             <td>{{$cp->PUNISHMENT}}</td>
                                             <td>{{$cp->TOTAL}}</td>
-                                            <td>{{$cp->staff->NAME}}</td>
                                             <td><a href= "{{ route ('violationrecord.edit', $cp->id )}}" class="btn btn-primary btn-sm">EDIT</td>
                                             <td>
                                                 <form action="{{ route ('violationrecord.destroy', $cp->id )}}" method="POST">

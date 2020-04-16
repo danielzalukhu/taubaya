@@ -138,13 +138,23 @@
                           <tr>
                             <th>NISN</th>
                             <th>STUDENT NAME</th>
+                            <th>TOTAL VIOLATION</th>
+                            <th>TOTAL POINT</th>
                           </tr>
                         </thead>
                         <tbody>
                           @foreach($siswa_bermasalah as $sb)
                             <tr>
-                              <td>{{ $sb->student->NISN }}</td>
-                              <td>{{ $sb->student->FNAME }}</td>
+                              <td>{{ $sb->NISN }}</td>
+                              <td>{{ $sb->FNAME }}{{" "}}{{ $sb->LNAME }}</td>
+                              <td>{{ $sb->BANYAKPELANGGARAN }}</td>
+                              <td>
+                                  @if($sb->TOTALPOIN >= 50 && $sb->TOTALPOIN < 100)
+                                      <a class="btn btn-warning btn-sm">{{ $sb->TOTALPOIN }}</a>
+                                  @elseif($sb->TOTALPOIN >= 100)
+                                      <a class="btn btn-danger btn-sm">{{ $sb->TOTALPOIN }}</a>
+                                  @endif 
+                              </td>
                             </tr>
                           @endforeach
                         </tbody>

@@ -74,6 +74,7 @@
                                         <tr>
                                             <th>STUDENT NAME</th>
                                             <th>DATE</th>
+                                            <th>ACADEMIC YEAR</th>
                                             <th>ACHIVEMENT NAME</th>
                                             <th>DESCRIPTION</th>
                                             <th>EDIT</th>
@@ -83,8 +84,15 @@
                                     <tbody>
                                     @foreach($catatan_penghargaan as $cp)
                                         <tr>
-                                            <td>{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
+                                            <td><a href="{{ route('student.profile', ['id'=>$cp->student->id]) }}">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
                                             <td>{{date('d-m-Y', strtotime($cp->DATE))}}</td>
+                                            <td>
+                                                {{$cp->academicyear->TYPE}}
+                                                {{ " - " }}
+                                                {{ strtok($cp->academicyear->START_DATE, '-') }}
+                                                {{ " / " }}
+                                                {{ strtok($cp->academicyear->END_DATE, '-') }}
+                                            </td>
                                             <td>{{$cp->achievement->TYPE}}{{" - "}}{{$cp->achievement->DESCRIPTION}}</td>
                                             <td>{{$cp->DESCRIPTION}}</td>
                                             <td><a href= "{{ route ('achievementrecord.edit', $cp->id )}}" class="btn btn-primary btn-sm">EDIT</td>
