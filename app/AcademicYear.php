@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AcademicYear extends Model
 {
     protected $table = 'academic_years';
-    protected $fillable = ['TYPE', 'START_DATE', 'END_DATE'];
+    protected $fillable = ['NAME', 'TYPE', 'START_DATE', 'END_DATE'];
 
     public function absent()
     {

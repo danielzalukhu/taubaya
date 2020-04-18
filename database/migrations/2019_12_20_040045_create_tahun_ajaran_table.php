@@ -15,6 +15,7 @@ class CreateTahunAjaranTable extends Migration
     {
         Schema::create('academic_years', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('NAME', 45);
             $table->enum('TYPE', ['ODD', 'EVEN']);
             $table->DATE('START_DATE');
             $table->DATE('END_DATE');

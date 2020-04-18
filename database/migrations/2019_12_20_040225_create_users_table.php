@@ -23,6 +23,8 @@ class CreateUsersTable extends Migration
             $table->ENUM('ROLE', ['STAFF', 'STUDENT', 'PARENT']);
             $table->unsignedInteger('STAFFS_ID')->nullable();
             $table->foreign('STAFFS_ID')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedInteger('STUDENTS_ID')->nullable();
+            $table->foreign('STUDENTS_ID')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

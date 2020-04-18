@@ -150,9 +150,9 @@
                               <td>{{ $sb->BANYAKPELANGGARAN }}</td>
                               <td>
                                   @if($sb->TOTALPOIN >= 50 && $sb->TOTALPOIN < 100)
-                                      <a class="btn btn-warning btn-sm">{{ $sb->TOTALPOIN }}</a>
+                                      <div class="btn btn-warning btn-sm">{{ $sb->TOTALPOIN }}</div>
                                   @elseif($sb->TOTALPOIN >= 100)
-                                      <a class="btn btn-danger btn-sm">{{ $sb->TOTALPOIN }}</a>
+                                      <div class="btn btn-danger btn-sm">{{ $sb->TOTALPOIN }}</div>
                                   @endif 
                               </td>
                             </tr>

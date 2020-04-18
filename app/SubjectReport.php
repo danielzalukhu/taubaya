@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class SubjectReport extends Model
 {
     protected $table = 'subject_reports';
-    protected $fillable = ['SUBJECTS_ID', 'SUBJECT_RECORD_ID', 'FINAL_SCORE', 'IS_VERIFIED'];
+    protected $fillable = ['SUBJECTS_ID', 'SUBJECT_RECORD_ID', 'FINAL_SCORE', 'IS_VERIFIED', 'TUGAS', 'PH', 'PTS', 'PAS',
+                            'UN', 'US'];
 
     public function subject()
     {

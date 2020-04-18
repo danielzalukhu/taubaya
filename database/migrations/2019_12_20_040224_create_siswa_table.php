@@ -48,8 +48,6 @@ class CreateSiswaTable extends Migration
             $table->foreign('GRADES_ID')->references('id')->on('grades')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('TOKENS_ID')->nullable();
             $table->foreign('TOKENS_ID')->references('id')->on('tokens')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedInteger('USERS_EMAIL')->nullable();
-            $table->foreign('USERS_EMAIL')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -10,13 +10,19 @@ use App\Student;
 use App\Activity;
 use App\ActivityStudent;
 use App\ActivityKD;
+use App\SubjectRecord;
+use App\SubjectReport;
 use App\KD;
 use App\Imports\SubjectImport;
 use DB;
 
-
 class SubjectImport implements ToCollection
 {
+    public function __construct(Request $request)
+    {
+       $this->request = $request;
+    }
+
     /**
     * @param Collection $collection
     */
@@ -49,7 +55,7 @@ class SubjectImport implements ToCollection
 
                     $nilai = $row[8];        
 
-                    ActivityStudent::create([
+                    $a = ActivityStudent::create([
                         'STUDENTS_ID' => $id_siswa,
                         'ACTIVITIES_ID' => $id_aktivitas,
                         'SUBJECTS_ID' => $id_mapel,
@@ -62,6 +68,72 @@ class SubjectImport implements ToCollection
                     ]);
                 }      
             }            
+        }         
+        $this->formula();                 
+    }
+
+    public function formula()
+    {
+        $tmp_nilai = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                                    ->select('students.*', 'activities_students.*')
+                                    ->get();
+        $arrayOfStudent = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                                ->select('students.*', 'activities_students.*')
+                                ->groupBy('activities_students.STUDENTS_ID')
+                                ->get();         
+                                
+        // $a = ActivityStudent::all();                                
+        // dd($a);
+
+        foreach ($arrayOfStudent as $student) 
+        {
+            $tmp_nama = $student->FNAME ." ". $student->LNAME;
+            $tmp_nisn = $student->NISN;
+            $tmp_tugas = [];
+            $tmp_ph = [];
+            $tmp_pts = [];
+            $tmp_pas = [];
+            $tmp_us = [];
+            $tmp_un = [];
+
+            $subject_record = new SubjectRecord();
+            $subject_record->ACADEMIC_YEAR_ID = $this->request->session()->get("session_academic_year_id");
+            $subject_record->STUDENTS_ID = $student->STUDENTS_ID;
+            $subject_record->save();
+
+            
+            foreach ($tmp_nilai as $nilai)
+            {
+                if($nilai->STUDENTS_ID){
+                    if($nilai->ACTIVITIES_ID === 1){
+                        array_push($tmp_tugas, $nilai->SCORE);
+                    }else if($nilai->ACTIVITIES_ID === 2){
+                        array_push($tmp_ph, $nilai->SCORE);
+                    }else if($nilai->ACTIVITIES_ID === 3){
+                        array_push($tmp_pts, $nilai->SCORE);
+                    }else if($nilai->ACTIVITIES_ID === 4){
+                        array_push($tmp_pas, $nilai->SCORE);
+                    }
+                    else if($nilai->ACTIVITIES_ID === 5){
+                        array_push($tmp_us, $nilai->SCORE);
+                    }
+                    else if($nilai->ACTIVITIES_ID === 6){
+                        array_push($tmp_un, $nilai->SCORE);
+                    }
+                }
+            }
+
+            $subject_report = SubjectReport::create([
+                'SUBJECTS_ID' => $student->SUBJECTS_ID,
+                'SUBJECT_RECORD_ID' => $subject_record->id,
+                'IS_VERIFIED' => '0',
+                'TUGAS' => json_encode($tmp_ph),
+                'PH' => json_encode($tmp_ph),
+                'PTS' => json_encode($tmp_pts),
+                'PAS' => json_encode($tmp_pas),
+                'US' => json_encode($tmp_us),
+                'UN' => json_encode($tmp_un),
+            ]);
         }
     }
 
@@ -95,77 +167,5 @@ class SubjectImport implements ToCollection
                           FROM KD
                           WHERE NUMBER = ' . $value);
         return $kd;                          
-    }
-
-    public function forumlaAssesment()
-    {
-        $siswa = Student::find(1);
-
-        $jurusan = $siswa->grade->NAME;
-        $get_jurusan = explode(' ', $jurusan)[1];
-        // dd($get_jurusan);
-
-        $mapel = Subject::where('CODE', 'like', '%'.$get_jurusan.'%')->get();
-        dd($mapel);
-        $get_mapel = array([0]=>MTK, [1]=>10, [2]=>TKJ);
-
-        if($get_jurusan == $get_mapel[2] && $siswa->grade->GRADE == $get_mapel[1])
-        {
-            $tmp_TUGAS = [];
-            $tmp_PH = [];
-            $tmp_PTS = [];
-            $tmp_PAS = [];
-
-            // PISAHIN DULU JENIS AKTIVITAS MASUKIN DALAM ARRAY 
-            $aktivitas_mapel = ActivityStudent::all();
-            foreach($aktivitas_mapel as $am)
-            {
-                if($am->activity->NAME == 'TUGAS')
-                {
-                    $tmp_TUGAS = array_push($tmp_TUGAS, $am->SCORE);
-                }
-                elseif($am->activity->NAME == 'PH')
-                {
-                    $tmp_PH = array_push($tmp_PH, $am->SCORE);
-                }
-                elseif($am->activity->NAME == 'PTS')
-                {
-                    $tmp_PTS = array_push($tmp_PTS, $am->SCORE);
-                }
-                elseif($am->activity->NAME == 'PTS')
-                {
-                    $tmp_PAS = array_push($tmp_PAS, $am->SCORE);
-                }
-            }
-
-            // HITUNG NILAINYA
-            $tmp_calculate_TUGAS = 0; 
-            foreach($tmp_TUGAS as $t)
-            {
-                $tmp_calculate_TUGAS = $tmp_calculate_TUGAS + $t->SCORE;
-                $tmp_calculate_TUGAS = $tmp_calculate_TUGAS / count($tmp_TUGAS) * (0.1);
-            } 
-            
-            $tmp_calculate_PH = 0;
-            foreach($tmp_PH as $t)
-            {
-                $tmp_calculate_PH = $tmp_calculate_PH + $t->SCORE;
-                $tmp_calculate_PH = $tmp_calculate_PH / count($tmp_PH) * (0.3);
-            } 
-            
-            $tmp_calculate_PTS = 0;
-            foreach($tmp_PTS as $t)
-            {
-                $tmp_calculate_PTS = $tmp_calculate_PTS + $t->SCORE;
-                $tmp_calculate_PTS = $tmp_calculate_PTS / count($tmp_PTS) * (0.3);
-            } 
-            
-            $tmp_calculate_PAS = 0;
-            foreach($tmp_PAS as $t)
-            {
-                $tmp_calculate_PAS = $tmp_calculate_PAS + $t->SCORE;
-                $tmp_calculate_PAS = $tmp_calculate_PAS / count($tmp_PAS) * (0.4);
-            } 
-        }
     }
 }

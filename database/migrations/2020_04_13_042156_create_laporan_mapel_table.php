@@ -21,6 +21,12 @@ class CreateLaporanMapelTable extends Migration
             $table->foreign('SUBJECT_RECORD_ID')->references('id')->on('subject_records')->onDelete('cascade')->onUpdate('cascade');
             $table->double('FINAL_SCORE');
             $table->tinyInteger('IS_VERIFIED');
+            $table->text('TUGAS');
+            $table->text('PH');
+            $table->text('PTS');
+            $table->text('PAS');
+            $table->text('UN');
+            $table->text('US');
             $table->timestamps();
         });
     }

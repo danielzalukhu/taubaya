@@ -10,17 +10,6 @@ use App\Imports\StudentImport;
 
 class ImportController extends Controller
 {
-    public function assesmentPercentage(Request $request)
-    {
-        $p_tugas = $request->get('input_persentase_tugas');
-        $p_ph = $request->get('input_persentase_ph');
-        $p_pts = $request->get('input_persentase_pts');
-        $p_pas = $request->get('input_persentase_pas');
-        $percentage = array($p_tugas, $p_ph, $p_pts, $p_pas);
-
-        return $percentage;
-    }
-
     public function importAssesment(Request $request)
     {
         //dd($request->all());
@@ -28,7 +17,7 @@ class ImportController extends Controller
 			'assesment_import' => 'required|mimes:csv,xls,xlsx'
         ]);
         
-        Excel::import(new SubjectImport, $request->file('assesment_import'));
+        Excel::import(new SubjectImport($request), $request->file('assesment_import'));
         Session::flash('sukses','Import success');
 		return redirect('assesment');
     }
