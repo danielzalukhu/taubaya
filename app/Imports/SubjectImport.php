@@ -69,7 +69,7 @@ class SubjectImport implements ToCollection
                 }      
             }            
         }         
-        $this->formula();                 
+        $this->formula();    
     }
 
     public function formula()
@@ -77,14 +77,12 @@ class SubjectImport implements ToCollection
         $tmp_nilai = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
                                     ->select('students.*', 'activities_students.*')
                                     ->get();
+
         $arrayOfStudent = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
                                 ->select('students.*', 'activities_students.*')
                                 ->groupBy('activities_students.STUDENTS_ID')
-                                ->get();         
-                                
-        // $a = ActivityStudent::all();                                
-        // dd($a);
-
+                                ->get();            
+                                                    
         foreach ($arrayOfStudent as $student) 
         {
             $tmp_nama = $student->FNAME ." ". $student->LNAME;
@@ -100,34 +98,31 @@ class SubjectImport implements ToCollection
             $subject_record->ACADEMIC_YEAR_ID = $this->request->session()->get("session_academic_year_id");
             $subject_record->STUDENTS_ID = $student->STUDENTS_ID;
             $subject_record->save();
-
-            
+        
             foreach ($tmp_nilai as $nilai)
-            {
+            {             
                 if($nilai->STUDENTS_ID){
-                    if($nilai->ACTIVITIES_ID === 1){
+                    if($nilai->ACTIVITIES_ID === 1){  
                         array_push($tmp_tugas, $nilai->SCORE);
                     }else if($nilai->ACTIVITIES_ID === 2){
                         array_push($tmp_ph, $nilai->SCORE);
-                    }else if($nilai->ACTIVITIES_ID === 3){
+                    }else if($nilai->ACTIVITIES_ID === 3){     
                         array_push($tmp_pts, $nilai->SCORE);
                     }else if($nilai->ACTIVITIES_ID === 4){
                         array_push($tmp_pas, $nilai->SCORE);
-                    }
-                    else if($nilai->ACTIVITIES_ID === 5){
+                    }else if($nilai->ACTIVITIES_ID === 5){
                         array_push($tmp_us, $nilai->SCORE);
-                    }
-                    else if($nilai->ACTIVITIES_ID === 6){
+                    }else if($nilai->ACTIVITIES_ID === 6){
                         array_push($tmp_un, $nilai->SCORE);
                     }
-                }
-            }
-
+                }                                                       
+            }             
+                    
             $subject_report = SubjectReport::create([
                 'SUBJECTS_ID' => $student->SUBJECTS_ID,
                 'SUBJECT_RECORD_ID' => $subject_record->id,
                 'IS_VERIFIED' => '0',
-                'TUGAS' => json_encode($tmp_ph),
+                'TUGAS' => json_encode($tmp_tugas),
                 'PH' => json_encode($tmp_ph),
                 'PTS' => json_encode($tmp_pts),
                 'PAS' => json_encode($tmp_pas),
@@ -165,7 +160,7 @@ class SubjectImport implements ToCollection
     {
         $kd = DB::SELECT('SELECT id
                           FROM KD
-                          WHERE NUMBER = ' . $value);
+                          WHERE NUMBER =  "' . $value . '"');
         return $kd;                          
     }
 }

@@ -35,11 +35,7 @@
                                             <select type="button" id="selector-dropdown-absentrecord-year" class="btn btn-default dropdown-toggle">
                                                 @foreach($tahun_ajaran as $ta)
                                                     <option value='{{ $ta->id }}' class="dropdown-academic-year" academic-year-id="{{$ta->id}}">
-                                                        {{ $ta->TYPE}}
-                                                        {{ " - " }}
-                                                        {{ strtok($ta->START_DATE, '-') }}
-                                                        {{ " / " }}
-                                                        {{ strtok($ta->END_DATE, '-') }}
+                                                        {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
                                                     </option>                                                                        
                                                 @endforeach
                                             </select>

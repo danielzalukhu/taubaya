@@ -81,15 +81,11 @@
                             <div class="panel-heading">                                
                                 <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
                                     <span>
-                                        <div class="btn-group">
+                                        <div class="btn-group">                                            
                                             <select type="button" id="selector-dropdown-violation-year" class="btn btn-default dropdown-toggle">
                                                 @foreach($tahun_ajaran as $ta)
                                                     <option value='{{ $ta->id }}' class="dropdown-violation-year" violation-academic-year-id="{{$ta->id}}">
-                                                        {{ $ta->TYPE}}
-                                                        {{ " - " }}
-                                                        {{ strtok($ta->START_DATE, '-') }}
-                                                        {{ " / " }}
-                                                        {{ strtok($ta->END_DATE, '-') }}
+                                                        {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
                                                     </option>                                                                        
                                                 @endforeach
                                             </select>
@@ -127,11 +123,7 @@
                                         <select type="button" id="select-dropdown-academicyear-graph-violation" class="btn btn-default dropdown-toggle">
                                             @foreach($tahun_ajaran as $ta)
                                                 <option value='{{ $ta->id }}' class="dropdown-violation-year-graphic" violation-academic-year-id-graphic="{{$ta->id}}">
-                                                    {{ $ta->TYPE}}
-                                                    {{ " - " }}
-                                                    {{ strtok($ta->START_DATE, '-') }}
-                                                    {{ " / " }}
-                                                    {{ strtok($ta->END_DATE, '-') }}
+                                                    {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
                                                 </option>                                                                        
                                             @endforeach
                                         </select>
@@ -158,11 +150,7 @@
                                             <select type="button" id="selector-dropdown-achievement-year" class="btn btn-default dropdown-toggle">
                                                 @foreach($tahun_ajaran as $ta)
                                                     <option value='{{ $ta->id }}' class="dropdown-achievement-year" achievement-academic-year-id="{{$ta->id}}">
-                                                        {{ $ta->TYPE}}
-                                                        {{ " - " }}
-                                                        {{ strtok($ta->START_DATE, '-') }}
-                                                        {{ " / " }}
-                                                        {{ strtok($ta->END_DATE, '-') }}
+                                                        {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
                                                     </option>                                                                        
                                                 @endforeach
                                             </select>
@@ -200,11 +188,7 @@
                                         <select type="button" id="select-dropdown-academicyear-graph-achievement" class="btn btn-default dropdown-toggle">
                                             @foreach($tahun_ajaran as $ta)
                                                 <option value='{{ $ta->id }}' class="dropdown-achievement-year-graphic" achievement-academic-year-id-graphic="{{$ta->id}}">
-                                                    {{ $ta->TYPE}}
-                                                    {{ " - " }}
-                                                    {{ strtok($ta->START_DATE, '-') }}
-                                                    {{ " / " }}
-                                                    {{ strtok($ta->END_DATE, '-') }}
+                                                    {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
                                                 </option>                                                                        
                                             @endforeach
                                         </select>
@@ -231,11 +215,7 @@
                                             <select type="button" id="selector-dropdown-absent-year" class="btn btn-default dropdown-toggle">
                                                 @foreach($tahun_ajaran as $ta)
                                                     <option value='{{ $ta->id }}' class="dropdown-absent-year" absent-academic-year-id="{{$ta->id}}">
-                                                        {{ $ta->TYPE}}
-                                                        {{ " - " }}
-                                                        {{ strtok($ta->START_DATE, '-') }}
-                                                        {{ " / " }}
-                                                        {{ strtok($ta->END_DATE, '-') }}
+                                                        {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
                                                     </option>                                                                        
                                                 @endforeach
                                             </select>
@@ -326,47 +306,9 @@
 
 <script>
     var studentId = '{{ $siswa->id }}';
-
-    $('#tbody-absent-academic-year').on('click', '.button-detail', (function(){
-        var absentType = $(this).attr('absent-type');
-        // var academicYearId = $(this).val();
-        // console.log(academicYearId)
-        $.ajax({
-            url: '{{route("student.detailAbsent")}}', 
-            type: 'get', 
-            data: {studentId: studentId, absentType: absentType},
-
-            success: function(result){
-                $('#tbody-absent-detail').empty()
-                
-                result.forEach(function(obj){
-                    // console.log(obj)
-                    $('#tbody-absent-detail').append(
-                        `
-                        <tr>
-                            <td>${obj.TYPE}</td>
-                            <td>${obj.START_DATE}</td>
-                            <td>${obj.END_DATE}</td>
-                            <td>${obj.DESCRIPTION}</td>
-                        </tr>
-
-                        `
-                    )
-                })
-                // console.log(result)
-                $('#modalAbsentDetail').modal('show')
-            },
-            error: function(err){
-                console.log(err)
-            }
-        })
-    }))
    
     $('#selector-dropdown-violation-year').change(function(){
-
-       // var academicYearId = $(this).attr('violation-academic-year-id');
         var academicYearId = $(this).val();
-        console.log(academicYearId);
 
         $.ajax({
             url: '{{ route("violationrecord.academicYearAjax") }}',
@@ -377,7 +319,6 @@
                 $('#tbody-violation-academic-year').empty()
 
                 result.forEach(function(obj){
-                    // console.log(obj)
                     $('#tbody-violation-academic-year').append(
                         `
                         <tr>
@@ -398,9 +339,7 @@
     });
 
     $('#selector-dropdown-achievement-year').change(function(){
-        // var academicYearId = $(this).attr('achievement-academic-year-id');
         var academicYearId = $(this).val();
-        console.log(academicYearId);
 
         $.ajax({
             url: '{{ route("achievement.academicYearAjax") }}',
@@ -411,7 +350,6 @@
                 $('#tbody-achievement-academic-year').empty()
 
                 result.forEach(function(obj){
-                    // console.log(obj)
                     $('#tbody-achievement-academic-year').append(
                         `
                         <tr>
@@ -431,10 +369,10 @@
         })
     });
 
+    $('#selector-dropdown-absent-year').val({{ $academic_year_id }})
+
     $('#selector-dropdown-absent-year').change(function(){
         var academicYearId = $(this).val();
-        // var academicYearId = $(this).attr('absent-academic-year-id');
-        //console.log(academicYearId)
 
         $.ajax({
             url: '{{ route("absent.academicYearAjax") }}',
@@ -443,9 +381,7 @@
 
             success: function(result){
                 $('#tbody-absent-academic-year').empty()
-                // console.log(result)
                 result.forEach(function(obj){
-                    // console.log(obj)
                     $('#tbody-absent-academic-year').append(
                         `
                         <tr>
@@ -466,22 +402,52 @@
         })
     });
 
-    // TAB VIOLATION //
-    $('#select-dropdown-academicyear-graph-violation').change(function(){
-        // var academicYearId = $(this).attr('violation-academic-year-id-graphic');
+    $('#tbody-absent-academic-year').on('click', '.button-detail', (function(){
+        var absentType = $(this).attr('absent-type');
         var academicYearId = $(this).val();
-        // console.log(academicYearId)
+
+        $.ajax({
+            url: '{{route("student.detailAbsent")}}', 
+            type: 'get', 
+            data: {studentId: studentId, absentType: absentType},
+
+            success: function(result){
+                $('#tbody-absent-detail').empty()
+                
+                result.forEach(function(obj){
+                    $('#tbody-absent-detail').append(
+                        `
+                        <tr>
+                            <td>${obj.TYPE}</td>
+                            <td>${obj.START_DATE}</td>
+                            <td>${obj.END_DATE}</td>
+                            <td>${obj.DESCRIPTION}</td>
+                        </tr>
+
+                        `
+                    )
+                })
+                $('#modalAbsentDetail').modal('show')
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+    }))
+
+    // TAB VIOLATION 
+    $('#select-dropdown-academicyear-graph-violation').change(function(){
+        var academicYearId = $(this).val();
 
         window.location = "{{ route('student.profile', ['id'=>$siswa->id]) }}"+"?academicYearId="+academicYearId;
     })
 
-    // $('#selector-dropdown-violation-year').val({{$academic_year_id}})
+    $('#selector-dropdown-violation-year').val({{$academic_year_id}})
     $('#select-dropdown-academicyear-graph-violation').val({{$academic_year_id}})
     
     var categories = {!!json_encode($kategori)!!}
     var dataGraph = {!!json_encode($data)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
-    // console.log(categories)
 
     var startMonth = selectedTahunAjaran.STARTMONTH;
     var endMonth = selectedTahunAjaran.ENDMONTH;
@@ -536,11 +502,10 @@
         series: dataSeries
     });
 
-    // TAB ACHIEVEMENT //
+    // TAB ACHIEVEMENT 
     
     $('#select-dropdown-academicyear-graph-achievement').change(function(){
         var academicYearId = $(this).val();
-        // console.log(academicYearId)
         $.ajax({
             url: '{{ route("student.achievementChart") }}',
             type: 'get',
@@ -557,7 +522,7 @@
         })
     })
 
-    // $('#selector-dropdown-achievement-year').val({{$academic_year_id}})
+    $('#selector-dropdown-achievement-year').val({{$academic_year_id}})
     $('#select-dropdown-academicyear-graph-achievement').val({{$academic_year_id}})
 
     var types = {!!json_encode($type)!!}
@@ -635,14 +600,11 @@
     var types = {!!json_encode($tipeAbsen)!!}
     var dataGraph = {!!json_encode($dataAbsen)!!}
 
-    // var minYear = selectedTahun.TAHUNTERKECIL
-    // var maxYear = selectedTahun.TAHUNTERBESAR
     var dataSeries = []
 
     types.forEach(function(item){   
         dataGraph.forEach(function(obj){
             if(obj.TIPE == item.TIPE){
-                // var values = obj.JUMLAH
                 dataSeries.push({
                     name: item.TIPE,
                     y: obj.JUMLAH
@@ -650,7 +612,6 @@
             }
         })
     })
-    // console.log(dataGraph);
 
     Highcharts.chart('chartAbsent', {
         chart: {

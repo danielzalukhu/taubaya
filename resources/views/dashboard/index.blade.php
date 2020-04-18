@@ -48,11 +48,7 @@
         <section class="content-header">
           <h1>SISTEM MONITORING PRESTASI SISWA
               <small>
-                  {{$tahun_ajaran[0]->TYPE}}
-                  {{" - "}}
-                  {{ strtok($tahun_ajaran[0]->START_DATE, '-') }}
-                  {{ " / " }}
-                  {{ strtok($tahun_ajaran[0]->END_DATE, '-') }}
+              {{$tahun_ajaran[0]->TYPE}}{{" - "}}{{$tahun_ajaran[0]->NAME}}
               </small>
           </h1>
           <ol class="breadcrumb">

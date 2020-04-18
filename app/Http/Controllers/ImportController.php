@@ -18,8 +18,8 @@ class ImportController extends Controller
         ]);
         
         Excel::import(new SubjectImport($request), $request->file('assesment_import'));
-        Session::flash('sukses','Import success');
-		return redirect('assesment');
+        Session::flash('sukses','Import berhasil');
+        return redirect('assesment');    		
     }
 
     public function importStudent(Request $request)

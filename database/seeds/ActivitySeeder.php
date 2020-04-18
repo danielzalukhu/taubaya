@@ -31,5 +31,15 @@ class ActivitySeeder extends Seeder
             'MODULE' => 'PAS',
             'DESCRIPTION' => 'Ulangan Akhir Semester',
         ]);
+        
+        DB::table('activities')->insert([
+            'MODULE' => 'US',
+            'DESCRIPTION' => 'Ujian Akhir Sekolah',
+        ]);
+
+        DB::table('activities')->insert([
+            'MODULE' => 'UN',
+            'DESCRIPTION' => 'Ujian Akhir Negara',
+        ]);
     }
 }

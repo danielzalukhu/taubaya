@@ -103,7 +103,7 @@ class StudentController extends Controller
 
         $catatan_absen = DB::select('SELECT TYPE, COUNT(TYPE) as TOTAL			
                                      FROM absents 
-                                     WHERE STUDENTS_ID = ' . $id . ' AND ACADEMIC_YEAR_ID = (SELECT MIN(id) FROM academic_years)
+                                     WHERE STUDENTS_ID = ' . $id . ' AND ACADEMIC_YEAR_ID = ' . $request->session()->get('session_academic_year_id') . '
                                      GROUP BY TYPE');  
 
         // RIGHT COLOMN DATA
@@ -111,7 +111,7 @@ class StudentController extends Controller
 
         $catatan_pelanggaran = DB::select('SELECT *
                                         FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
-                                        WHERE STUDENTS_ID = '. $id);
+                                        WHERE STUDENTS_ID = ' . $id . ' AND' . ' ACADEMIC_YEAR_ID = ' . $request->session()->get('session_academic_year_id'));
 
         $point = DB::select('SELECT SUM(TOTAL) as point
                             FROM violation_records
@@ -133,7 +133,7 @@ class StudentController extends Controller
 
         $catatan_penghargaan = DB::select('SELECT *
                                         FROM achievement_records JOIN achievements on achievements.id = achievement_records.ACHIEVEMENTS_ID 
-                                        WHERE STUDENTS_ID = ' . $id);
+                                        WHERE STUDENTS_ID = ' . $id . ' AND' . ' ACADEMIC_YEAR_ID = ' . $request->session()->get('session_academic_year_id'));
 
         // GRAFIK TAB VIOLATION
 
@@ -192,12 +192,6 @@ class StudentController extends Controller
                                  FROM absents a
                                  WHERE a.STUDENTS_ID = " . $id . "
                                  GROUP BY TIPE, TAHUN");
-
-        // $selected_tahun_absen = DB::select("SELECT YEAR(THNKECIL) AS TAHUNTERKECIL, YEAR(THNBESAR) AS TAHUNTERBESAR
-        //                              FROM (
-        //                                     SELECT MIN(a.START_DATE) AS THNKECIL, MAX(a.START_DATE) AS THNBESAR
-        //                                     FROM absents a ) AS INNERTABLE"
-        //                                    )[0];
     
         return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
                     'catatan_penghargaan', 'total_achievement_point',

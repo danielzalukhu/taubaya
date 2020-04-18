@@ -14,6 +14,11 @@
                         <button type="button" class="close" data-dismiss="alert">×</button> 
                         <strong>{{ $sukses }}</strong>
                     </div>
+                @elseif($error = Session::get('error'))    
+                    <div class="alert alert-danger alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button> 
+                        <strong>{{ $error }}</strong>
+                    </div>                                
                 @endif
  
                 <div class="row">
@@ -55,28 +60,143 @@
                         <div class="box">                        
                             <div class="box-body">
                                 <div class="table-responsive">
-                                    <table id="example1" class="table table-bordered table-striped">
+                                    <table id="example1" class="table table-hover table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>NO</th>
-                                            <th>SUBJECT NAME</th>
-                                            <th>STUDENT NAME</th>
-                                            <th>ACTIVITY NAME</th>
-                                            <th>SCORE</th>
+                                            <th>NISN</th>
+                                            <th>STUDENT NAME
+                                            <th>TUGAS</th>
+                                            <th>ULANGAN HARIAN</th>
+                                            <th>UJIAN TENGAH SEMESTER</th>
+                                            <th>UJIAN AKHIR SEMESTER</th>
+                                            <th>NILAI AKHIR</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @php $i=1 @endphp
-                                    @foreach($aktivitas_siswa as $as)
-                                        <tr>
+                                        @php $i=1 @endphp
+                                        <tr>                                    
                                             <td>{{ $i++ }}</td>
-                                            <td>{{$as->subject->DESCRIPTION}}</td>
-                                            <td>{{$as->student->FNAME}}{{" "}}{{$as->student->LNAME}}</td>
-                                            <td>{{$as->activity->MODULE}}</td>
-                                            <td>{{$as->SCORE}}</td>
+                                            <td>0010010001</td>
+                                            <td>Ahmad Abdul</td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>T 1</th>
+                                                        <th>T 2</th>
+                                                        <th>T 3</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>80</td>
+                                                        <td>90</td>
+                                                        <td>100</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>PH 1</th>
+                                                        <th>PH 2</th>
+                                                        <th>PH 3</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>80</td>
+                                                        <td>90</td>
+                                                        <td>100</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>NILAI UTS</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>80</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>NILAI UAS</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>70</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>80</td>
                                         </tr>
-                                    @endforeach
+                                        
+                                        <tr>                                    
+                                            <td>{{ $i++ }}</td>
+                                            <td>0010010001</td>
+                                            <td>Ahmad Abdul</td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>T 1</th>
+                                                        <th>T 2</th>
+                                                        <th>T 3</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>80</td>
+                                                        <td>90</td>
+                                                        <td>100</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>PH 1</th>
+                                                        <th>PH 2</th>
+                                                        <th>PH 3</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>80</td>
+                                                        <td>90</td>
+                                                        <td>100</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>NILAI UTS</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>80</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover table-dark">
+                                                    <tr>
+                                                        <th>NILAI UAS</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>70</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>80</td>
+                                        </tr>                                        
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>NO</th>
+                                            <th>NISN</th>
+                                            <th>STUDENT NAME
+                                            <th>TUGAS</th>
+                                            <th>ULANGAN HARIAN</th>
+                                            <th>UJIAN TENGAH SEMESTER</th>
+                                            <th>UJIAN AKHIR SEMESTER</th>
+                                            <th>NILAI AKHIR</th>
+                                        </tr>
+                                    </tfoot>
                                     </table>
                                 </div>
                             </div>

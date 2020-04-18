@@ -18,7 +18,7 @@ class CreateCatatanPelanggaranTable extends Migration
             $table->date('DATE');
             $table->double('TOTAL');
             $table->text('DESCRIPTION');
-            $table->string('PUNISHMENT', 45);
+            $table->text('PUNISHMENT');
             $table->integer('STUDENTS_ID')->unsigned();
             $table->foreign('STUDENTS_ID')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('VIOLATIONS_ID')->unsigned();
