@@ -29,7 +29,7 @@
                             </div>
                             
                             <div class="panel-heading">                                
-                                <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                                <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                     <span>
                                         <div class="btn-group">
                                             <select type="button" id="selector-dropdown-absentrecord-year" class="btn btn-default dropdown-toggle">
@@ -55,7 +55,7 @@
 
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">ABSENT LIST</h3>            
+                            <h3 class="box-title">DAFTAR ABSEN</h3>            
                         </div>
                         <div class="box">
                             <div class="box-body">
@@ -63,32 +63,35 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th colspan="2">DATE</th>
-                                            <th>STUDENT NAME</th>
-                                            <th>REASON</th>
-                                            <th>DESCRIPTION</th>
-                                            <th>NOTED BY</th>
-                                            <th>EDIT</th>
-                                            <th>DELETE</th>
+                                            <th>#</th>
+                                            <th colspan="2">TANGGAL</th>
+                                            <th>NAMA SISWA</th>
+                                            <th>ALASAN</th>
+                                            <th>DESKRIPSI</th>
+                                            <th>AKSI</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @php $i=1 @endphp
                                     @foreach($absen as $a)
                                         <tr>
+                                            <td>{{$i++}}</td>
                                             <td>{{date('d-m-Y', strtotime($a->START_DATE))}}</td>
                                             <td>{{date('d-m-Y', strtotime($a->END_DATE))}}</td>
                                             <td>{{$a->student->FNAME }}{{" "}}{{$a->student->LNAME}}</td>
                                             <td>{{$a->TYPE}}</td>
                                             <td>{{$a->DESCRIPTION}}</td>
-                                            <td>{{$a->staff->NAME}}</td>
-                                            <td><a href= "{{ route ('absent.edit', $a->id )}}" class="btn btn-primary btn-sm">EDIT</td>
                                             <td>
-                                                <form action="{{ route ('absent.destroy', $a->id )}}" method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    {{ method_field("DELETE" )}}
-                                                    {{ csrf_field() }}
-                                                    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                </form>
+                                                <a href="{{ route ('absent.edit', $a->id )}}" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <form action="{{ route ('absent.destroy', $a->id )}}" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>                                            
                                             </td>
                                         </td>
                                     @endforeach

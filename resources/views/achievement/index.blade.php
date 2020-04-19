@@ -17,39 +17,48 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">ACHIEVEMENT LIST</h3>            
+                            <h3 class="box-title">DAFTAR PENGHARGAAN</h3>            
                         </div>
                         <div class="box">
                             <div class="box-body">
-                                <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>TYPE</th>
-                                    <th>DESCRIPTION</th>
-                                    <th>POINT</th>
-                                    <th>EDIT</th>
-                                    <th>DELETE</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($penghargaan as $pe)
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
                                     <tr>
-                                        <td>{{$pe->TYPE}}</td>
-                                        <td>{{$pe->DESCRIPTION}}</td>
-                                        <td>{{$pe->POINT}}</td>
-                                        <td><a href= "{{ route ('achievement.edit', $pe->id )}}" class="btn btn-primary btn-sm">EDIT</td>
-                                        <td>
-                                            <form action="{{ route ('achievement.destroy', $pe->id )}}" method="POST">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                {{ method_field("DELETE" )}}
-                                                {{ csrf_field() }}
-                                                <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                            </form>
-                                        </td>
+                                        <th>#</th>
+                                        <th>TIPE</th>
+                                        <th>DEKSRIPSI</th>
+                                        <th>TINGKAT</th>
+                                        <th>POIN</th>
+                                        <th>AKSI</th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                                </table>
+                                    </thead>
+                                    <tbody>
+                                    @php $i=1 @endphp
+                                    @foreach($penghargaan as $pe)
+                                        <tr>
+                                            <td>{{$i++}}</td>
+                                            <td>{{$pe->TYPE}}</td>
+                                            <td>{{$pe->DESCRIPTION}}</td>
+                                            <td>{{$pe->GRADE}}</td>
+                                            <td>{{$pe->POINT}}</td>
+                                            <td>
+                                                <a href="{{ route ('achievement.edit', $pe->id )}}" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <form action="{{ route ('achievement.destroy', $pe->id )}}" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>                                            
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                    </table>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -71,7 +80,7 @@
                     <form action="{{ route('achievement.store') }}" method="post"  enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="form-group{{ $errors->has('a_type') ? 'has-error' : '' }} ">
-                            <label>Type</label>
+                            <label>Tipe</label>
                             <select name="a_type" class="form-control" id="inputGroupSelect01">
                                 <option value="PR">PRESTASI</option>
                                 <option value="NPR">NON-PRESTASI</option>
@@ -82,7 +91,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Description</label>
+                            <label>Deksripsi</label>
                             <textarea name="a_desc" class="form-control" 
                             id="exampleFormControlTextarea1" rows="3">{{old('a_desc')}}</textarea>
                         </div>

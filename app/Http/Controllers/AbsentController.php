@@ -77,7 +77,7 @@ class AbsentController extends Controller
             'DESCRIPTION' => $request->get('a_desc'),
             'RECEIPT_IMG' => $request->get('a_image'),
             'STUDENTS_ID' => $request->get('a_s_name'),
-            'STAFFS_ID' => $request->get('a_noted_by')
+            'STAFFS_ID' => $request->session()->get('session_user_id')
         ]);
         
         if($request->hasFile('a_image'))
@@ -138,7 +138,7 @@ class AbsentController extends Controller
         $absen->DESCRIPTION = $request->get('a_desc');
         $absen->RECEIPT_IMG = $request->get('a_image');
         $absen->STUDENTS_ID = $request->get('a_s_name');
-        $absen->STAFFS_ID = $request->get('a_noted_by');
+        $absen->STAFFS_ID = $request->session()->get('session_user_id');
 
         if($request->hasFile('a_image'))
         {

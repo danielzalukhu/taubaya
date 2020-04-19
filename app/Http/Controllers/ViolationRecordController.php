@@ -141,7 +141,7 @@ class ViolationRecordController extends Controller
                     ]);
 
                     $catatan_pelanggaran->save();
-                    return redirect('violationrecord')->with('sukses', 'Record Violation has been created');
+                    return redirect('violationrecord')->with('sukses', 'Catatan pelanggaran baru berhasil dibuat');
                 }                
             }            
         }           
@@ -213,7 +213,7 @@ class ViolationRecordController extends Controller
             $catatan_pelanggaran->STAFFS_ID = $request->session()->get('session_user_id');
         }
         $catatan_pelanggaran->save();
-        return redirect(action('ViolationRecordController@index', $catatan_pelanggaran->id))->with('sukses', 'Violation Record has been chaged');
+        return redirect(action('ViolationRecordController@index', $catatan_pelanggaran->id))->with('sukses', 'Catatan pelanggaran berhasil diubah');
     }
 
     /**
@@ -226,7 +226,7 @@ class ViolationRecordController extends Controller
     {
         $catatan_pelanggaran = ViolationRecord::whereId($id)->firstOrFail();
         $catatan_pelanggaran->delete();
-        return redirect(action('ViolationRecordController@index'))->with('sukses', 'Violation Record has been deleted');
+        return redirect(action('ViolationRecordController@index'))->with('sukses', 'Catatan pelanggaran berhasil dihapus');
     }
     
     public function ajaxChangeViolationRecord(Request $request)

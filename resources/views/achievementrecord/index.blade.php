@@ -18,22 +18,23 @@
                         {{ session('error') }}
                     </div>
                 @endif
-                <div class="row">
-                    
+                <div class="row">                    
                     <div class="col-xs-12">
                         <div class="panel-heading">
                             <h3 class="box-title"></h3>            
                         </div>
                         <div class="box box-info">
-
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
                                 </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                                </button>
                             </div>
 
                             <div class="panel-heading">                                
-                                <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                                <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                     <span>
                                         <div class="btn-group">
                                             <select type="button" id="selector-dropdown-achievementrecord-year" class="btn btn-default dropdown-toggle">
@@ -59,12 +60,12 @@
 
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">STUDENT ACHIEVEMENT LIST</h3>            
+                            <h3 class="box-title">DAFTAR PENGHARGAAN SISWA</h3>            
                         </div>
                         <div class="box">
                             <div class="box-header">
                                 <div class="right">
-                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">CREATE NEW</button>
+                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">BUAT DAFTAR PENGHARGAAN</button>
                                 </div>
                             </div>
                             <div class="box-body">
@@ -72,37 +73,40 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>STUDENT NAME</th>
-                                            <th>DATE</th>
-                                            <th>ACADEMIC YEAR</th>
-                                            <th>ACHIVEMENT NAME</th>
-                                            <th>DESCRIPTION</th>
-                                            <th>EDIT</th>
-                                            <th>DELETE</th>
+                                            <th>#</th>
+                                            <th>NAMA SISWA</th>
+                                            <th>TANGGAL</th>
+                                            <th>TAHUN AJARAN</th>
+                                            <th>NAMA PENGHARGAAN</th>
+                                            <th>DESKRIPSI</th>
+                                            <th>AKSI</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @php $i=1 @endphp
                                     @foreach($catatan_penghargaan as $cp)
                                         <tr>
+                                            <td>{{$i++}}</td>
                                             <td><a href="{{ route('student.profile', ['id'=>$cp->student->id]) }}">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
                                             <td>{{date('d-m-Y', strtotime($cp->DATE))}}</td>
                                             <td>
                                                 {{$cp->academicyear->TYPE}}
                                                 {{ " - " }}
-                                                {{ strtok($cp->academicyear->START_DATE, '-') }}
-                                                {{ " / " }}
-                                                {{ strtok($cp->academicyear->END_DATE, '-') }}
+                                                {{$cp->academicyear->NAME}}
                                             </td>
                                             <td>{{$cp->achievement->TYPE}}{{" - "}}{{$cp->achievement->DESCRIPTION}}</td>
                                             <td>{{$cp->DESCRIPTION}}</td>
-                                            <td><a href= "{{ route ('achievementrecord.edit', $cp->id )}}" class="btn btn-primary btn-sm">EDIT</td>
                                             <td>
-                                                <form action="{{ route ('achievementrecord.destroy', $cp->id )}}" method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    {{ method_field("DELETE" )}}
-                                                    {{ csrf_field() }}
-                                                    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                </form>
+                                                <a href="{{ route ('achievementrecord.edit', $cp->id )}}" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <form action="{{ route ('achievementrecord.destroy', $cp->id )}}" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>                                            
                                             </td>
                                         </tr>
                                     @endforeach

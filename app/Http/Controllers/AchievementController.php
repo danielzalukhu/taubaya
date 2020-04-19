@@ -40,12 +40,13 @@ class AchievementController extends Controller
         $penghargaan = new Achievement([
             'TYPE' => $request->get('a_type'),
             'DESCRIPTION' => $request->get('a_desc'),
-            'POINT' => $request->get('a_point')
+            'POINT' => $request->get('a_point'),
+            'GRADE' => $request->get('a_grade')
         ]);
         //dd($request->all());
         $penghargaan->save();
 
-        return redirect('achievement')->with('sukses', 'New Achievement has been created');
+        return redirect('achievement')->with('sukses', 'Daftar penghargaan berhasil dibuat');
     }
 
     /**
@@ -85,9 +86,10 @@ class AchievementController extends Controller
         $penghargaan->TYPE = $request->get('a_type');
         $penghargaan->DESCRIPTION = $request->get('a_desc');
         $penghargaan->POINT = $request->get('a_point');
+        $penghargaan->GRADE = $request->get('a_grade');
         $penghargaan->save();
 
-        return redirect(action('AchievementController@index', $penghargaan->id))->with('sukses', 'Achievement has been chaged');
+        return redirect(action('AchievementController@index', $penghargaan->id))->with('sukses', 'Penghargaan berhasil diubah');
     }
 
     /**
@@ -100,6 +102,6 @@ class AchievementController extends Controller
     {
         $penghargaan = Achievement::whereId($id)->firstOrFail();
         $penghargaan->delete();
-        return redirect(action('AchievementController@index'))->with('sukses', 'Achievement has been deleted');
+        return redirect(action('AchievementController@index'))->with('sukses', 'Penghargaan berhasil diubah');
     }
 }

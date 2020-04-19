@@ -17,40 +17,45 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">VIOLATION LIST</h3>            
+                            <h3 class="box-title">DAFTAR PELANGGARAN</h3>            
                         </div>
                         <div class="box">
                             <div class="box-header">
                                 <div class="right">
-                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">CREATE NEW</button>
+                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">BUAT DAFTAR PELANGGARAN</button>
                                 </div>
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped">
                                     <thead>
-                                    <tr>
-                                        <th>VIOLATION NAME</th>
-                                        <th>DESCRIPTION</th>
-                                        <th>POINT</th>
-                                        <th>EDIT</th>
-                                        <th>DELETE</th>
-                                    </tr>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>NAMA PELANGGARAN</th>
+                                            <th>DESKRIPSI</th>
+                                            <th>POIN</th>
+                                            <th>AKSI</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
+                                    @php $i=1 @endphp
                                     @foreach($pelanggaran as $pl)
                                         <tr>
+                                            <td>{{$i++}}</td>
                                             <td>{{$pl->NAME}}</td>
                                             <td>{{$pl->DESCRIPTION}}</td>
                                             <td>{{$pl->POINT}}</td>
-                                            <td><a href= "{{ route ('violation.edit', $pl->id )}}" class="btn btn-primary btn-sm">EDIT</td>
                                             <td>
-                                                <form action="{{ route ('violation.destroy', $pl->id )}}" method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    {{ method_field("DELETE" )}}
-                                                    {{ csrf_field() }}
-                                                    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                </form>
+                                                <a href="{{ route ('violation.edit', $pl->id )}}" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <form action="{{ route ('violation.destroy', $pl->id )}}" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>                                            
                                             </td>
                                         </tr>
                                     @endforeach
@@ -70,7 +75,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title" id="exampleModalLabel">CREATE NEW MASTER VIOLATION</h1>
+                    <h1 class="modal-title" id="exampleModalLabel">BUAT PELANGGARAN BARU</h1>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -80,22 +85,22 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <!-- {{csrf_field()}} -->
                         <div class="form-group{{ $errors->has('v_name') ? 'has-error' : '' }} ">
-                            <label>Violation Name</label>
-                            <input name="v_name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="R-01 OR B-01 OR SB-01" value="{{old('v_name')}}">            
+                            <label>Nama Pelanggaran</label>
+                            <input name="v_name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="R-01/B-01/SB-01" value="{{old('v_name')}}">            
                             @if($errors->has('v_name'))
                                 <span class="help-block">{{$errors->first('v_name')}}</span>
                             @endif
                         </div>
 
                         <div class="form-group">
-                            <label>Description</label>
+                            <label>Deskripsi</label>
                             <textarea name="v_desc" class="form-control" 
                             id="exampleFormControlTextarea1" rows="3">{{old('v_desc')}}</textarea>
                         </div>
 
                         <div class="form-group{{ $errors->has('v_point') ? 'has-error' : '' }} ">
-                            <label>Point</label>
-                            <input name="v_point"type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="0 untill 250" value="{{old('v_point')}}">            
+                            <label>Poin</label>
+                            <input name="v_point"type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="0 s/d 250" value="{{old('v_point')}}">            
                             @if($errors->has('v_point'))
                                 <span class="help-block">{{$errors->first('v_point')}}</span>
                             @endif

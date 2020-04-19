@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">EDIT VIOLATION</h3>            
+                            <h3 class="box-title">UBAH PELANGGARAN</h3>            
                         </div>
                         <div class="box">
                             <div class="box-body">
@@ -22,21 +22,21 @@
 
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <div class="form-group">
-                                        <label>Violation Name</label>
+                                        <label>Nama Pelanggaran</label>
                                         <input name="v_name" type="text" class="form-control" value="{{ $pelanggaran->NAME }}">            
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Description</label>
+                                        <label>Deskripsi</label>
                                         <input name="v_desc"type="text" class="form-control" value="{{ $pelanggaran->DESCRIPTION }}">            
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Point</label>
+                                        <label>Poin</label>
                                         <input name="v_point"type="text" class="form-control" value="{{ $pelanggaran->POINT }}">            
                                     </div>
 
-                                    <button type="submit" class="btn btn-warning">Update</button>
+                                    <button type="submit" class="btn btn-warning">Ubah</button>
                                 </form>                        
                             </div>
                         </div>

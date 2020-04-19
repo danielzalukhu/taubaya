@@ -52,7 +52,7 @@ class ViolationController extends Controller
         
         $pelanggaran->save();
 
-        return redirect('violation')->with('sukses', 'New Violation has been created');
+        return redirect('violation')->with('sukses', 'Daftar pelanggaran baru berhasil dibuat');
     }
 
     /**
@@ -95,7 +95,7 @@ class ViolationController extends Controller
         $pelanggaran->POINT = $request->get('v_point');
         $pelanggaran->save();
 
-        return redirect(action('ViolationController@index', $pelanggaran->id))->with('sukses', 'Violation has been chaged');
+        return redirect(action('ViolationController@index', $pelanggaran->id))->with('sukses', 'Daftar pelanggaran berhasil diubah');
     }
 
     /**
@@ -108,6 +108,6 @@ class ViolationController extends Controller
     {
         $pelanggaran = Violation::whereId($id)->firstOrFail();
         $pelanggaran->delete();
-        return redirect(action('ViolationController@index'))->with('sukses', 'Violation has been deleted');
+        return redirect(action('ViolationController@index'))->with('sukses', 'Daftar pelanggaran berhasil dihapus');
     }
 }

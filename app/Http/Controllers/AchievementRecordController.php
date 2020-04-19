@@ -105,7 +105,7 @@ class AchievementRecordController extends Controller
 
         // dd($request->all());
         $catatan_penghargaan->save();
-        return redirect('achievementrecord')->with('sukses', 'New achivement record has been created');
+        return redirect('achievementrecord')->with('sukses', 'Daftar penghargaan baru berhasil dibuat');
     }
 
     /**
@@ -174,7 +174,7 @@ class AchievementRecordController extends Controller
         }
         //dd($request->all());
         $catatan_penghargaan->save();
-        return redirect(action('AchievementRecordController@index', $catatan_penghargaan->id))->with('sukses', 'Achievement Record has been chaged');
+        return redirect(action('AchievementRecordController@index', $catatan_penghargaan->id))->with('sukses', 'Daftar penghargaan siswa berhasil diubah');
     }
 
     /**
@@ -187,7 +187,7 @@ class AchievementRecordController extends Controller
     {
         $catatan_penghargaan = AchievementRecord::whereId($id)->firstOrFail();
         $catatan_penghargaan->delete();
-        return redirect(action('AchievementRecordController@index'))->with('sukses', 'Achievement Record has been deleted');
+        return redirect(action('AchievementRecordController@index'))->with('sukses', 'Daftar penghargaan siswa berhasil dihapus');
     }
 
     public function ajaxChangeAchievementRecord(Request $request)

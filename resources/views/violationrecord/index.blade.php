@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="panel-heading">                                
-                                <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                                <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                     <span>
                                         <div class="btn-group">
                                             <select type="button" id="selector-dropdown-violationrecord-year" class="btn btn-default dropdown-toggle">
@@ -61,13 +61,13 @@
 
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">VIOLATION RECORD LIST</h3>            
+                            <h3 class="box-title">DAFTAR CATATAN PELANGGARAN SISWA</h3>            
                         </div>
                         <div class="box">
                             <div class="box-header">
                                 @if(Auth::guard('web')->user()->ROLE === "STAFF")
                                 <div class="right">
-                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">CREATE NEW</button>
+                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">BUAT CATATAN PELANGGARAN</button>
                                 </div>
                                 @endif
                             </div>
@@ -76,39 +76,42 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th>STUDENT NAME</th>
-                                        <th>DATE</th>
-                                        <th>ACADEMIC YEAR</th>
-                                        <th>VIOLATION NAME</th>
-                                        <th>PUNISHMENT</th>
-                                        <th>POINT</th>
-                                        <th>EDIT</th>
-                                        <th>DELETE</th>
+                                        <th>#</th>
+                                        <th>NAMA SISWA</th>
+                                        <th>TANGGAL</th>
+                                        <th>TAHUN AJARAN</th>
+                                        <th>NAMA PELANGGARAN</th>
+                                        <th>HUKUMAN</th>
+                                        <th>POIN</th>
+                                        <th>AKSI</th>
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    @php $i=1 @endphp
                                     @foreach($catatan_pelanggaran as $cp)
                                         <tr>
+                                            <td>{{$i++}}</td>
                                             <td><a href="{{ route('student.profile', ['id'=>$cp->student->id]) }}">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
                                             <td>{{date('d-m-Y', strtotime($cp->DATE))}}</td>
                                             <td>
                                                 {{$cp->academicyear->TYPE}}
                                                 {{ " - " }}
-                                                {{ strtok($cp->academicyear->START_DATE, '-') }}
-                                                {{ " / " }}
-                                                {{ strtok($cp->academicyear->END_DATE, '-') }}
+                                                {{$cp->academicyear->NAME}}
                                             </td>
                                             <td>{{$cp->violation->DESCRIPTION}}</td>
                                             <td>{{$cp->PUNISHMENT}}</td>
                                             <td>{{$cp->TOTAL}}</td>
-                                            <td><a href= "{{ route ('violationrecord.edit', $cp->id )}}" class="btn btn-primary btn-sm">EDIT</td>
                                             <td>
-                                                <form action="{{ route ('violationrecord.destroy', $cp->id )}}" method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    {{ method_field("DELETE" )}}
-                                                    {{ csrf_field() }}
-                                                    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                </form>
+                                                <a href="{{ route ('violationrecord.edit', $cp->id )}}" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <form action="{{ route ('violationrecord.destroy', $cp->id )}}" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>                                            
                                             </td>
                                         </tr>
                                     @endforeach
@@ -128,7 +131,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title" id="exampleModalLabel">RECORD THE VIOLATION!</h1>
+                    <h1 class="modal-title" id="exampleModalLabel">BUAT CATATAN PELANGGARAN</h1>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -138,7 +141,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                         <div class="form-group{{ $errors->has('vr_date') ? 'has-error' : '' }} ">
-                            <label>Date</label>
+                            <label>Tanggal</label>
                             <input name="vr_date" type="date" class="form-control input-violation-date" aria-describedby="emailHelp" value="{{old('vr_date')}}">            
                             @if($errors->has('vr_date'))
                                 <span class="help-block">{{$errors->first('vr_date')}}</span>
@@ -146,7 +149,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('vr_student_name') ? 'has-error' : '' }} ">
-                            <label>Student Name</label>
+                            <label>Nama Siswa</label>
                             <select name="vr_student_name" class="form-control" id="inputGroupSelect01">
                                 @foreach($siswa as $s)
                                     <option value='{{ $s->id }}'>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>
@@ -158,7 +161,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('vr_violation_name') ? 'has-error' : '' }} ">
-                            <label>Violation Name</label>
+                            <label>Nama Pelanggaran</label>
                             <select name="vr_violation_name" class="form-control" id="inputGroupSelect01">
                                 @foreach($pelanggaran as $p)
                                     <option value='{{ $p->id }}'>{{$p->NAME}}{{" - "}}{{ $p->DESCRIPTION }}</option>
@@ -170,7 +173,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('vr_desc') ? 'has-error' : '' }} ">
-                            <label>Description</label>            
+                            <label>Deskripsi</label>            
                             <textarea name="vr_desc" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_desc')}}</textarea>
                             @if($errors->has('vr_desc'))
                                 <span class="help-block">{{$errors->first('vr_desc')}}</span>
@@ -178,14 +181,12 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('vr_punishment') ? 'has-error' : '' }} ">
-                            <label>Punishment</label>
+                            <label>Hukuman</label>
                             <textarea name="vr_punishment" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_punishment')}}</textarea>
                             @if($errors->has('vr_punishment'))
                                 <span class="help-block">{{$errors->first('vr_punishment')}}</span>
                             @endif
                         </div>
-
-                        
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

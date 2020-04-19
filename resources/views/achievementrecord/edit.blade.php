@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">EDIT STUDENT VIOLATION RECORD</h3>            
+                            <h3 class="box-title">UBAH DAFTAR PENGHARGAAN SISWA</h3>            
                         </div>
                         <div class="box">
                             <div class="box-body">
@@ -27,7 +27,7 @@
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     
                                     <div class="form-group{{ $errors->has('ar_student_name') ? 'has-error' : '' }} ">
-                                        <label>Student Name</label>
+                                        <label>Nama Siswa</label>
                                         <select name="ar_student_name" class="form-control">
                                             @foreach($siswa as $s)
                                                 <option value="{{ $s->id }}" @if($catatan_penghargaan->STUDENTS_ID == $s->id) selected @endif>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>                                                    
@@ -39,7 +39,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('ar_date') ? 'has-error' : '' }} ">
-                                        <label>Date</label>
+                                        <label>Tanggal</label>
                                         <input name="ar_date" type="date" class="form-control"  value="{{$catatan_penghargaan->DATE}}">            
                                         @if($errors->has('ar_date'))
                                             <span class="help-block">{{$errors->first('ar_date')}}</span>
@@ -47,7 +47,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('ar_achievement_name') ? 'has-error' : '' }} ">
-                                        <label>Achievement Name</label>
+                                        <label>Nama Penghargaan</label>
                                         <select name="ar_achievement_name" class="form-control">
                                             @foreach($penghargaan as $p)
                                                 <option value="{{ $p->id }}" @if($catatan_penghargaan->ACHIEVEMENTS_ID == $p->id) selected @endif>{{ $p->TYPE }}{{" - "}}{{ $p->DESCRIPTION }}</option>                                                    
@@ -59,14 +59,14 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('ar_desc') ? 'has-error' : '' }} ">
-                                        <label>Description</label>            
+                                        <label>Deskripsi</label>            
                                         <textarea name="ar_desc" class="form-control" rows="3">{{ $catatan_penghargaan->DESCRIPTION }}</textarea>
                                         @if($errors->has('ar_desc'))
                                             <span class="help-block">{{$errors->first('ar_desc')}}</span>
                                         @endif
                                     </div>
 
-                                    <button type="submit" class="btn btn-warning">Update</button>
+                                    <button type="submit" class="btn btn-warning">Ubah</button>
                                 </form>                        
                             </div>
                         </div>
