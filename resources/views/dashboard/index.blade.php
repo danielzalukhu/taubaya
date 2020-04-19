@@ -63,12 +63,12 @@
                   <div class="small-box bg-blue">
                     <div class="inner">
                       <h3>{{$jumlah_siswa}}</h3>
-                      <p>Students</p>
+                      <p>SISWA</p>
                     </div>
                     <div class="icon">
                       <i class="fa fa-users"></i>
                     </div>
-                    <a href="{{route('student.index')}}" class="small-box-footer">More Students <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="{{route('student.index')}}" class="small-box-footer">Daftar Siswa.. <i class="fa fa-arrow-circle-right"></i></a>
                   </div>
                 </div>
 
@@ -76,12 +76,12 @@
                     <div class="small-box bg-green">
                       <div class="inner">
                         <h3>{{$jumlah_penghargaan}}</h3>
-                        <p>Student Achievements</p>
+                        <p>PENGHARGAAN</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-trophy"></i>
                       </div>
-                      <a href="{{route('achievement.index')}}" class="small-box-footer">More Trophy<i class="fa fa-arrow-circle-right"></i></a>
+                      <a href="{{route('achievement.index')}}" class="small-box-footer">Daftar Penghargaan..<i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
@@ -89,26 +89,25 @@
                     <div class="small-box bg-yellow">
                       <div class="inner">
                         <h3>{{$jumlah_pelanggaran}}</h3>
-                        <p>Record Violations</p>
+                        <p>PELANGGARAN</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-person-add"></i>
                       </div>
-                      <a href="{{route('violationrecord.index')}}" class="small-box-footer">More Violations <i class="fa fa-arrow-circle-right"></i></a>
+                      <a href="{{route('violationrecord.index')}}" class="small-box-footer">Daftar Pelanggaran.. <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-red">
                       <div class="inner">
-                        <h3>..<sup style="font-size: 20px">%</sup></h3>
-
-                        <p>Record Absents</p>
+                        <h3>{{date("D")}}<sup style="font-size: 20px"></sup></h3>
+                        <p>{{date("d-m-Y")}}</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                       </div>
-                      <a href="{{route('absent.index')}}" class="small-box-footer">More Absents <i class="fa fa-arrow-circle-right"></i></a>
+                      <a href="{{route('absent.index')}}" class="small-box-footer">Daftar Absensi..<i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -117,7 +116,7 @@
               <div class="col-lg-8"> 
                 <div class="box box-warning">
                   <div class="box-header with-border">
-                      <h3 class="box-title">Trouble Student</h3>
+                      <h3 class="box-title">Daftar Siswa Bermasalah</h3>
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
                             <i class="fa fa-minus"></i>
@@ -133,9 +132,9 @@
                         <thead>
                           <tr>
                             <th>NISN</th>
-                            <th>STUDENT NAME</th>
-                            <th>TOTAL VIOLATION</th>
-                            <th>TOTAL POINT</th>
+                            <th>NAMA SISWA</th>
+                            <th>TOTAL PELANGGARAN</th>
+                            <th>TOTAL POIN</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -158,8 +157,8 @@
                     </div>
                   </div>                  
                   <div class="box-footer clearfix">
-                    <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-info btn-flat pull-left">Record New Violation</a>
-                    <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-default btn-flat pull-right">View All Violation Records</a>
+                    <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-info btn-flat pull-left">Buat Daftar Pelanggaran</a>
+                    <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-default btn-flat pull-right">Lihat Daftar Pelanggaran</a>
                   </div>
               </div>
               <div class="col-lg-4">

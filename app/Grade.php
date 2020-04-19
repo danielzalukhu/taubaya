@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 {
     protected $table= 'grades';
+    protected $fillable = ['NAME', 'DESCRIPTION', 'GRADE', 'PROGRAMS_ID', 'STAFFS_ID'];
 
     public function program()
     {

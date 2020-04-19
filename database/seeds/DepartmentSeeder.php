@@ -27,5 +27,9 @@ class DepartmentSeeder extends Seeder
             'NAME' => 'Departemen Kurikulum',
             'DESCRIPTION' => 'Manajemen struktur kurikulum dan organisasi siswa'
         ]);
+        DB::table('departments')->insert([
+            'NAME' => 'Departemen Kesehatan',
+            'DESCRIPTION' => 'Manajemen kesehatan siswa'
+        ]);
     }
 }

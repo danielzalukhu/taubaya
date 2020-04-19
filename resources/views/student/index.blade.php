@@ -1,7 +1,6 @@
 @extends('layout.master')
 
 @section('header')
-  <!-- DataTables -->
   <link rel="stylesheet" href="adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 @stop
 
@@ -18,12 +17,12 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">LIST OF STUDENTS</h3>            
+                            <h3 class="box-title">DAFTAR NAMA SISWA</h3>            
                         </div>
                         <div class="box">
                             <div class="box-header">
                                 <div class="right">
-                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">ADD NEW STUDENT</button>
+                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modalTambahSiswa">INPUT DAFTAR SISWA</button>
                                 </div>
                             </div>
                             <div class="box-body">
@@ -31,29 +30,30 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>NISN</th>
-                                            <th>STUDENT NAME</th>
-                                            <!-- <th>CLASS</th> -->
-                                            <th>EDIT</th>
-                                            <th>DELETE</th>
+                                            <th>NAMA SISWA</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @php $i=1 @endphp
                                     @foreach($siswa as $s)
                                         <tr>
+                                            <td>{{ $i++ }}</td>
                                             <td><a href="{{ route('student.profile', ['id'=>$s->id]) }}">{{$s->NISN}}</a></td>
                                             <td>{{$s->FNAME}}{{" "}}{{$s->LNAME}}</td>
-                                            <!-- <td>{{$s->CLASSES_ID}}</td> -->
                                             <td>
-                                                <a href= "#" class="btn btn-primary btn-sm">EDIT</a>
-                                            </td>
-                                            <td>
-                                                <form action="{{ route ('student.destroy', $s->id )}}" method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    {{ method_field("DELETE" )}}
-                                                    {{ csrf_field() }}
-                                                    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                </form>
+                                                <a href="#" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>                                            
                                             </td>
                                         </tr>
                                     @endforeach
@@ -68,12 +68,12 @@
         </div>
     </div>
 
-    <!-- Modal Create New-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- MODAL -->
+    <div class="modal fade" id="modalTambahSiswa" tabindex="-1" role="dialog" aria-labelledby="modalTambahSiswaLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title" id="exampleModalLabel">INPUT NEW STUDENT</h1>
+                    <h1 class="modal-title" id="exampleModalLabel">INPUT DATA SISWA BARU</h1>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -83,7 +83,7 @@
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         
                         <div class="form-group{{ $errors->has('student_import') ? 'has-error' : '' }} ">
-                            <label>Import file (.xls/.csv)</label>
+                            <label>IMPORT EXCEL (XLSX/XLS)</label>
                             <input name="student_import" type="file" class="form-control">
                             @if($errors->has('student_import'))
                                 <span class="help-block">{{$errors->first('student_import')}}</span>

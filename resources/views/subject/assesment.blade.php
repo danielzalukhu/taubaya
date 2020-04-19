@@ -33,7 +33,7 @@
                         </div>
                         <div class="box box-primary">
                             <div class="box-header with-border">
-                                <h3 class="box-title">IMPORT EXCEL (XLSX/XLS/CSV)</h3>
+                                <h3 class="box-title">IMPORT EXCEL (XLSX/XLS)</h3>
                             </div>
                             <div class="box-body">
                                 <form action="{{ route('subject.importAssesment') }}" method="POST"  enctype="multipart/form-data">
@@ -48,7 +48,6 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
                                 </form>
@@ -70,7 +69,7 @@
                                         <tr>
                                             <th>NO</th>
                                             <th>NISN</th>
-                                            <th>STUDENT NAME</th>
+                                            <th>NAMA SISWA</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
                                             <th>UJIAN TENGAH SEMESTER</th>

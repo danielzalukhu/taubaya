@@ -34,80 +34,80 @@
         </li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-users"></i> <span>STUDENT</span>
+            <i class="fa fa-users"></i> <span>SISWA</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>LIST STUDENT</a></li>
-            <li><a href=#><i class="fa fa-book"></i>MY SUBJECT</a></li>
+            <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>
+            <li><a href=#><i class="fa fa-book"></i>MAPEL-KU</a></li>
           </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-book"></i> <span>SUBJECT</span>
+            <i class="fa fa-book"></i> <span>MATA PELAJARAN</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('subject.index')}}"><i class="fa fa-list-ol"></i>LIST OF SUBJECT</a></li>
-            <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>INCOMPLETE REPORT</a></li>
-            <li><a href="{{route('subject.assesment')}}"><i class="fa fa-pencil"></i>SUBJECT ASSESSMENT</a></li>
+            <li><a href="{{route('subject.index')}}"><i class="fa fa-list-ol"></i>DAFTAR MAPEL</a></li>
+            <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>LAPOR KETIDAKTUNTASAN </a></li>
+            <li><a href="{{route('subject.assesment')}}"><i class="fa fa-pencil"></i>INPUT PENILAIAN</a></li>
           </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-heart"></i> <span>EXTRACURRICULAR</span>
+            <i class="fa fa-heart"></i> <span>EKSTRAKURIKULER</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>LIST OF EXTRACURRICULAR</a></li>
-            <li><a href="#"><i class="fa fa-pencil"></i>INPUT ASSESSMENT</a></li>
+            <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
+            <li><a href="#"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>
           </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-trophy"></i> <span>ACHIEVEMENT</span>
+            <i class="fa fa-trophy"></i> <span>PENGHARGAAN</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('achievement.index')}}"><i class="fa fa-thumbs-up"></i>TYPES OF ACHIEVEMENTS</a></li>
-            <li><a href="{{route('achievementrecord.index')}}"><i class="fa fa-list-ol"></i>RECORD ACHIEVEMENTS</a></li>
+            <li><a href="{{route('achievement.index')}}"><i class="fa fa-thumbs-up"></i>DAFTAR PENGHARGAAN</a></li>
+            <li><a href="{{route('achievementrecord.index')}}"><i class="fa fa-list-ol"></i>CATAT PENGHARGAAN</a></li>
           </ul>
         </li>
 
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-thumbs-down"></i> <span>VIOLATION</span>
+            <i class="fa fa-thumbs-down"></i> <span>PELANGGARAN</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('violation.index')}}"><i class="fa fa fa-warning"></i>TYPES OF VIOLATIONS</a></li>
-            <li><a href="{{route('violationrecord.index')}}"><i class="fa fa-list-ol"></i>RECORD STUDENT VIOLATIONS</a></li>
+            <li><a href="{{route('violation.index')}}"><i class="fa fa fa-warning"></i>DAFTAR PELANGGARAN</a></li>
+            <li><a href="{{route('violationrecord.index')}}"><i class="fa fa-list-ol"></i>CATAT PELANGGARAN</a></li>
           </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-hand-paper-o"></i> <span>ABSENT</span>
+            <i class="fa fa-hand-paper-o"></i> <span>ABSEN</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('absent.index')}}"><i class="fa fa-list-ol"></i>ABSENT</a></li>
+            <li><a href="{{route('absent.index')}}"><i class="fa fa-list-ol"></i>DAFTAR ABSEN</a></li>
           </ul>
         </li>
 
