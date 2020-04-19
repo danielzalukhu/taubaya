@@ -10,6 +10,7 @@ use App\Staff;
 use App\Violation;
 use App\AcademicYear;
 use App\ActivityStudent;
+use App\SubjectReport;
 use DB;
 
 class SubjectController extends Controller
@@ -192,9 +193,9 @@ class SubjectController extends Controller
     public function assesmentImport() 
     {
         $aktivitas_siswa = ActivityStudent::all();
-        $mata_pelajaran = Subject::all();
-        // dd($aktivitas_siswa);
-        return view('subject.assesment', compact('aktivitas_siswa', 'mata_pelajaran'));
+        $laporan_mapel = SubjectReport::all();
+
+        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel'));
     }
 }
  

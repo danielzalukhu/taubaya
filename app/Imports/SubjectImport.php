@@ -104,9 +104,9 @@ class SubjectImport implements ToCollection
                 if($nilai->STUDENTS_ID){
                     if($nilai->ACTIVITIES_ID === 1){  
                         array_push($tmp_tugas, $nilai->SCORE);
-                    }else if($nilai->ACTIVITIES_ID === 2){
+                    }else if($nilai->ACTIVITIES_ID === 2){                        
                         array_push($tmp_ph, $nilai->SCORE);
-                    }else if($nilai->ACTIVITIES_ID === 3){     
+                    }else if($nilai->ACTIVITIES_ID === 3){                             
                         array_push($tmp_pts, $nilai->SCORE);
                     }else if($nilai->ACTIVITIES_ID === 4){
                         array_push($tmp_pas, $nilai->SCORE);
@@ -115,13 +115,72 @@ class SubjectImport implements ToCollection
                     }else if($nilai->ACTIVITIES_ID === 6){
                         array_push($tmp_un, $nilai->SCORE);
                     }
-                }                                                       
+                }         
             }             
-                    
+
+            $count_tugas = $this->countActivity($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 1));
+            $sum_score_tugas = $this->sumTotalScore($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 1));
+
+            $count_ph = $this->countActivity($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 2));
+            $sum_score_ph = $this->sumTotalScore($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 2));
+
+            $count_pts = $this->countActivity($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 3));
+            $sum_score_pts = $this->sumTotalScore($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 3));
+
+            $count_pas = $this->countActivity($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 4));
+            $sum_score_pas = $this->sumTotalScore($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 4));
+
+            $count_us = $this->countActivity($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 5));
+            $sum_score_us = $this->sumTotalScore($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 5));
+
+            $count_un = $this->countActivity($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 6));
+            $sum_score_un = $this->sumTotalScore($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 6));
+
+            // dd($count_tugas);
+
+            foreach($count_tugas as $ct){
+                $tmp_ct = $ct->BANYAKAKTIVITAS;
+                foreach($sum_score_tugas as $sct){
+                    $tmp_sct = $sct->TOTALNILAI;
+                }
+                $avarage_tugas = ($tmp_sct / $tmp_ct) * 0.1;
+            }
+
+            foreach($count_ph as $cph){
+                $tmp_cph = $cph->BANYAKAKTIVITAS;
+                foreach($sum_score_ph as $scph){
+                    $tmp_scph = $scph->TOTALNILAI;
+                }
+                $avarage_ph = ($tmp_scph / $tmp_cph) * 0.2;
+            }
+
+            foreach($count_pts as $cpts){
+                $tmp_cpts = $cpts->BANYAKAKTIVITAS;
+                foreach($sum_score_pts as $scpts){
+                    $tmp_scpts = $scpts->TOTALNILAI;
+                }
+                $avarage_pts = ($tmp_scpts / $tmp_cpts) * 0.3;
+            }
+
+            foreach($count_pas as $cpas){
+                $tmp_cpas = $cpas->BANYAKAKTIVITAS;
+                foreach($sum_score_pas as $scpas){
+                    $tmp_scpas = $scpas->TOTALNILAI;
+                }
+                $avarage_pas = ($tmp_scpas / $tmp_cpas) * 0.4;
+            }
+            
+            $total_score_student = $avarage_tugas + $avarage_ph + $avarage_pts + $avarage_pas;            
+            $fix_total_score_round = round($total_score_student, 2);
+            // dd($fix_total_score_round);
+            // $a = array($avarage_tugas, $avarage_ph, $avarage_pts, $avarage_pas, $total_score_student);
+            // dd($a);
+
             $subject_report = SubjectReport::create([
                 'SUBJECTS_ID' => $student->SUBJECTS_ID,
                 'SUBJECT_RECORD_ID' => $subject_record->id,
-                'IS_VERIFIED' => '0',
+                'FINAL_SCORE' => $fix_total_score_round,
+                'IS_VERIFIED' => 0,
                 'TUGAS' => json_encode($tmp_tugas),
                 'PH' => json_encode($tmp_ph),
                 'PTS' => json_encode($tmp_pts),
@@ -130,6 +189,26 @@ class SubjectImport implements ToCollection
                 'UN' => json_encode($tmp_un),
             ]);
         }
+    }
+
+    public function countActivity($id, $activity_id)
+    {
+        $tmp_count_activity = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                                        ->select('students.NISN', DB::raw('COUNT(*) AS BANYAKAKTIVITAS'))
+                                        ->where('STUDENTS_ID', $id)
+                                        ->where('ACTIVITIES_ID', $activity_id)
+                                        ->get();
+        return $tmp_count_activity;                                                
+    }
+
+    public function sumTotalScore($id, $activity_id)
+    {
+        $tmp_sum_score = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                                ->select('students.NISN', DB::raw('SUM(SCORE) AS TOTALNILAI'))
+                                ->where('STUDENTS_ID', $id)
+                                ->where('ACTIVITIES_ID', $activity_id)
+                                ->get();
+        return $tmp_sum_score;                                
     }
 
     public function selectStudentId($value)

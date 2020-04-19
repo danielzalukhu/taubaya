@@ -65,7 +65,7 @@
                                         <tr>
                                             <th>NO</th>
                                             <th>NISN</th>
-                                            <th>STUDENT NAME
+                                            <th>STUDENT NAME</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
                                             <th>UJIAN TENGAH SEMESTER</th>
@@ -75,10 +75,15 @@
                                     </thead>
                                     <tbody>
                                         @php $i=1 @endphp
-                                        <tr>                                    
+                                        @foreach($laporan_mapel as $lm)
+                                        <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td>0010010001</td>
-                                            <td>Ahmad Abdul</td>
+                                            <td>{{ $lm->subjectrecord->student->NISN }}</td>
+                                            <td>
+                                                {{ $lm->subjectrecord->student->FNAME }}
+                                                {{" "}}
+                                                {{ $lm->subjectrecord->student->LNAME}}
+                                            </td>
                                             <td>
                                                 <table class="table table-hover table-dark">
                                                     <tr>
@@ -127,69 +132,15 @@
                                                     </tr>
                                                 </table>
                                             </td>
-                                            <td>80</td>
+                                            <td>{{ $lm->FINAL_SCORE }}</td>
                                         </tr>
-                                        
-                                        <tr>                                    
-                                            <td>{{ $i++ }}</td>
-                                            <td>0010010001</td>
-                                            <td>Ahmad Abdul</td>
-                                            <td>
-                                                <table class="table table-hover table-dark">
-                                                    <tr>
-                                                        <th>T 1</th>
-                                                        <th>T 2</th>
-                                                        <th>T 3</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>80</td>
-                                                        <td>90</td>
-                                                        <td>100</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table class="table table-hover table-dark">
-                                                    <tr>
-                                                        <th>PH 1</th>
-                                                        <th>PH 2</th>
-                                                        <th>PH 3</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>80</td>
-                                                        <td>90</td>
-                                                        <td>100</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table class="table table-hover table-dark">
-                                                    <tr>
-                                                        <th>NILAI UTS</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>80</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table class="table table-hover table-dark">
-                                                    <tr>
-                                                        <th>NILAI UAS</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>70</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>80</td>
-                                        </tr>                                        
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <th>NO</th>
                                             <th>NISN</th>
-                                            <th>STUDENT NAME
+                                            <th>STUDENT NAME</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
                                             <th>UJIAN TENGAH SEMESTER</th>

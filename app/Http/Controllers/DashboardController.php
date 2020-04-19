@@ -65,7 +65,6 @@ class DashboardController extends Controller
                             ->having('TOTALPOIN', ">=", 50 )
                             ->get();                             
 
-        //dd($siswa);
         return view('dashboard.index', compact('siswa'));
     }
 }
