@@ -138,7 +138,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          @foreach($siswa_bermasalah as $sb)
+                          @forelse($siswa_bermasalah as $sb)
                             <tr>
                               <td>{{ $sb->NISN }}</td>
                               <td>{{ $sb->FNAME }}{{" "}}{{ $sb->LNAME }}</td>
@@ -151,7 +151,11 @@
                                   @endif 
                               </td>
                             </tr>
-                          @endforeach
+                          @empty
+                            <tr>
+                                <td colspan="12" class="text-center p-5">Belum ada daftar siswa bermasalah</td>
+                            </tr>
+                          @endforelse
                         </tbody>
                       </table>
                     </div>

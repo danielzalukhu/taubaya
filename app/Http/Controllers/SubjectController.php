@@ -12,6 +12,7 @@ use App\AcademicYear;
 use App\ActivityStudent;
 use App\SubjectReport;
 use DB;
+use Carbon\Carbon;
 
 class SubjectController extends Controller
 {
@@ -134,19 +135,37 @@ class SubjectController extends Controller
         $point = 0;
         $hukuman = "-";
 
-        $ketidaktuntasan = new ViolationRecord([
-            'DATE' => $request->get('vr_date'),
-            'STUDENTS_ID' => $request->get('vr_student_name'),
-            'DESCRIPTION' => $request->get('vr_description'),
-            'PUNISHMENT' => $hukuman,
-            'VIOLATIONS_ID' => $request->get('vr_violation_name'),
-            'STAFFS_ID' => $request->get('vr_noted_by'),
-            'TOTAL' => $point,
-            'ACADEMIC_YEAR_ID' => $request->get('vr_academic_year')  
-        ]);
-        //dd($request->all());
-        $ketidaktuntasan->save();
-        return redirect('incomplete')->with('sukses', 'Incomplete Report has been created');
+        $date = $request->get('vr_date');
+        $request_date = Carbon::parse($date);
+
+        $session_start_ay = $request->session()->get('session_start_ay');
+        $start_ay = Carbon::parse($session_start_ay);
+
+        $session_end_ay = $request->session()->get('session_end_ay');
+        $end_ay = Carbon::parse($session_end_ay);
+
+        $check = $request_date->between($start_ay,$end_ay);
+
+        if($check == false)
+        {
+            return redirect('incomplete')->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+        }
+        else
+        {
+            $ketidaktuntasan = new ViolationRecord([
+                'DATE' => $request->get('vr_date'),
+                'STUDENTS_ID' => $request->get('vr_student_name'),
+                'DESCRIPTION' => $request->get('vr_description'),
+                'PUNISHMENT' => $hukuman,
+                'VIOLATIONS_ID' => $request->get('vr_violation_name'),
+                'STAFFS_ID' => $request->session()->get('session_user_id'),
+                'TOTAL' => $point,
+                'ACADEMIC_YEAR_ID' => $request->session()->get('session_academic_year_id')
+            ]);
+
+            $ketidaktuntasan->save();
+            return redirect('incomplete')->with('sukses', 'Incomplete Report has been created');
+        }
     }
     
     public function editIncomplete($id)
@@ -169,25 +188,41 @@ class SubjectController extends Controller
         $point = 0;
         $hukuman = "-";
 
-        $ketidaktuntasan->DATE = $request->get('vr_date');
-        $ketidaktuntasan->DESCRIPTION = $request->get('vr_desc');
-        $ketidaktuntasan->STUDENTS_ID = $request->get('vr_student_name');
-        $ketidaktuntasan->VIOLATIONS_ID = $request->get('vr_violation_name');
-        $ketidaktuntasan->ACADEMIC_YEAR_ID = $request->get('vr_academic_year');
-        $ketidaktuntasan->STAFFS_ID = $request->get('vr_noted_by');
-        $ketidaktuntasan->PUNISHMENT = $hukuman;
-        $ketidaktuntasan->TOTAL = $point;
+        $date = $request->get('vr_date');
+        $request_date = Carbon::parse($date);
+
+        $session_start_ay = $request->session()->get('session_start_ay');
+        $start_ay = Carbon::parse($session_start_ay);
+
+        $session_end_ay = $request->session()->get('session_end_ay');
+        $end_ay = Carbon::parse($session_end_ay);
+
+        $check = $request_date->between($start_ay,$end_ay);
+
+        if($check == false)
+        {
+            return redirect(action('SubjectController@editIncomplete', $ketidaktuntasan->id))->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+        }
+        else{
+            $ketidaktuntasan->DATE = $request->get('vr_date');
+            $ketidaktuntasan->DESCRIPTION = $request->get('vr_desc');
+            $ketidaktuntasan->STUDENTS_ID = $request->get('vr_student_name');
+            $ketidaktuntasan->VIOLATIONS_ID = $request->get('vr_violation_name');
+            $ketidaktuntasan->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
+            $ketidaktuntasan->STAFFS_ID = $request->session()->get('session_user_id');
+            $ketidaktuntasan->PUNISHMENT = $hukuman;
+            $ketidaktuntasan->TOTAL = $point;
+        }
         //dd($request->all());
         $ketidaktuntasan->save();
-
-        return redirect(action('SubjectController@incomplete', $ketidaktuntasan->id))->with('sukses', 'Incomplete report has been chaged');
+        return redirect(action('SubjectController@incomplete', $ketidaktuntasan->id))->with('sukses', 'Laporan ketidaktuntasan berhasil dibuat');
     }
 
     public function destroyIncomplete($id)
     {
         $ketidaktuntasan = ViolationRecord::whereId($id)->firstOrFail();
         $ketidaktuntasan->delete();
-        return redirect(action('SubjectController@incomplete'))->with('sukses', 'Incomplete report has been chaged');
+        return redirect(action('SubjectController@incomplete'))->with('sukses', 'Laporan ketidaktuntasan berhasil dibuat');
     }
 
     public function assesmentImport() 

@@ -29,8 +29,7 @@
                                             <th>NAMA MAPEL</th>
                                             <th>KKM</th>
                                             <th>TIPE</th>
-                                            <th>ACTION</th>
-                                            <!-- <th>HAPUS</th> -->
+                                            <th>AKSI</th>
                                         </tr>
                                     </thead>
                                     <tbody>

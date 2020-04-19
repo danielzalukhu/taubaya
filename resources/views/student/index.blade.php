@@ -33,7 +33,7 @@
                                             <th>#</th>
                                             <th>NISN</th>
                                             <th>NAMA SISWA</th>
-                                            <th></th>
+                                            <th>AKSI</th>
                                         </tr>
                                     </thead>
                                     <tbody>

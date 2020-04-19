@@ -197,8 +197,7 @@ class ViolationRecordController extends Controller
         $end_ay = Carbon::parse($session_end_ay);
 
         $check = $request_date->between($start_ay,$end_ay);
-        // $a = array($request_date, $start_ay, $end_ay);
-        // dd($a);
+        
         if($check == false)
         {
             return redirect(action('ViolationRecordController@edit', $catatan_pelanggaran->id))->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
