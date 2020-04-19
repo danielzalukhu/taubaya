@@ -11,7 +11,7 @@
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
-      <!-- search form -->
+
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
           <input type="text" name="q" class="form-control" placeholder="Search...">
@@ -20,9 +20,8 @@
                 </button>
               </span>
         </div>
-      </form>
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
+      </form> 
+
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         @if(Auth::guard('web')->user()->ROLE === "STAFF")
@@ -35,20 +34,20 @@
         </li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-users"></i> <span>MASTER STUDENT</span>
+            <i class="fa fa-users"></i> <span>STUDENT</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>STUDENT</a></li>
+            <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>LIST STUDENT</a></li>
             <li><a href=#><i class="fa fa-book"></i>MY SUBJECT</a></li>
           </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-book"></i> <span>MASTER SUBJECT</span>
+            <i class="fa fa-book"></i> <span>SUBJECT</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -62,7 +61,20 @@
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-trophy"></i> <span>MASTER ACHIEVEMENT</span>
+            <i class="fa fa-heart"></i> <span>EXTRACURRICULAR</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>LIST OF EXTRACURRICULAR</a></li>
+            <li><a href="#"><i class="fa fa-pencil"></i>INPUT ASSESSMENT</a></li>
+          </ul>
+        </li>
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-trophy"></i> <span>ACHIEVEMENT</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -76,7 +88,7 @@
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-thumbs-down"></i> <span>MASTER VIOLATION</span>
+            <i class="fa fa-thumbs-down"></i> <span>VIOLATION</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -89,7 +101,7 @@
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-hand-paper-o"></i> <span>MASTER ABSENT</span>
+            <i class="fa fa-hand-paper-o"></i> <span>ABSENT</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

@@ -40,17 +40,17 @@ Route::post('incomplete', 'SubjectController@storeIncomplete')->name('subject.st
 Route::get('incomplete/{id}/edit', 'SubjectController@editIncomplete')->name('subject.editIncomplete');
 Route::post('incomplete/{id}/update', 'SubjectController@updateIncomplete')->name('subject.updateIncomplete');
 Route::get('incomplete{id}/delete', 'SubjectController@destroyIncomplete')->name('subject.destroyIncomplete');
+Route::resource('subject', 'SubjectController')->middleware('auth');
+
+// EXTRACURRICULER 
+Route::resource('extracurricular', 'ExtracurricularController')->middleware('auth');
 
 // IMPORT
-
 Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
 Route::get('assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
 Route::post('assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
 Route::post('assesment/percentage', 'ImportController@assesmentPercentage')->middleware('auth')->name('subject.assesmentPercentage');
 
-
-Route::resource('subject', 'SubjectController')->middleware('auth');
-
+// AUTH
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');

@@ -15,6 +15,7 @@ use App\SubjectReport;
 use App\KD;
 use App\Imports\SubjectImport;
 use DB;
+use Session;
 
 class SubjectImport implements ToCollection
 {
@@ -54,7 +55,7 @@ class SubjectImport implements ToCollection
                     $id_kd = $this->selectKdId($kd_id)[0]->id;
 
                     $nilai = $row[8];        
-
+                    
                     $a = ActivityStudent::create([
                         'STUDENTS_ID' => $id_siswa,
                         'ACTIVITIES_ID' => $id_aktivitas,
