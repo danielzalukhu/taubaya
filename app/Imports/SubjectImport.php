@@ -5,6 +5,7 @@ namespace App\Imports;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use App\Imports\SubjectImport;
 use App\Subject;
 use App\Student;
 use App\Activity;
@@ -13,7 +14,6 @@ use App\ActivityKD;
 use App\SubjectRecord;
 use App\SubjectReport;
 use App\KD;
-use App\Imports\SubjectImport;
 use DB;
 use Session;
 
@@ -30,7 +30,7 @@ class SubjectImport implements ToCollection
     private $id_mapel;
 
     public function collection(Collection $collection)
-    {
+    {   
         foreach($collection as $key => $row)
         {
             if($key >= 1)
@@ -173,6 +173,7 @@ class SubjectImport implements ToCollection
             
             $total_score_student = $avarage_tugas + $avarage_ph + $avarage_pts + $avarage_pas;            
             $fix_total_score_round = round($total_score_student, 2);
+            
             // dd($fix_total_score_round);
             // $a = array($avarage_tugas, $avarage_ph, $avarage_pts, $avarage_pas, $total_score_student);
             // dd($a);
@@ -216,7 +217,7 @@ class SubjectImport implements ToCollection
     {
         $siswa = DB::SELECT('SELECT id
                              FROM students 
-                             WHERE students.NISN = ' . $value);
+                             WHERE students.NISN = "' . $value . '"');
         return $siswa;                            
     }
 

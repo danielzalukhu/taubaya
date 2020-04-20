@@ -34,30 +34,24 @@
                         <b>MATA PELAJARAN</b> <a class="pull-right">JUMLAH</a>
                       </li>
                       <li class="list-group-item">
-                        <b>ABSENT</b> <a class="pull-right"><b>BERAPA</b> % </a>
-                      </li>
-                      <li class="list-group-item">
-                        <b>VIOLATIONS POINT</b> 
+                        <b>POIN PELANGGARAN</b> 
                         <a class="pull-right">{{$point_record}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>ACHIEVEMENTS POINT</b> 
+                        <b>POIN PENGHARGAAN</b> 
                         <a class="pull-right">{{$total_achievement_point}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>TOTAL POINT</b> 
+                        <b>TOTAL POIN</b> 
                         <a class="pull-right">
                             @if($point_record > 75)
-                            {{$point_record - $total_achievement_point}}
+                                {{$point_record - $total_achievement_point}}
                             @else
-                            {{$point_record}}
-
+                                {{$point_record}}
                             @endif
                         </a>
                       </li>
                     </ul>
-
-                    <!-- <a href="#" class="btn btn-success btn-block"><b>EDIT PROFILE</b></a> -->
                   </div>
               </div>
           </div>
@@ -66,9 +60,9 @@
               <div class="nav-tabs-custom">
 
                   <ul class="nav nav-tabs">
-                    <li class="active"><a href="#violation" data-toggle="tab">VIOLATION</a></li>
-                    <li><a href="#achievement" data-toggle="tab">ACHIEVEMENT</a></li>
-                    <li><a href="#absent" data-toggle="tab">ABSENT</a></li>
+                    <li class="active"><a href="#violation" data-toggle="tab">PELANGGARAN</a></li>
+                    <li><a href="#achievement" data-toggle="tab">PENGHARGAAN</a></li>
+                    <li><a href="#absent" data-toggle="tab">ABSEN</a></li>
                   </ul>
 
                   <div class="tab-content">
@@ -76,10 +70,10 @@
                     <div class="tab-pane  active in" id="violation">
                         <div class="panel">
                             <div class="panel-heading">
-                                <h1 class="panel-title">STUDENT VIOLATION RECORD</h1>
+                                <h1 class="panel-title">CATATAN PELANGGARAN SISWA</h1>
                             </div>
                             <div class="panel-heading">                                
-                                <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                                <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                     <span>
                                         <div class="btn-group">                                            
                                             <select type="button" id="selector-dropdown-violation-year" class="btn btn-default dropdown-toggle">
@@ -93,31 +87,40 @@
                                     </span>        
                                 </h5>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>DATE</th>
-                                            <th>KODE</th>
-                                            <th>DESCRIPTION</th>
-                                            <th>POINT</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody-violation-academic-year">
-                                        @foreach($catatan_pelanggaran as $cp)
-                                          <tr>
-                                            <td>{{ date('d-m-Y', strtotime($cp->DATE)) }}</td>
-                                            <td>{{ $cp->NAME }}</td>
-                                            <td>{{ $cp->DESCRIPTION }}</td>
-                                            <td>{{ $cp->TOTAL }}</td>
-                                          </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>TANGGAL</th>
+                                                <th>KODE PELANGGARAN</th>
+                                                <th>DESKRIPSI</th>
+                                                <th>POIN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-violation-academic-year">
+                                            @php $i=1 @endphp
+                                            @forelse($catatan_pelanggaran as $cp)
+                                                <tr>
+                                                    <td>{{ $i++ }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($cp->DATE)) }}</td>
+                                                    <td>{{ $cp->NAME }}</td>
+                                                    <td>{{ $cp->DESCRIPTION }}</td>
+                                                    <td>{{ $cp->TOTAL }}</td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="12" class="text-center p-5">Belum ada data catatan pelanggaran</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>                            
                             </div>
                         </div>
                         <div class="panel-heading">                                
-                            <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                            <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                 <span>
                                     <div class="btn-group">
                                         <select type="button" id="select-dropdown-academicyear-graph-violation" class="btn btn-default dropdown-toggle">
@@ -141,10 +144,10 @@
                     <div class="tab-pane" id="achievement">
                         <div class="panel">
                             <div class="panel-heading">
-                                <h1 class="panel-title">STUDENT ACHIEVEMENT RECORD</h1>
+                                <h1 class="panel-title">CATATAN PENGHARGAAN SISWA</h1>
                             </div>
                             <div class="panel-heading">                                
-                                <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                                <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                     <span>
                                         <div class="btn-group">
                                             <select type="button" id="selector-dropdown-achievement-year" class="btn btn-default dropdown-toggle">
@@ -158,31 +161,40 @@
                                     </span>        
                                 </h5>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>DATE</th>
-                                            <th>TYPE</th>
-                                            <th>DESCRIPTION</th>                                            
-                                            <th>POINT</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody-achievement-academic-year">
-                                        @foreach($catatan_penghargaan as $cp)
-                                          <tr>
-                                            <td>{{ date('d-m-Y', strtotime($cp->DATE)) }}</td>
-                                            <td>{{ $cp->TYPE }}</td>
-                                            <td>{{ $cp->DESCRIPTION }}</td>
-                                            <td>{{ $cp->POINT }}</td>
-                                          </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-borderd">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>TANGGAL</th>
+                                                <th>TINGKAT</th>
+                                                <th>DESKRIPSI</th>                                            
+                                                <th>POIN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-achievement-academic-year">
+                                            @php $i=1 @endphp
+                                            @forelse($catatan_penghargaan as $cp)
+                                            <tr>
+                                                <td>{{ $i++ }}</td>
+                                                <td>{{ date('d-m-Y', strtotime($cp->DATE)) }}</td>
+                                                <td>{{ $cp->GRADE }}</td>
+                                                <td>{{ $cp->DESCRIPTION }}</td>
+                                                <td>{{ $cp->POINT }}</td>
+                                            </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="12" class="text-center p-5">Belum ada data catatan penghargaan</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>  
                         <div class="panel-heading">                                
-                            <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                            <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                 <span>
                                     <div class="btn-group">
                                         <select type="button" id="select-dropdown-academicyear-graph-achievement" class="btn btn-default dropdown-toggle">
@@ -206,10 +218,10 @@
                     <div class="tab-pane" id="absent">
                         <div class="panel">
                             <div class="panel-heading">
-                                <h1 class="panel-title">STUDENT ABSENT RECORD</h1>
+                                <h1 class="panel-title">CATATAN ABSENSI SISWA</h1>
                             </div>
                             <div class="panel-heading">                                
-                                <h5 class="panel-title"><b>ACADEMIC YEAR:</b>
+                                <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                     <span>
                                         <div class="btn-group">
                                             <select type="button" id="selector-dropdown-absent-year" class="btn btn-default dropdown-toggle">
@@ -225,25 +237,34 @@
                             </div>
                         
                             <div class="panel-body">
-                                <!-- <table class="table table-striped"> -->
-                                <table id="example1" class="table table-bordered table-striped">    
+                                <table id="example1" class="table table-striped table-bordered">    
                                     <thead>
                                         <tr>
-                                            <th>TYPE</th>
-                                            <th>DESCRIPTION</th>
+                                            <th>TIPE</th>
+                                            <th>DESKRIPSI</th>
                                             <th>DETAIL</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody-absent-academic-year">
-                                        @foreach($catatan_absen as $ca)
-                                          <tr>
+                                        @forelse($catatan_absen as $ca)
+                                        <tr>
                                             <td>{{ $ca->TYPE }}</td>
-                                            <td>{{ $ca->TOTAL }}{{" "}}{{"DAYS"}}</td>
+                                            <td>{{ $ca->TOTAL }}{{" "}}{{"HARI"}}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary btn-sm button-detail" data-toggle="modal" data-target="#detailAbsentModal" absent-type="{{$ca->TYPE}}">SHOW</button>
+                                                <button type="button" 
+                                                        class="btn btn-primary btn-sm button-detail" 
+                                                        data-toggle="modal" 
+                                                        data-target="#detailAbsentModal" 
+                                                        absent-type="{{$ca->TYPE}}">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
                                             </td>
-                                          </tr>
-                                        @endforeach
+                                        </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="12" class="text-center p-5">Belum ada data absensi</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -270,18 +291,18 @@
                                         <table id="table-absent-detail" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>TYPE</th>
-                                                <th>START DATE</th>
-                                                <th>END DATE</th>
-                                                <th>DESCRIPTION</th>
+                                                <th>TIPE</th>
+                                                <th>TANGGAL AWAL</th>
+                                                <th>TANGGAL AKHIR</th>
+                                                <th>DESKRIPSI</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-absent-detail">
                                             <tr>
-                                                <td>J</td>
-                                                <td>ASD</td>
-                                                <td>ASDASD</td>
-                                                <td>ADFAFER</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
                                             </tr>
                                         </tbody>
                                         </table>
@@ -386,9 +407,9 @@
                         `
                         <tr>
                             <td>${obj.TYPE}</td>
-                            <td>${obj.TOTAL} DAYS</td>
+                            <td>${obj.TOTAL} HARI</td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm button-detail" data-toggle="modal" data-target="#detailAbsentModal" absent-type=${obj.TYPE}>SHOW</button>
+                                <button type="button" class="btn btn-primary btn-sm button-detail" data-toggle="modal" data-target="#detailAbsentModal" absent-type=${obj.TYPE}><i class="fa fa-eye"></i></button>
                             </td>
                         </tr>
 
@@ -487,7 +508,7 @@
         yAxis: {
             min: 0,
             title: {
-                text: 'JUMLAH PELANGGARAN TERJADI'
+                text: 'JUMLAH PELANGGARAN TERCATAT'
             }
         },
         credits: {

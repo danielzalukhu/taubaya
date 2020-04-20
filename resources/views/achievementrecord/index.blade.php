@@ -249,7 +249,7 @@
             type: 'column'
         },
         title: {
-            text: 'STATISTIK PENGHARGAAN YANG TERCATAT BERDASARKAN JENIS PENGHARGAAN'
+            text: 'STATISTIK PENGHARGAAN YANG TERCATAT BERDASARKAN JENIS PENGHARGAAN DAN PERIODE TAHUN AJARAN'
         },
         xAxis: {
             categories: dataCategory,
