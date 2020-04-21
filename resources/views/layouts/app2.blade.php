@@ -18,7 +18,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="{{ asset('logincss/assets/img/apple-icon.png') }}">
-	<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('logincss/assets/img/favicon.png') }}">
+	<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('logincss/assets/img/favicon.png') }}">	
 </head>
 
 <body>
@@ -31,7 +31,7 @@
 						<div class="content">
 							<div class="header">
 								<div class="logo text-center"><img src="{{ asset('logincss/logo-sma.png') }}" alt="Klorofil Logo"></div>
-								<p class="lead">Login</p>
+								<p class="lead">SELAMAT DATANG</p>
 							</div>
 							<form class="form-auth-small" action="{{ route ('login') }}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
