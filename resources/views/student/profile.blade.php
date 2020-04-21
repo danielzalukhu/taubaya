@@ -92,7 +92,6 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
                                                 <th>TANGGAL</th>
                                                 <th>KODE PELANGGARAN</th>
                                                 <th>DESKRIPSI</th>
@@ -100,10 +99,8 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-violation-academic-year">
-                                            @php $i=1 @endphp
                                             @forelse($catatan_pelanggaran as $cp)
                                                 <tr>
-                                                    <td>{{ $i++ }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($cp->DATE)) }}</td>
                                                     <td>{{ $cp->NAME }}</td>
                                                     <td>{{ $cp->DESCRIPTION }}</td>
@@ -166,7 +163,6 @@
                                     <table class="table table-striped table-borderd">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
                                                 <th>TANGGAL</th>
                                                 <th>TINGKAT</th>
                                                 <th>DESKRIPSI</th>                                            
@@ -174,10 +170,8 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-achievement-academic-year">
-                                            @php $i=1 @endphp
                                             @forelse($catatan_penghargaan as $cp)
                                             <tr>
-                                                <td>{{ $i++ }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($cp->DATE)) }}</td>
                                                 <td>{{ $cp->GRADE }}</td>
                                                 <td>{{ $cp->DESCRIPTION }}</td>
