@@ -230,12 +230,6 @@ class SubjectController extends Controller
         $aktivitas_siswa = ActivityStudent::all();
         $laporan_mapel = SubjectReport::all();
         
-        $arrayOfStudent = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                ->select('subject_reports.TUGAS AS NILAITUGAS', 'subject_records.*')
-                                ->where('subject_records.STUDENTS_ID', 6)
-                                ->toSql();  
-
-        // dd($arrayOfStudent);
         return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel'));
     }
 }

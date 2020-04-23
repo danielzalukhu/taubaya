@@ -17,7 +17,7 @@ class CreateEkskulTable extends Migration
             $table->increments('id');
             $table->string('NAME', 45);
             $table->text('DESCRIPTION');
-            $table->integer('STAFFS_ID')->unsigned();
+            $table->unsignedInteger('STAFFS_ID')->nullable();
             $table->foreign('STAFFS_ID')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

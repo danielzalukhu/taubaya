@@ -43,13 +43,13 @@ Route::get('incomplete{id}/delete', 'SubjectController@destroyIncomplete')->name
 Route::resource('subject', 'SubjectController')->middleware('auth');
 
 // EXTRACURRICULER 
+Route::get('extracurricular');
 Route::resource('extracurricular', 'ExtracurricularController')->middleware('auth');
 
 // IMPORT
 Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
 Route::get('assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
 Route::post('assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
-Route::post('assesment/percentage', 'ImportController@assesmentPercentage')->middleware('auth')->name('subject.assesmentPercentage');
 
 // AUTH
 Auth::routes();

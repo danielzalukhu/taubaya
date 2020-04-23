@@ -118,7 +118,7 @@ class SubjectImport implements ToCollection
                     }
                 }         
             }             
-
+ 
             $count_tugas = $this->countActivity($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 1));
             $sum_score_tugas = $this->sumTotalScore($student->STUDENTS_ID, ($student->ACTIVITIES_ID = 1));
 

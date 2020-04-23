@@ -95,7 +95,7 @@ class ViolationController extends Controller
         $pelanggaran->POINT = $request->get('v_point');
         $pelanggaran->save();
 
-        return redirect(action('ViolationController@index', $pelanggaran->id))->with('sukses', 'Daftar pelanggaran berhasil diubah');
+        return redirect(action('ViolationController@index', $pelanggaran->id))->with('sukses', 'Daftar pelanggaran$pelanggaran berhasil diubah');
     }
 
     /**
@@ -108,6 +108,6 @@ class ViolationController extends Controller
     {
         $pelanggaran = Violation::whereId($id)->firstOrFail();
         $pelanggaran->delete();
-        return redirect(action('ViolationController@index'))->with('sukses', 'Daftar pelanggaran berhasil dihapus');
+        return redirect(action('ViolationController@index'))->with('sukses', 'Daftar pelanggaran$pelanggaran berhasil dihapus');
     }
 }

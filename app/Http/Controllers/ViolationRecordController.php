@@ -171,9 +171,8 @@ class ViolationRecordController extends Controller
         $tahun_ajaran = AcademicYear::all();
         $siswa = Student::all();
         $pelanggaran = Violation::all();
-        $karyawan = Staff::all();
 
-        return view('violationrecord.edit', compact('catatan_pelanggaran', 'tahun_ajaran', 'siswa', 'pelanggaran', 'karyawan'));
+        return view('violationrecord.edit', compact('catatan_pelanggaran', 'tahun_ajaran', 'siswa', 'pelanggaran'));
     }
 
     /**

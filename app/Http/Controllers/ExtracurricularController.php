@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Extracurricular;
+use App\Staff;
 
 class ExtracurricularController extends Controller
 {
@@ -13,7 +15,8 @@ class ExtracurricularController extends Controller
      */
     public function index()
     {
-        //
+        $ekskul = Extracurricular::all();
+        return view('extracurricular.index', compact('ekskul'));
     }
 
     /**
@@ -23,7 +26,7 @@ class ExtracurricularController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -34,7 +37,18 @@ class ExtracurricularController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'e_name' => 'required',
+            'e_desc' => 'required',
+            ]);
+         
+        $ekskul = new Extracurricular([
+            'NAME' => $request->get('e_name'),
+            'DESCRIPTION' => $request->get('e_desc'),
+        ]);
+        $ekskul->save();
+
+        return redirect('extracurricular')->with('sukses', 'Daftar ekskul baru berhasil dibuat');
     }
 
     /**
@@ -56,7 +70,12 @@ class ExtracurricularController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ekskul = Extracurricular::find($id);
+        $karyawan = Staff::select('staffs.*')
+                        ->where('DEPARTMENTS_ID', 3)
+                        ->get();
+
+        return view('Extracurricular.edit', compact('ekskul', 'karyawan'));
     }
 
     /**
@@ -68,7 +87,14 @@ class ExtracurricularController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $ekskul = Extracurricular::find($id);
+       
+        $ekskul->NAME = $request->get('e_name');
+        $ekskul->DESCRIPTION = $request->get('e_desc');
+        $ekskul->STAFFS_ID = $request->get('e_staff_id');
+        $ekskul->save();
+
+        return redirect(action('ExtracurricularController@index', $ekskul->id))->with('sukses', 'Daftar ekskul berhasil diubah');
     }
 
     /**
@@ -79,6 +105,8 @@ class ExtracurricularController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ekskul = Extracurricular::whereId($id)->firstOrFail();
+        $ekskul->delete();
+        return redirect(action('ExtracurricularController@index'))->with('sukses', 'Daftar ekskul berhasil dihapus');
     }
 }
