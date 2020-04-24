@@ -16,6 +16,14 @@ use Carbon\Carbon;
 
 class SubjectController extends Controller
 {
+    public function __construct(ActivityStudent $students)
+    {
+        $students = ActivityStudent::all()->get();
+        foreach ($students as $s) {
+            $this->student_id = $s->STUDENTS_ID;
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -51,7 +59,7 @@ class SubjectController extends Controller
             'MINIMALPOIN' => $request->get('s_kkm'),
             'TYPE' => $request->get('s_type')
         ]);
-        //dd($request->all())
+
         $mapel->save();
 
         return redirect('subject')->with('sukses', 'New Subject has been created');
@@ -126,7 +134,7 @@ class SubjectController extends Controller
         $pelanggaran = Violation::all();
         $karyawan = Staff::all();
         $tahun_ajaran = AcademicYear::all();
-        // dd($ketidaktuntasan);
+
         return view('subject.incomplete', compact('ketidaktuntasan', 'siswa', 'pelanggaran', 'karyawan', 'tahun_ajaran'));
     }
 
@@ -177,7 +185,6 @@ class SubjectController extends Controller
         $pelanggaran = Violation::all();
         $karyawan = Staff::all();
 
-        // dd($ketidaktuntasan);
         return view('subject.editincomplete', compact('ketidaktuntasan','tahun_ajaran','siswa','pelanggaran','karyawan'));
     }
 
@@ -213,8 +220,9 @@ class SubjectController extends Controller
             $ketidaktuntasan->PUNISHMENT = $hukuman;
             $ketidaktuntasan->TOTAL = $point;
         }
-        //dd($request->all());
+
         $ketidaktuntasan->save();
+
         return redirect(action('SubjectController@incomplete', $ketidaktuntasan->id))->with('sukses', 'Laporan ketidaktuntasan berhasil dibuat');
     }
 
@@ -227,10 +235,59 @@ class SubjectController extends Controller
 
     public function assesmentImport() 
     {
-        $aktivitas_siswa = ActivityStudent::all();
+        $aktivitas_siswa = ActivityStudent::all();        
         $laporan_mapel = SubjectReport::all();
+        $nilai_tugas = $this->showDetailTugasStudent($this->student_id)->tugas;
+        $nilai_ph = $this->showDetailPHStudent($this->student_id)->ph;
+        $nilai_pts = $this->showDetailPTSStudent($this->student_id)->pts;
+        $nilai_pas = $this->showDetailPASStudent($this->student_id)->pas;
+
+        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel', 'nilai_tugas', 
+                                                 'nilai_ph', 'nilai_pts', 'nilai_pas'));
+    }
+
+    public function showDetailTugasStudent($id)
+    {
+        $tugas = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                        ->select('students.*', 'activities_students.SCORE')
+                        ->where('activities_students.ACTIVITIES_ID', 1)
+                        ->where('students.id', $id)
+                        ->get();
         
-        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel'));
+        return view('subject.assesment', compact('tugas'));
+    }
+
+    public function showDetailPHStudent($id)
+    {
+        $ph = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                        ->select('students.*', 'activities_students.SCORE')
+                        ->where('activities_students.ACTIVITIES_ID', 2)
+                        ->where('students.id', $id)
+                        ->get();
+        
+        return view('subject.assesment', compact('ph'));
+    }
+
+    public function showDetailPTSStudent($id)
+    {
+        $pts = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                        ->select('students.*', 'activities_students.SCORE')
+                        ->where('activities_students.ACTIVITIES_ID', 3)
+                        ->where('students.id', $id)
+                        ->get();
+        
+        return view('subject.assesment', compact('pts'));
+    }
+
+    public function showDetailPASStudent($id)
+    {
+        $pas = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                        ->select('students.*', 'activities_students.SCORE')
+                        ->where('activities_students.ACTIVITIES_ID', 4)
+                        ->where('students.id', $id)
+                        ->get();
+        
+        return view('subject.assesment', compact('pas'));
     }
 }
  

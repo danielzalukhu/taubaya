@@ -89,69 +89,53 @@
                                                 {{ $lm->subjectrecord->student->LNAME}}
                                             </td>
                                             <td>
-                                                <table class="table table-hover table-dark">
+                                                <table class="table table-hover">
+                                                    @foreach($nilai_tugas as $nt)
                                                     <tr>
-                                                        <th>T 1</th>
-                                                        <th>T 2</th>
-                                                        <th>T 3</th>
+                                                        @if($nt[$lm->subjectrecord->STUDENTS_ID])
+                                                            <tr>{{ $nt->SCORE }}{{"|"}}</tr>
+                                                        @endif
                                                     </tr>
-                                                    <tr>
-                                                        <td>80</td>
-                                                        <td>90</td>
-                                                        <td>100</td>
-                                                    </tr>
+                                                    @endforeach
                                                 </table>
                                             </td>
                                             <td>
-                                                <table class="table table-hover table-dark">
+                                                <table class="table table-hover">
+                                                    @foreach($nilai_ph as $ph)
                                                     <tr>
-                                                        <th>PH 1</th>
-                                                        <th>PH 2</th>
-                                                        <th>PH 3</th>
+                                                        @if($ph[$lm->subjectrecord->STUDENTS_ID])
+                                                            <tr>{{ $ph->SCORE }}{{"|"}}</tr>
+                                                        @endif
                                                     </tr>
-                                                    <tr>
-                                                        <td>80</td>
-                                                        <td>90</td>
-                                                        <td>100</td>
-                                                    </tr>
-                                                </table>
+                                                    @endforeach
+                                                </table>                                                                                    
                                             </td>
                                             <td>
-                                                <table class="table table-hover table-dark">
+                                                <table class="table table-hover">
+                                                    @foreach($nilai_pts as $pts)
                                                     <tr>
-                                                        <th>NILAI UTS</th>
+                                                        @if($pts[$lm->subjectrecord->STUDENTS_ID])
+                                                            <tr>{{ $pts->SCORE }}{{"|"}}</tr>
+                                                        @endif
                                                     </tr>
-                                                    <tr>
-                                                        <td>80</td>
-                                                    </tr>
-                                                </table>
+                                                    @endforeach
+                                                </table>                                            
                                             </td>
                                             <td>
-                                                <table class="table table-hover table-dark">
+                                                <table class="table table-hover">
+                                                    @foreach($nilai_pas as $pas)
                                                     <tr>
-                                                        <th>NILAI UAS</th>
+                                                        @if($pas[$lm->subjectrecord->STUDENTS_ID])
+                                                            <tr>{{ $pas->SCORE }}{{"|"}}</tr>
+                                                        @endif
                                                     </tr>
-                                                    <tr>
-                                                        <td>70</td>
-                                                    </tr>
+                                                    @endforeach
                                                 </table>
-                                            </td>
+                                            </td>                                                
                                             <td>{{ $lm->FINAL_SCORE }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>NO</th>
-                                            <th>NISN</th>
-                                            <th>STUDENT NAME</th>
-                                            <th>TUGAS</th>
-                                            <th>ULANGAN HARIAN</th>
-                                            <th>UJIAN TENGAH SEMESTER</th>
-                                            <th>UJIAN AKHIR SEMESTER</th>
-                                            <th>NILAI AKHIR</th>
-                                        </tr>
-                                    </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -179,6 +163,7 @@
         })
 </script>
 @stop
+
 
 
 

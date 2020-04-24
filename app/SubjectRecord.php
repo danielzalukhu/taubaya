@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubjectRecord extends Model
 {
-    protected $fillable = ['ACADEMIC_YEAR_ID', 'SUBJECTS_ID'];
+    protected $fillable = ['ACADEMIC_YEAR_ID', 'STUDENTS_ID'];
 
     public function subject()
     {
