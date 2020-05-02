@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ExtracurricularReport extends Model
 {
-    protected $table = 'achievements_reports';
+    protected $table = 'extracurricular_reports';
     protected $fillable = ['EXTRACURRICULARS_ID', 'EXTRACURRICULAR_RECORD_ID', 'SCORE', 'NOTES'];
 
     public function extracurricular()

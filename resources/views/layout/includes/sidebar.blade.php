@@ -68,7 +68,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
-            <li><a href="#"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>
+            <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>
           </ul>
         </li>
 

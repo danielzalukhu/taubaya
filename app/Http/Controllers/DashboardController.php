@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $request->session()->put('session_start_ay', $tahun_ajaran[0]->START_DATE);
         $request->session()->put('session_end_ay', $tahun_ajaran[0]->END_DATE);
         $request->session()->put('session_user_id', Auth::user()->id);
-        // dd($request->session()->get('session_start_ay'));
+        // dd($request->session()->get('session_academic_year_id'));
         //END GLOBAL SESSION 
 
         $jumlah_siswa = $this->countStudent()->siswa;

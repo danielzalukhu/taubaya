@@ -17,8 +17,8 @@ class CreateLaporanEkskulTable extends Migration
             $table->increments('id');
             $table->integer('EXTRACURRICULARS_ID')->unsigned();
             $table->foreign('EXTRACURRICULARS_ID')->references('id')->on('extracurriculars')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('EXTRACURRICULAR_REPORT_ID')->unsigned();
-            $table->foreign('EXTRACURRICULAR_REPORT_ID')->references('id')->on('extracurricular_records')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('EXTRACURRICULAR_RECORD_ID')->unsigned();
+            $table->foreign('EXTRACURRICULAR_RECORD_ID')->references('id')->on('extracurricular_records')->onDelete('cascade')->onUpdate('cascade');
             $table->double('SCORE');
             $table->text('DESCRIPTION');
             $table->timestamps();

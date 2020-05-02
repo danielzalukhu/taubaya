@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Extracurricular;
+use App\ExtracurricularRecord;
+use App\ExtracurricularReport;
 use App\Staff;
+use App\Student;
 
 class ExtracurricularController extends Controller
 {
@@ -17,16 +20,6 @@ class ExtracurricularController extends Controller
     {
         $ekskul = Extracurricular::all();
         return view('extracurricular.index', compact('ekskul'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
     }
 
     /**
@@ -49,17 +42,6 @@ class ExtracurricularController extends Controller
         $ekskul->save();
 
         return redirect('extracurricular')->with('sukses', 'Daftar ekskul baru berhasil dibuat');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -109,4 +91,41 @@ class ExtracurricularController extends Controller
         $ekskul->delete();
         return redirect(action('ExtracurricularController@index'))->with('sukses', 'Daftar ekskul berhasil dihapus');
     }
+
+    public function ekskulAssesment()
+    {
+        $ekskul = Extracurricular::all();
+        $siswa = Student::all();
+        $ekskul_report = ExtracurricularReport::all();
+        return view('extracurricular.assesment', compact('ekskul', 'siswa', 'ekskul_report'));
+    }
+
+    public function storeAssesment(Request $request)
+    {
+        $this->validate($request, [
+            'e_ekskul_name' => 'required',
+            'e_student_name' => 'required',
+            'e_nilai' => 'required',
+            'e_desc' => 'required',
+            ]);
+         
+        $ekskul_record = new ExtracurricularRecord();
+        $ekskul_record->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
+        $ekskul_record->STUDENTS_ID = $request->get('e_student_name');
+        $ekskul_record->save();
+
+        $ekskul_report = new ExtracurricularReport([
+            'EXTRACURRICULARS_ID' => $request->get('e_ekskul_name'),
+            'EXTRACURRICULAR_RECORD_ID' => $ekskul_record->id,
+            'SCORE' => $request->get('e_nilai'),
+            'DESCRIPTION' => $request->get('e_desc')
+        ]);
+        
+        $ekskul_report->save();
+        
+        // dd($ekskul_record);
+        
+        return redirect('extracurricular/assesment')->with('sukses', 'Berhasil menambah nilai ekskul siswa');
+    }
 }
+
