@@ -45,6 +45,8 @@ Route::resource('subject', 'SubjectController')->middleware('auth');
 // EXTRACURRICULER 
 Route::get('extracurricular/assesment', 'ExtracurricularController@ekskulAssesment')->middleware('auth')->name('extracurricular.assesment');
 Route::post('extracurricular/assesment/input', 'ExtracurricularController@storeAssesment')->middleware('auth')->name('extracurricular.storeAssesment');
+Route::get('extracurricular/assesment/edit/{id}', 'ExtracurricularController@editAssesment')->middleware('auth')->name('extracurricular.editAssesment');
+Route::post('extracurricular/assesment/update/{id}', 'ExtracurricularController@updateAssesment')->middleware('auth')->name('extracurricular.updateAssesment');
 Route::resource('extracurricular', 'ExtracurricularController')->middleware('auth');
 
 // IMPORT

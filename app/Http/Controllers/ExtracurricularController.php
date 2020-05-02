@@ -57,7 +57,7 @@ class ExtracurricularController extends Controller
                         ->where('DEPARTMENTS_ID', 3)
                         ->get();
 
-        return view('Extracurricular.edit', compact('ekskul', 'karyawan'));
+        return view('extracurricular.edit', compact('ekskul', 'karyawan'));
     }
 
     /**
@@ -120,12 +120,38 @@ class ExtracurricularController extends Controller
             'SCORE' => $request->get('e_nilai'),
             'DESCRIPTION' => $request->get('e_desc')
         ]);
-        
+    
         $ekskul_report->save();
         
-        // dd($ekskul_record);
-        
         return redirect('extracurricular/assesment')->with('sukses', 'Berhasil menambah nilai ekskul siswa');
+    }
+
+    public function editAssesment($id)
+    {
+        $ekskul_report = ExtracurricularReport::find($id);        
+        $ekskul = Extracurricular::all();
+        $siswa = Student::all();
+
+        return view('extracurricular.editAssesment', compact('ekskul_report', 'ekskul', 'siswa'));
+    }
+
+    public function updateAssesment(Request $request, $id)
+    {
+        $ekskul_report = ExtracurricularReport::find($id);
+
+        $ekskul_record = ExtracurricularRecord::find($ekskul_report->EXTRACURRICULAR_RECORD_ID);
+
+        $ekskul_record->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
+        $ekskul_record->STUDENTS_ID = $request->get('e_student_name');
+        $ekskul_record->save();
+
+        $ekskul_report->EXTRACURRICULARS_ID = $request->get('e_ekskul_name');
+        $ekskul_report->EXTRACURRICULAR_RECORD_ID = $ekskul_record->id;
+        $ekskul_report->SCORE = $request->get('e_nilai');
+        $ekskul_report->DESCRIPTION = $request->get('e_desc');
+        $ekskul_report->save();
+
+        return redirect(action('ExtracurricularController@ekskulAssesment', $ekskul_report->id))->with('sukses', 'Data nilai ekskul berhasil diubah');
     }
 }
 

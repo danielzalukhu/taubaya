@@ -33,7 +33,7 @@
 
                                     <div class="form-group">
                                         <label>Poin</label>
-                                        <input name="v_point"type="text" class="form-control" value="{{ $pelanggaran->POINT }}">            
+                                        <input name="v_point" type="text" class="form-control" value="{{ $pelanggaran->POINT }}">            
                                     </div>
 
                                     <button type="submit" class="btn btn-warning">Ubah</button>

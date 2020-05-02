@@ -15,13 +15,21 @@
                 @endif
                 <div class="row">
                     <div class="panel-heading">
-                        <h3 class="box-title">INPUT NILAI EKSTRAKURIKULER</h3>            
+                        <h3 class="box-title">INPUT NILAI EKSTRAKURIKULER</h3>     
                     </div>
                     <div class="col-xs-4">                        
                         <div class="box">
-                            <div class="box-header">
+                            <div class="box-header with-border">
                                 <div class="center">
-                                    <h4>DAFTAR EKSTRAKURIKULER</h4>
+                                    <h4  class="box-title">DAFTAR EKSTRAKURIKULER</h4>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                        <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>       
                                 </div>
                             </div>
                             <div class="box-body">
@@ -52,9 +60,17 @@
                     </div>
                     <div class="col-xs-8">                        
                         <div class="box">
-                            <div class="box-header">
+                            <div class="box-header with-border">
                                 <div class="center">
-                                    <h4>INPUT NILAI</h4>
+                                    <h4 class="box-title">INPUT NILAI</h4>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                        <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>       
                                 </div>
                             </div>
                             <div class="box-body">
@@ -141,7 +157,7 @@
                                             </td>
                                             <td>{{ $er->SCORE }}</td>
                                             <td>
-                                                <a href="#" class="btn btn-warning btn-sm">
+                                                <a href="{{ route ('extracurricular.editAssesment', $er->id )}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
                                                 <form action="#" method="POST" class="inline">
@@ -160,7 +176,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
