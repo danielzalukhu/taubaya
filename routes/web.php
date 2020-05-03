@@ -39,14 +39,15 @@ Route::get('incomplete', 'SubjectController@incomplete')->middleware('auth')->na
 Route::post('incomplete', 'SubjectController@storeIncomplete')->name('subject.storeIncomplete');
 Route::get('incomplete/{id}/edit', 'SubjectController@editIncomplete')->name('subject.editIncomplete');
 Route::post('incomplete/{id}/update', 'SubjectController@updateIncomplete')->name('subject.updateIncomplete');
-Route::get('incomplete{id}/delete', 'SubjectController@destroyIncomplete')->name('subject.destroyIncomplete');
+Route::get('incomplete/{id}/delete', 'SubjectController@destroyIncomplete')->name('subject.destroyIncomplete');
 Route::resource('subject', 'SubjectController')->middleware('auth');
 
 // EXTRACURRICULER 
 Route::get('extracurricular/assesment', 'ExtracurricularController@ekskulAssesment')->middleware('auth')->name('extracurricular.assesment');
 Route::post('extracurricular/assesment/input', 'ExtracurricularController@storeAssesment')->middleware('auth')->name('extracurricular.storeAssesment');
 Route::get('extracurricular/assesment/edit/{id}', 'ExtracurricularController@editAssesment')->middleware('auth')->name('extracurricular.editAssesment');
-Route::post('extracurricular/assesment/update/{id}', 'ExtracurricularController@updateAssesment')->middleware('auth')->name('extracurricular.updateAssesment');
+Route::put('extracurricular/assesment/update/{id}', 'ExtracurricularController@updateAssesment')->middleware('auth')->name('extracurricular.updateAssesment');
+Route::get('extracurricular/delete/{id}', 'ExtracurricularController@destroyAssesment')->middleware('auth')->name('extracurricular.destroyAssesment');
 Route::resource('extracurricular', 'ExtracurricularController')->middleware('auth');
 
 // IMPORT

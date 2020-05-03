@@ -114,13 +114,12 @@ class ExtracurricularController extends Controller
         $ekskul_record->STUDENTS_ID = $request->get('e_student_name');
         $ekskul_record->save();
 
-        $ekskul_report = new ExtracurricularReport([
-            'EXTRACURRICULARS_ID' => $request->get('e_ekskul_name'),
-            'EXTRACURRICULAR_RECORD_ID' => $ekskul_record->id,
-            'SCORE' => $request->get('e_nilai'),
-            'DESCRIPTION' => $request->get('e_desc')
-        ]);
-    
+        $ekskul_report = new ExtracurricularReport();
+        $ekskul_report->EXTRACURRICULARS_ID = $request->get('e_ekskul_name');
+        $ekskul_report->EXTRACURRICULAR_RECORD_ID = $ekskul_record->id;
+        $ekskul_report->SCORE = $request->get('e_nilai');
+        $ekskul_report->DESCRIPTION = $request->get('e_desc');
+
         $ekskul_report->save();
         
         return redirect('extracurricular/assesment')->with('sukses', 'Berhasil menambah nilai ekskul siswa');
@@ -152,6 +151,16 @@ class ExtracurricularController extends Controller
         $ekskul_report->save();
 
         return redirect(action('ExtracurricularController@ekskulAssesment', $ekskul_report->id))->with('sukses', 'Data nilai ekskul berhasil diubah');
+    }
+
+    public function destroyAssesment($id)
+    {
+        $ekskul_report = ExtracurricularReport::whereId($id)->firstOrFail();
+        $ekskul_report->delete();
+
+        ExtracurricularRecord::where('id', $ekskul_report->EXTRACURRICULAR_RECORD_ID)->delete();
+
+        return redirect(action('ExtracurricularController@ekskulAssesment'))->with('sukses', 'Data nilai ekskul berhasil dihaous');
     }
 }
 

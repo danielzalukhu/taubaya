@@ -1,7 +1,8 @@
 @extends('layout.master')
 
 @section('header')
-    <link rel="stylesheet" href="adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<!-- DataTables -->
+<link rel="stylesheet" href="adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 @stop
 
 @section('content')
@@ -124,7 +125,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
                             <h3 class="box-title">DAFTAR NILAI EKSKUL</h3>            
@@ -160,7 +163,7 @@
                                                 <a href="{{ route ('extracurricular.editAssesment', $er->id )}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <form action="#" method="POST" class="inline">
+                                                <form action="{{ route ('extracurricular.destroyAssesment', $er->id )}}" method="get" class="inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
@@ -175,7 +178,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                
                 </div>
             </div>
         </div>

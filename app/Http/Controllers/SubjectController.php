@@ -18,7 +18,7 @@ class SubjectController extends Controller
 {
     public function __construct(ActivityStudent $students)
     {
-        $students = ActivityStudent::all()->get();
+        $students = ActivityStudent::all();
         foreach ($students as $s) {
             $this->student_id = $s->STUDENTS_ID;
         }
