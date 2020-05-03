@@ -16,14 +16,6 @@ use Carbon\Carbon;
 
 class SubjectController extends Controller
 {
-    public function __construct(ActivityStudent $students)
-    {
-        $students = ActivityStudent::all();
-        foreach ($students as $s) {
-            $this->student_id = $s->STUDENTS_ID;
-        }
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -235,14 +227,18 @@ class SubjectController extends Controller
 
     public function assesmentImport() 
     {
-        $aktivitas_siswa = ActivityStudent::all();        
-        $laporan_mapel = SubjectReport::all();
-        $nilai_tugas = $this->showDetailTugasStudent($this->student_id)->tugas;
-        $nilai_ph = $this->showDetailPHStudent($this->student_id)->ph;
-        $nilai_pts = $this->showDetailPTSStudent($this->student_id)->pts;
-        $nilai_pas = $this->showDetailPASStudent($this->student_id)->pas;
-
-        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel', 'nilai_tugas', 
+        $aktivitas_siswa = ActivityStudent::all();     
+        $laporan_mapel = SubjectReport::all();       
+        
+        foreach($aktivitas_siswa as $as)
+        {
+            $nilai_tugas = $this->showDetailTugasStudent($as->STUDENTS_ID)->tugas;
+            $nilai_ph = $this->showDetailPHStudent($as->STUDENTS_ID)->ph;
+            $nilai_pts = $this->showDetailPTSStudent($as->STUDENTS_ID)->pts;
+            $nilai_pas = $this->showDetailPASStudent($as->STUDENTS_ID)->pas; 
+        }
+    
+        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel', 'nilai_tugas',
                                                  'nilai_ph', 'nilai_pts', 'nilai_pas'));
     }
 

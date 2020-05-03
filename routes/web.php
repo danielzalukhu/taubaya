@@ -19,6 +19,10 @@ Route::get('/student/{id}/profile', 'StudentController@profile')->middleware('au
 Route::get('/student/detailabsent' , 'StudentController@showDetailAbsent')->middleware('auth')->name('student.detailAbsent');
 Route::resource('student', 'StudentController')->middleware('auth');
 
+// IMPORT
+Route::get('subject/assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
+Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
+Route::post('subject/assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
 
 // ACHIEVEMENT & ACHIEVEMENT RECORD
 Route::resource('achievement', 'AchievementController')->middleware('auth');
@@ -49,11 +53,6 @@ Route::get('extracurricular/assesment/edit/{id}', 'ExtracurricularController@edi
 Route::put('extracurricular/assesment/update/{id}', 'ExtracurricularController@updateAssesment')->middleware('auth')->name('extracurricular.updateAssesment');
 Route::get('extracurricular/delete/{id}', 'ExtracurricularController@destroyAssesment')->middleware('auth')->name('extracurricular.destroyAssesment');
 Route::resource('extracurricular', 'ExtracurricularController')->middleware('auth');
-
-// IMPORT
-Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
-Route::get('subject/assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
-Route::post('subject/assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
 
 // AUTH
 Auth::routes();

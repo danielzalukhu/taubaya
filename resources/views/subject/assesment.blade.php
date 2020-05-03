@@ -3,7 +3,7 @@
 @section('header')
 <!-- DataTables -->
 <link rel="stylesheet" href="adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@stop
+@endsection
 
 @section('content')
     <div class="main">
@@ -92,9 +92,7 @@
                                                 <table class="table table-hover">
                                                     @foreach($nilai_tugas as $nt)
                                                     <tr>
-                                                        @if($nt[$lm->subjectrecord->STUDENTS_ID])
-                                                            <tr>{{ $nt->SCORE }}{{"|"}}</tr>
-                                                        @endif
+                                                        <tr>{{ $nt->SCORE }}{{" | "}}</tr>                                                        
                                                     </tr>
                                                     @endforeach
                                                 </table>
@@ -103,9 +101,7 @@
                                                 <table class="table table-hover">
                                                     @foreach($nilai_ph as $ph)
                                                     <tr>
-                                                        @if($ph[$lm->subjectrecord->STUDENTS_ID])
-                                                            <tr>{{ $ph->SCORE }}{{"|"}}</tr>
-                                                        @endif
+                                                        <tr>{{ $ph->SCORE }}{{" | "}}</tr>
                                                     </tr>
                                                     @endforeach
                                                 </table>                                                                                    
@@ -114,9 +110,7 @@
                                                 <table class="table table-hover">
                                                     @foreach($nilai_pts as $pts)
                                                     <tr>
-                                                        @if($pts[$lm->subjectrecord->STUDENTS_ID])
-                                                            <tr>{{ $pts->SCORE }}{{"|"}}</tr>
-                                                        @endif
+                                                        <tr>{{ $pts->SCORE }}</tr>
                                                     </tr>
                                                     @endforeach
                                                 </table>                                            
@@ -125,16 +119,14 @@
                                                 <table class="table table-hover">
                                                     @foreach($nilai_pas as $pas)
                                                     <tr>
-                                                        @if($pas[$lm->subjectrecord->STUDENTS_ID])
-                                                            <tr>{{ $pas->SCORE }}{{"|"}}</tr>
-                                                        @endif
+                                                        <tr>{{ $pas->SCORE }}</tr>
                                                     </tr>
                                                     @endforeach
                                                 </table>
                                             </td>                                                
                                             <td>{{ $lm->FINAL_SCORE }}</td>
                                         </tr>
-                                        @endforeach
+                                        @endforeach                                    
                                     </tbody>
                                     </table>
                                 </div>
