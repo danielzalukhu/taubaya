@@ -116,7 +116,7 @@ class StudentController extends Controller
 
         $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH
                                              FROM academic_years
-                                             WHERE id = " . $academic_year_id . " ")[0];
+                                             WHERE id = " . $academic_year_id . " ")[0];                                           
 
         // GRAFIK TAB ACHIEVEMENT
 
@@ -128,7 +128,7 @@ class StudentController extends Controller
                                        FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                                        WHERE ACADEMIC_YEAR_ID = " . $academic_year_id ."  AND STUDENTS_ID = " . $id . "
                                        GROUP BY TINGKAT, BULAN
-                                       ORDER BY BULAN ASC");    
+                                       ORDER BY BULAN ASC");                
                                         
         // GRAFIK TAB ABSENT 
         
@@ -157,6 +157,37 @@ class StudentController extends Controller
         return $absen;                               
     }
 
+    public function returnDataViolationChart(Request $request)
+    {
+        $category = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                        WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                        WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                        WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                                END) AS KATEGORI
+                                FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
+                                GROUP BY KATEGORI ");
+
+        $dataViolation = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                    WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                    WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                    WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                            END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+                            FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
+                            WHERE ACADEMIC_YEAR_ID = " . $request->academicYearId  . " AND STUDENTS_ID = " . $request->studentId . "
+                            GROUP BY KATEGORI, BULAN
+                            ORDER BY BULAN ASC ");
+
+        $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH
+                            FROM academic_years
+                            WHERE id = " . $request->academicYearId . " ")[0]; 
+                            
+        $data['category'] = $category;
+        $data['dataViolation'] = $dataViolation;
+        $data['selected_tahun_ajaran'] = $selected_tahun_ajaran;
+
+        return $data;                   
+    }
+
     public function returnDataAchievementChart(Request $request)
     {
         $type = DB::select("SELECT a.GRADE as TINGKAT
@@ -173,10 +204,11 @@ class StudentController extends Controller
                             FROM academic_years
                             WHERE id = " . $request->academicYearId . " ")[0];
         
-        $data['type']=$type;
-        $data['dataAchievement']=$dataAchievement;
-        $data['selected_tahun_ajaran']=$selected_tahun_ajaran;
+        $data['type'] = $type;
+        $data['dataAchievement'] = $dataAchievement;
+        $data['selected_tahun_ajaran'] = $selected_tahun_ajaran;
 
         return $data;                   
     }
 }
+

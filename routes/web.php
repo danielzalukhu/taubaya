@@ -15,6 +15,7 @@ Route::get('/', 'DashboardController@index')->middleware('auth')->name('dashboar
 
 // STUDENT
 Route::get('achievement/chart', 'StudentController@returnDataAchievementChart')->middleware('auth')->name('student.achievementChart');
+Route::get('violation/chart', 'StudentController@returnDataViolationChart')->middleware('auth')->name('student.violationChart');
 Route::get('/student/{id}/profile', 'StudentController@profile')->middleware('auth')->name('student.profile');
 Route::get('/student/detailabsent' , 'StudentController@showDetailAbsent')->middleware('auth')->name('student.detailAbsent');
 Route::resource('student', 'StudentController')->middleware('auth');

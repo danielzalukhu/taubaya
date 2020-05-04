@@ -57,16 +57,6 @@ class AchievementRecordController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //return view('achivementrecord.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -84,9 +74,7 @@ class AchievementRecordController extends Controller
         $end_ay = Carbon::parse($session_end_ay);
 
         $check = $request_date->between($start_ay,$end_ay);
-        // $a = array($request_date, $start_ay, $end_ay);
-        // dd($a);
-        
+
         if($check == false)
         {
             return redirect('achievementrecord')->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
@@ -103,20 +91,8 @@ class AchievementRecordController extends Controller
             ]);
         }
 
-        // dd($request->all());
         $catatan_penghargaan->save();
         return redirect('achievementrecord')->with('sukses', 'Daftar penghargaan baru berhasil dibuat');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -172,7 +148,7 @@ class AchievementRecordController extends Controller
             $catatan_penghargaan->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
             $catatan_penghargaan->STAFFS_ID = $request->session()->get('session_user_id');
         }
-        //dd($request->all());
+
         $catatan_penghargaan->save();
         return redirect(action('AchievementRecordController@index', $catatan_penghargaan->id))->with('sukses', 'Daftar penghargaan siswa berhasil diubah');
     }

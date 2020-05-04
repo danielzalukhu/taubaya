@@ -21,19 +21,13 @@ class ViolationRecordController extends Controller
     public function index(Request $request)
     {
         $catatan_pelanggaran = ViolationRecord::all();
-        // $catatan_pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')                           
-        //                     ->select('students.*', 
-        //                              DB::raw('COUNT(*) as BANYAKPELANGGARAN'), 
-        //                              DB::raw('SUM(violation_records.TOTAL) as TOTALPOIN')) 
-        //                     ->groupBy('students.id')
-        //                     ->get();                             
-        // dd($catatan_pelanggaran);
+   
         $tahun_ajaran = AcademicYear::all();
         $siswa = Student::all();
         $pelanggaran = Violation::all();
         $karyawan = Staff::all();
         
-        // utk grafik
+        // UNTUK GRAFIK
         $academic_year_id = 0;
         $maxId = DB::select('SELECT max(id) as id
                              FROM academic_years')[0]->id;        
@@ -66,18 +60,8 @@ class ViolationRecordController extends Controller
                                              FROM academic_years
                                              WHERE id = " . $academic_year_id )[0];
 
-        // -----------------------------------
+        
         return view('violationrecord.index', compact('catatan_pelanggaran', 'tahun_ajaran', 'siswa', 'pelanggaran', 'karyawan', 'academic_year_id', 'kategori', 'data', 'selected_tahun_ajaran'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //return view('violationrecord.create');
     }
 
     /**
@@ -108,7 +92,6 @@ class ViolationRecordController extends Controller
         $end_ay = Carbon::parse($session_end_ay);
 
         $check = $request_date->between($start_ay,$end_ay);
-        // dd($end_ay);
 
         foreach($pelanggaran as $p)
         {
@@ -145,17 +128,6 @@ class ViolationRecordController extends Controller
                 }                
             }            
         }           
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
     }
 
     /**

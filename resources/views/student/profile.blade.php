@@ -322,6 +322,8 @@
 <script>
     var studentId = '{{ $siswa->id }}';
    
+    $('#selector-dropdown-violation-year').val({{$academic_year_id}})
+
     $('#selector-dropdown-violation-year').change(function(){
         var academicYearId = $(this).val();
 
@@ -352,6 +354,8 @@
             }
         })
     });
+
+    $('#selector-dropdown-achievement-year').val({{$academic_year_id}})
 
     $('#selector-dropdown-achievement-year').change(function(){
         var academicYearId = $(this).val();
@@ -450,75 +454,95 @@
         })
     }))
 
-    // TAB VIOLATION 
+    // TAB VIOLATION GRAFIK
+
+    $('#select-dropdown-academicyear-graph-violation').val({{$academic_year_id}})
+
     $('#select-dropdown-academicyear-graph-violation').change(function(){
         var academicYearId = $(this).val();
+        // window.location = "{{ route('student.profile', ['id'=>$siswa->id]) }}"+"?academicYearId="+academicYearId;
+        $.ajax({
+            url: '{{ route("student.violationChart") }}',
+            type: 'get',
+            data: {academicYearId: academicYearId, studentId: studentId},
 
-        window.location = "{{ route('student.profile', ['id'=>$siswa->id]) }}"+"?academicYearId="+academicYearId;
+            success: function(result){
+                // console.log(result)
+                chartViolation(result['category'], result['dataViolation'], result['selected_tahun_ajaran'])
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
     })
-
-    $('#selector-dropdown-violation-year').val({{$academic_year_id}})
-    $('#select-dropdown-academicyear-graph-violation').val({{$academic_year_id}})
     
     var categories = {!!json_encode($kategori)!!}
     var dataGraph = {!!json_encode($data)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
 
-    var startMonth = selectedTahunAjaran.STARTMONTH;
-    var endMonth = selectedTahunAjaran.ENDMONTH;
-    var dataSeries = [];
-    var dataCategory = []
+    chartViolation(categories, dataGraph, selectedTahunAjaran)
 
-    categories.forEach(function(item){
-        var values = []
-        for(var i=startMonth; i <= endMonth; i++){
-            values[i-startMonth] = 0
-            dataCategory.push('Bulan '+ i)
-        }
-        
-        dataGraph.forEach(function(obj){
-            if(obj.KATEGORI == item.KATEGORI){
-                values[obj.BULAN - startMonth] = obj.JUMLAH
+    function chartViolation(types, dataGraph, selecetedTahunAjaran){
+        $("#chartViolation").empty()
+
+        var startMonth = selectedTahunAjaran.STARTMONTH;
+        var endMonth = selectedTahunAjaran.ENDMONTH;
+        var dataSeries = [];
+        var dataCategory = []
+
+        categories.forEach(function(item){
+            var values = []
+            for(var i=startMonth; i <= endMonth; i++){
+                values[i-startMonth] = 0
+                dataCategory.push('Bulan '+ i)
             }
+            
+            dataGraph.forEach(function(obj){
+                if(obj.KATEGORI == item.KATEGORI){
+                    values[obj.BULAN - startMonth] = obj.JUMLAH
+                }
+            })
+
+            dataSeries.push({
+                name: item.KATEGORI,
+                data: values
+            })
         })
 
-        dataSeries.push({
-            name: item.KATEGORI,
-            data: values
-        })
-    })
-
-    Highcharts.chart('chartViolation', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'STATISTIK PELANGGARAN YANG TERCATAT BERDASARKAN JENIS PELANGGARAN DAN PERIODE TAHUN AJARAN'
-        },
-        xAxis: {
-            categories: dataCategory,
-            crosshair: true
-        },
-        yAxis: {
-            min: 0,
+        Highcharts.chart('chartViolation', {
+            chart: {
+                type: 'column'
+            },
             title: {
-                text: 'JUMLAH PELANGGARAN TERCATAT'
-            }
-        },
-        credits: {
-            enabled: false,
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-            }
-        },
-        series: dataSeries
-    });
-
-    // TAB ACHIEVEMENT 
+                text: 'STATISTIK PELANGGARAN YANG TERCATAT BERDASARKAN JENIS PELANGGARAN DAN PERIODE TAHUN AJARAN'
+            },
+            xAxis: {
+                categories: dataCategory,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'JUMLAH PELANGGARAN TERCATAT'
+                }
+            },
+            credits: {
+                enabled: false,
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: dataSeries
+        });
+    }
     
+    // TAB ACHIEVEMENT GRAFIK
+    
+    $('#select-dropdown-academicyear-graph-achievement').val({{$academic_year_id}})
+
     $('#select-dropdown-academicyear-graph-achievement').change(function(){
         var academicYearId = $(this).val();
         $.ajax({
@@ -527,7 +551,7 @@
             data: {academicYearId: academicYearId, studentId: studentId},
 
             success: function(result){
-               console.log(result)
+               // console.log(result)
                chartAchievement(result['type'], result['dataAchievement'], result['selected_tahun_ajaran'])
 
             },
@@ -536,9 +560,6 @@
             }
         })
     })
-
-    $('#selector-dropdown-achievement-year').val({{$academic_year_id}})
-    $('#select-dropdown-academicyear-graph-achievement').val({{$academic_year_id}})
 
     var types = {!!json_encode($type)!!}
     var dataGraph = {!!json_encode($data)!!}
@@ -610,8 +631,8 @@
         });
     }
 
+    // TAB ABSENT GRAFIK
 
-    // TAB ABSENT // 
     var types = {!!json_encode($tipeAbsen)!!}
     var dataGraph = {!!json_encode($dataAbsen)!!}
 

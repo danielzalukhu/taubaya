@@ -113,7 +113,7 @@
             </div>
 
             <div class="row"> 
-              <div class="col-lg-8"> 
+              <div class="col-lg-6"> 
                 <div class="box box-warning">
                   <div class="box-header with-border">
                       <h3 class="box-title">Daftar Siswa Bermasalah</h3>
