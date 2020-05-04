@@ -33,6 +33,7 @@
                                             <th>#</th>
                                             <th>NISN</th>
                                             <th>NAMA SISWA</th>
+                                            <th>KELAS</th>
                                             <th>AKSI</th>
                                         </tr>
                                     </thead>
@@ -42,7 +43,8 @@
                                         <tr>
                                             <td>{{ $i++ }}</td>
                                             <td><a href="{{ route('student.profile', ['id'=>$s->id]) }}">{{$s->NISN}}</a></td>
-                                            <td>{{$s->FNAME}}{{" "}}{{$s->LNAME}}</td>
+                                            <td>{{ $s->FNAME }}{{" "}}{{ $s->LNAME }}</td>
+                                            <td>{{ $s->grade->NAME }}</td>
                                             <td>
                                                 <a href="#" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pencil"></i>
