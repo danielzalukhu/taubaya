@@ -222,8 +222,7 @@ class SubjectController extends Controller
         // }
         // dd($id_siswa);
 
-        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel', 'nilai_tugas',
-                                                 'nilai_ph', 'nilai_pts', 'nilai_pas'));
+        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel'));
     }
 
     public function showDetailTugasStudent($id)

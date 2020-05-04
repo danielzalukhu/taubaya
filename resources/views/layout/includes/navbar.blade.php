@@ -16,8 +16,7 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="user-image" alt="User Image">
-                        <span class="hidden-xs">Hi, {{Auth::guard('web')->user()->name}}</span>
-                        <!-- {{Auth::guard('web')->check()}} -->
+                        <span class="hidden-xs">Hi! {{Auth::guard('web')->user()->name}}</span>
                     </a>
                     <ul class="dropdown-menu">                
                         <li class="user-header">
@@ -25,11 +24,7 @@
                             <p>
                                 {{Auth::guard('web')->user()->name}}
                                 <small>
-                                @if(Auth::guard('web')->user()->ROLE === "STAFF")
-                                    {{Auth::guard('web')->user()->ROLE}}
-                                @else
-                                    NAMA SISWA DAN KELAS
-                                @endif
+                                    {{ Auth::guard('web')->user()->ROLE }}
                                 </small>
                             </p>
                         </li>                

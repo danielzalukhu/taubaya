@@ -210,5 +210,12 @@ class StudentController extends Controller
 
         return $data;                   
     }
+
+    public function mapelku()
+    {
+        $siswa = Student::all();
+
+        return view('student.mapel');
+    }
 }
 

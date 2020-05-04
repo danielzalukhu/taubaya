@@ -1,8 +1,7 @@
 @extends('layout.master')
 
 @section('header')
-<!-- DataTables -->
-<link rel="stylesheet" href="adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @stop
 
 @section('content')
@@ -32,17 +31,17 @@
                             <div class="box-body">
                                 <table id="example1" class="table table-bordered table-striped">
                                 <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>NAMA SISWA</th>
-                                    <th>TANGGAL</th>
-                                    <th colspan="2">KODE - DEKSRIPSI</th>
-                                    <th>AKSI</th>
-                                </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>NAMA SISWA</th>
+                                        <th>TANGGAL</th>
+                                        <th colspan="2">KODE - DEKSRIPSI</th>
+                                        <th>AKSI</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @php $i=1 @endphp
-                                @foreach($ketidaktuntasan as $tts)
+                                    @php $i=1 @endphp
+                                    @foreach($ketidaktuntasan as $tts)
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{$tts->student->FNAME}}{{" "}}{{$tts->student->LNAME}}</td>
@@ -62,7 +61,7 @@
                                             </form>                                            
                                         </td>
                                     </tr>
-                                @endforeach
+                                    @endforeach
                                 </tbody>
                                 </table>
                             </div>
@@ -139,7 +138,7 @@
 @stop
 
 @section('footer')
-<script>
+<script>    
     $(function () {
         $('#example1').DataTable()
             $('#example2').DataTable({
