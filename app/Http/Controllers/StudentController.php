@@ -67,7 +67,7 @@ class StudentController extends Controller
         for($i = 0; $i < count($point); $i++){
             $point_record = $point[$i]->point; 
         } 
-
+        
         $achievement_point = DB::select('SELECT POINT
                                          FROM achievement_records JOIN achievements on achievements.id = achievement_records.ACHIEVEMENTS_ID 
                                          WHERE STUDENTS_ID = ' . $id);
@@ -77,7 +77,7 @@ class StudentController extends Controller
         for($i = 0; $i < count($achievement_point); $i++){
             $total_achievement_point = $achievement_point[$i]->POINT; 
         } 
-
+        
         $catatan_penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                                        
                                             ->select('achievements.*', 'achievement_records.*')
                                             ->where('STUDENTS_ID', '=', $id)
