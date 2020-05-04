@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Student;
 use App\Absent;
 use App\ViolationRecord;
+use App\AchievementRecord;
 use App\AcademicYear;
 use DB;
 
@@ -21,61 +22,6 @@ class StudentController extends Controller
         $siswa = Student::all();
                                
         return view('student.index', compact('siswa'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-
     }
 
     /**
@@ -101,17 +47,18 @@ class StudentController extends Controller
                             WHERE STUDENTS_ID = ' . $id .' 
                             ORDER BY START_DATE, END_DATE ASC');
 
-        $catatan_absen = DB::select('SELECT TYPE, COUNT(TYPE) as TOTAL			
+        $catatan_absen = DB::select("SELECT TYPE, COUNT(TYPE) as TOTAL			
                                      FROM absents 
-                                     WHERE STUDENTS_ID = ' . $id . ' AND ACADEMIC_YEAR_ID = ' . $request->session()->get('session_academic_year_id') . '
-                                     GROUP BY TYPE');  
+                                     WHERE STUDENTS_ID = ' . $id . ' AND ACADEMIC_YEAR_ID = '" . $request->session()->get('session_academic_year_id') . "'
+                                     GROUP BY TYPE");  
 
         // RIGHT COLOMN DATA
         $tahun_ajaran = AcademicYear::all();
-
-        $catatan_pelanggaran = DB::select('SELECT *
-                                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
-                                        WHERE STUDENTS_ID = ' . $id . ' AND' . ' ACADEMIC_YEAR_ID = ' . $request->session()->get('session_academic_year_id'));
+                                           
+        $catatan_pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                            ->select('violation_records.*', 'violations.*')
+                            ->where('STUDENTS_ID', '=', $id)
+                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'));
 
         $point = DB::select('SELECT SUM(TOTAL) as point
                             FROM violation_records
@@ -131,9 +78,10 @@ class StudentController extends Controller
             $total_achievement_point = $achievement_point[$i]->POINT; 
         } 
 
-        $catatan_penghargaan = DB::select('SELECT *
-                                        FROM achievement_records JOIN achievements on achievements.id = achievement_records.ACHIEVEMENTS_ID 
-                                        WHERE STUDENTS_ID = ' . $id . ' AND' . ' ACADEMIC_YEAR_ID = ' . $request->session()->get('session_academic_year_id'));
+        $catatan_penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                                        
+                                            ->select('achievements.*', 'achievement_records.*')
+                                            ->where('STUDENTS_ID', '=', $id)
+                                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'));
 
         // GRAFIK TAB VIOLATION
 
@@ -194,10 +142,10 @@ class StudentController extends Controller
                                  GROUP BY TIPE, TAHUN");
     
         return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
-                    'catatan_penghargaan', 'total_achievement_point',
-                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
-                    'type', 'dataAchievement',
-                    'tipeAbsen', 'dataAbsen'));
+                                               'catatan_penghargaan', 'total_achievement_point',
+                                               'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
+                                               'type', 'dataAchievement',
+                                               'tipeAbsen', 'dataAbsen'));
     }
 
     public function showDetailAbsent(Request $request)
