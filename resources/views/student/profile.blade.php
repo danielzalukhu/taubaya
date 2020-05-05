@@ -5,7 +5,6 @@
 @stop
 
 @section('content')
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
           PROFIL SISWA
@@ -17,7 +16,6 @@
         </ol>
     </section>
 
-    <!-- Main content -->
     <section class="content">
         <div class="row">
           <div class="col-md-3">

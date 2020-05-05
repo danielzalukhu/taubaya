@@ -217,12 +217,8 @@ class SubjectController extends Controller
             $nilai_pas = $this->showDetailPASStudent($as->STUDENTS_ID)->pas; 
         }
     
-        // for($i = 0; $i < count($aktivitas_siswa); $i++){
-        //     $id_siswa = $aktivitas_siswa[$i]->STUDENTS_ID;
-        // }
-        // dd($id_siswa);
-
-        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel'));
+        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel', 'nilai_tugas',
+                                                 'nilai_ph', 'nilai_pts', 'nilai_pas'));
     }
 
     public function showDetailTugasStudent($id)

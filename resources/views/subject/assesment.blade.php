@@ -1,8 +1,7 @@
 @extends('layout.master')
 
 @section('header')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @endsection
 
 @section('content')
@@ -61,7 +60,14 @@
                         <div class="panel-heading">
                             <h3 class="box-title">ACTIVITIES STUDENTS SCORE</h3>            
                         </div>
-                        <div class="box">                        
+                        <div class="box">   
+                            <div class="box-header">
+                                <div class="right">
+                                    <button type="button" class="btn btn-success btn-sm pull-right">
+                                        <i class="fa fa-check"></i> VERIFIKASI NILAI
+                                    </button>
+                                </div>
+                            </div>                     
                             <div class="box-body">
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-hover table-bordered table-striped">
@@ -75,6 +81,7 @@
                                             <th>UJIAN TENGAH SEMESTER</th>
                                             <th>UJIAN AKHIR SEMESTER</th>
                                             <th>NILAI AKHIR</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -125,6 +132,18 @@
                                                 </table>
                                             </td>                                                
                                             <td>{{ $lm->FINAL_SCORE }}</td>
+                                            <td>
+                                                <a href="{{ route('subject.editAssesment', $lm->subjectrecord->STUDENTS_ID) }}" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <form action="#" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>                                            
+                                            </td>
                                         </tr>
                                         @endforeach                                    
                                     </tbody>

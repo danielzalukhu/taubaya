@@ -23,6 +23,7 @@ Route::resource('student', 'StudentController')->middleware('auth');
 
 // IMPORT
 Route::get('subject/assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
+Route::get('subject/assesment/edit/{id}', 'SubjectController@editAssesment')->middleware('auth')->name('subject.editAssesment');
 Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
 Route::post('subject/assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
 

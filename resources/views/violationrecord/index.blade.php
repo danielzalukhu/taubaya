@@ -1,8 +1,7 @@
 @extends('layout.master')
 
 @section('header')
-<!-- DataTables -->
-<link rel="stylesheet" href="adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @stop
 
 @section('content')
@@ -65,11 +64,9 @@
                         </div>
                         <div class="box">
                             <div class="box-header">
-                                @if(Auth::guard('web')->user()->ROLE === "STAFF")
                                 <div class="right">
                                     <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">BUAT CATATAN PELANGGARAN</button>
                                 </div>
-                                @endif
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">

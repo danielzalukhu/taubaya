@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('header')
-  <link rel="stylesheet" href="adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @stop
 
 @section('content')
