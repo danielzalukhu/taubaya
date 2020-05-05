@@ -8,6 +8,7 @@ use App\Absent;
 use App\ViolationRecord;
 use App\AchievementRecord;
 use App\AcademicYear;
+use App\Subject;
 use DB;
 
 class StudentController extends Controller
@@ -211,11 +212,21 @@ class StudentController extends Controller
         return $data;                   
     }
 
-    public function mapelku()
+    public function mapelku(Request $request)
     {
-        $siswa = Student::all();
+        $student_class_login = $request->session()->get('session_student_class');
+        $student_class = explode(" ", $student_class_login);
 
-        return view('student.mapel');
+        if($student_class[0] == 10)
+        {
+            $selected_mapel = Subject::where('CODE', 'LIKE',  'C2%' . $student_class[1] . '%')->get();
+        }
+        elseif($student_class[0] == 11 && $student_class[0] == 12)
+        {
+            $selected_mapel = Subject::where('CODE', 'LIKE',  'C3%' . $student_class[1] . '%')->get();
+        }
+
+        return view('student.mapel', compact('selected_mapel'));
     }
 }
 

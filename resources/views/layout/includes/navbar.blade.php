@@ -24,14 +24,17 @@
                             <p>
                                 {{Auth::guard('web')->user()->name}}
                                 <small>
+                                @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                                    {{ Auth::guard('web')->user()->staff->ROLE }} 
+                                    {{ " - " }}
+                                    {{ Auth::guard('web')->user()->staff->department->NAME }}
+                                @else
                                     {{ Auth::guard('web')->user()->ROLE }}
+                                @endif
                                 </small>
                             </p>
                         </li>                
                         <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
-                            </div>
                             <div class="pull-right">
                                 <a href="javascript:void(0)"  onclick="doLogout()" class="btn btn-default btn-flat">Sign out</a>
                             </div>

@@ -33,10 +33,10 @@
                                     </thead>
                                     <tbody>
                                     @php $i=1 @endphp
-                                    
+                                    @foreach($selected_mapel as $sm)
                                         <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td></td>
+                                            <td>{{ $sm->DESCRIPTION }}</td>
                                             <td></td>
                                             <td>
                                                 <a href="#" class="btn btn-info btn-sm">
@@ -54,7 +54,7 @@
                                                 </form>                                            
                                             </td>
                                         </tr>
-                                    
+                                    @endforeach
                                     </tbody>
                                     </table>
                                 </div>
