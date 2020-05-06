@@ -24,18 +24,21 @@ Route::resource('student', 'StudentController')->middleware('auth');
 // IMPORT
 Route::get('subject/assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
 Route::get('subject/assesment/edit/{id}', 'SubjectController@editAssesment')->middleware('auth')->name('subject.editAssesment');
+Route::post('subject/assesment/update/{id}', 'SubjectController@updateAssesment')->middleware('auth')->name('subject.updateAssesment');
+Route::get('subject/assesment/delete/{id}', 'SubjectController@destroyAssesment')->middleware('auth')->name('subject.destroyAssesment');
+Route::get('subject/assesment/status/{id}', 'SubjectController@setStatus')->middleware('auth')->name('subject.setStatus');
 Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
 Route::post('subject/assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
 
 // ACHIEVEMENT & ACHIEVEMENT RECORD
+Route::get('ar/academicyear', 'AchievementRecordController@ajaxChangeAchievementRecord')->middleware('auth')->name('achievement.academicYearAjax');
 Route::resource('achievement', 'AchievementController')->middleware('auth');
 Route::resource('achievementrecord', 'AchievementRecordController')->middleware('auth');
-Route::get('ar/academicyear', 'AchievementRecordController@ajaxChangeAchievementRecord')->middleware('auth')->name('achievement.academicYearAjax');
 
 // VIOLATION & VIOLATION RECORD
+Route::get('vr/academicyear', 'ViolationRecordController@ajaxChangeViolationRecord')->middleware('auth')->name('violationrecord.academicYearAjax');
 Route::resource('violation', 'ViolationController')->middleware('auth');
 Route::resource('violationrecord', 'ViolationRecordController')->middleware('auth');
-Route::get('vr/academicyear', 'ViolationRecordController@ajaxChangeViolationRecord')->middleware('auth')->name('violationrecord.academicYearAjax');
 
 // ABSENT
 Route::get('absent/academicyear', 'AbsentController@ajaxChangeAbsentRecord')->middleware('auth')->name('absent.academicYearAjax');

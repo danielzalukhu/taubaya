@@ -58,14 +58,12 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">ACTIVITIES STUDENTS SCORE</h3>            
+                            <h3 class="box-title">DAFTAR NILAI SISWA</h3>            
                         </div>
                         <div class="box">   
                             <div class="box-header">
                                 <div class="right">
-                                    <button type="button" class="btn btn-success btn-sm pull-right">
-                                        <i class="fa fa-check"></i> VERIFIKASI NILAI
-                                    </button>
+                                    
                                 </div>
                             </div>                     
                             <div class="box-body">
@@ -76,6 +74,7 @@
                                             <th>NO</th>
                                             <th>NISN</th>
                                             <th>NAMA SISWA</th>
+                                            <th>NAMA MAPEL</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
                                             <th>UJIAN TENGAH SEMESTER</th>
@@ -95,54 +94,72 @@
                                                 {{" "}}
                                                 {{ $lm->subjectrecord->student->LNAME}}
                                             </td>
+                                            <td>{{ $lm->subject->DESCRIPTION }}</td>
                                             <td>
                                                 <table class="table table-hover">
-                                                    @foreach($nilai_tugas as $nt)
+                                                    @php
+                                                        $scores = json_decode($lm->TUGAS);
+                                                    @endphp
+                                                    @foreach($scores as $score)
                                                     <tr>
-                                                        <tr>{{ $nt->SCORE }}{{" | "}}</tr>                                                        
+                                                        <tr>{{ $score }}{{" | "}}</tr>                                                        
                                                     </tr>
                                                     @endforeach
                                                 </table>
                                             </td>
                                             <td>
                                                 <table class="table table-hover">
-                                                    @foreach($nilai_ph as $ph)
+                                                    @php
+                                                        $scores = json_decode($lm->PH);
+                                                    @endphp
+                                                    @foreach($scores as $score)
                                                     <tr>
-                                                        <tr>{{ $ph->SCORE }}{{" | "}}</tr>
+                                                        <tr>{{ $score }}{{" | "}}</tr>                                                        
                                                     </tr>
                                                     @endforeach
                                                 </table>                                                                                    
                                             </td>
                                             <td>
                                                 <table class="table table-hover">
-                                                    @foreach($nilai_pts as $pts)
+                                                    @php
+                                                        $scores = json_decode($lm->PTS);
+                                                    @endphp
+                                                    @foreach($scores as $score)
                                                     <tr>
-                                                        <tr>{{ $pts->SCORE }}</tr>
+                                                        <tr>{{ $score }}</tr>                                                        
                                                     </tr>
                                                     @endforeach
                                                 </table>                                            
                                             </td>
                                             <td>
                                                 <table class="table table-hover">
-                                                    @foreach($nilai_pas as $pas)
+                                                    @php
+                                                        $scores = json_decode($lm->PAS);
+                                                    @endphp
+                                                    @foreach($scores as $score)
                                                     <tr>
-                                                        <tr>{{ $pas->SCORE }}</tr>
+                                                        <tr>{{ $score }}</tr>                                                        
                                                     </tr>
                                                     @endforeach
                                                 </table>
                                             </td>                                                
                                             <td>{{ $lm->FINAL_SCORE }}</td>
                                             <td>
-                                                <a href="{{ route('subject.editAssesment', $lm->subjectrecord->STUDENTS_ID) }}" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <form action="#" method="POST" class="inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>                                            
+                                                @if($lm->IS_VERIFIED == 0)                                      
+                                                    <a href="{{ route('subject.setStatus', $lm->id) }}?status=1" class="btn btn-success btn-sm"  onclick="return confirm('Are you sure?')">
+                                                        <i class="fa fa-check"></i> 
+                                                    </a>
+                                                    <a href="{{ route('subject.editAssesment', $lm->id) }}" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                    <form action="{{ route('subject.destroyAssesment', $lm->id) }}" method="GET" class="inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>      
+                                                @endif
                                             </td>
                                         </tr>
                                         @endforeach                                    

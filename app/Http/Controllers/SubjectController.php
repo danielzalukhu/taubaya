@@ -11,6 +11,7 @@ use App\Violation;
 use App\AcademicYear;
 use App\ActivityStudent;
 use App\SubjectReport;
+use App\SubjectRecord;
 use DB;
 use Carbon\Carbon;
 
@@ -205,64 +206,103 @@ class SubjectController extends Controller
     }
 
     public function assesmentImport() 
-    {
-        $aktivitas_siswa = ActivityStudent::all();     
-        $laporan_mapel = SubjectReport::all();       
-        
-        foreach($aktivitas_siswa as $as)
-        {
-            $nilai_tugas = $this->showDetailTugasStudent($as->STUDENTS_ID)->tugas;
-            $nilai_ph = $this->showDetailPHStudent($as->STUDENTS_ID)->ph;
-            $nilai_pts = $this->showDetailPTSStudent($as->STUDENTS_ID)->pts;
-            $nilai_pas = $this->showDetailPASStudent($as->STUDENTS_ID)->pas; 
-        }
+    {    
+        $laporan_mapel = SubjectReport::all();    
     
-        return view('subject.assesment', compact('aktivitas_siswa', 'laporan_mapel', 'nilai_tugas',
-                                                 'nilai_ph', 'nilai_pts', 'nilai_pas'));
+        return view('subject.assesment', compact('laporan_mapel'));
     }
 
-    public function showDetailTugasStudent($id)
+    public function editAssesment($id)
     {
-        $tugas = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
-                        ->select('students.*', 'activities_students.SCORE')
-                        ->where('activities_students.ACTIVITIES_ID', 1)
-                        ->where('students.id', $id)
-                        ->get();
+        $laporan_mapel = SubjectReport::find($id);
+        $siswa = Student::all();
+        $mapel = Subject::all();
         
-        return view('subject.assesment', compact('tugas'));
+        return view('subject.editassesment', compact('laporan_mapel', 'siswa', 'mapel'));
     }
 
-    public function showDetailPHStudent($id)
+    public function updateAssesment(Request $request, $id)
     {
-        $ph = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
-                        ->select('students.*', 'activities_students.SCORE')
-                        ->where('activities_students.ACTIVITIES_ID', 2)
-                        ->where('students.id', $id)
-                        ->get();
+        $laporan_mapel = SubjectReport::find($id);
+       
+        $array_tugas = $request->get('a_nilai_tugas');
+        $array_ph = $request->get('a_nilai_ph');
+        $array_pts = $request->get('a_nilai_pts');
+        $array_pas = $request->get('a_nilai_pas');        
+        $array_un = array();
+        $array_us = array();
+        $final_score = 0;        
         
-        return view('subject.assesment', compact('ph'));
+        $sum_nilai_tugas = 0;
+        $rata_nilai_tugas = 0;
+        $final_nilai_tugas = 0;
+        foreach($array_tugas as $tugas){
+            $sum_nilai_tugas = $sum_nilai_tugas + $tugas;
+        }
+        $rata_nilai_tugas = $sum_nilai_tugas / count($array_tugas);
+        $final_nilai_tugas = $rata_nilai_tugas * 0.1;
+
+        $sum_nilai_ph = 0;
+        $rata_nilai_ph = 0;
+        $final_nilai_ph = 0;
+        foreach($array_ph as $ph){
+            $sum_nilai_ph = $sum_nilai_ph + $ph;
+        }
+        $rata_nilai_ph = $sum_nilai_ph / count($array_ph);
+        $final_nilai_ph = $rata_nilai_ph * 0.2;
+
+        $sum_nilai_pts = 0;
+        $rata_nilai_pts = 0;
+        $final_nilai_pts = 0;
+        foreach($array_pts as $pts){
+            $sum_nilai_pts = $sum_nilai_pts + $pts;
+        }
+        $rata_nilai_pts = $sum_nilai_pts / count($array_pts);
+        $final_nilai_pts = $rata_nilai_pts * 0.3;
+
+        $sum_nilai_pas = 0;
+        $rata_nilai_pas = 0;
+        $final_nilai_pas = 0;
+        foreach($array_pas as $pas){
+            $sum_nilai_pas = $sum_nilai_pas + $pas;
+        }
+        $rata_nilai_pas = $sum_nilai_pas / count($array_pas);
+        $final_nilai_pas = $rata_nilai_pas * 0.4;
+
+        $final_score = $final_nilai_tugas + $final_nilai_ph + $final_nilai_pts + $final_nilai_pas;
+        $fix_final_score = round($final_score, 2);
+
+        $laporan_mapel->SUBJECTS_ID = $request->get('a_subject_id');
+        $laporan_mapel->SUBJECT_RECORD_ID = $laporan_mapel->SUBJECT_RECORD_ID;
+        $laporan_mapel->TUGAS = json_encode($array_tugas);
+        $laporan_mapel->PH = json_encode($array_ph);
+        $laporan_mapel->PTS = json_encode($array_pts);
+        $laporan_mapel->PAS = json_encode($array_pas);
+        $laporan_mapel->UN = json_encode($array_un);
+        $laporan_mapel->US = json_encode($array_us);
+        $laporan_mapel->FINAL_SCORE = $fix_final_score;
+    
+        $laporan_mapel->save();
+
+        return redirect(action('SubjectController@assesmentImport', $laporan_mapel->id))->with('sukses', 'Data nilai siswa berhasil diubah');
     }
 
-    public function showDetailPTSStudent($id)
+    public function destroyAssesment($id)
     {
-        $pts = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
-                        ->select('students.*', 'activities_students.SCORE')
-                        ->where('activities_students.ACTIVITIES_ID', 3)
-                        ->where('students.id', $id)
-                        ->get();
-        
-        return view('subject.assesment', compact('pts'));
+        $laporan_mapel = SubjectReport::whereId($id)->firstOrFail();
+        $laporan_mapel->delete();
+        return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Data nilai siswa berhasil dihapus');
     }
 
-    public function showDetailPASStudent($id)
+    public function setStatus(Request $request, $id)
     {
-        $pas = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
-                        ->select('students.*', 'activities_students.SCORE')
-                        ->where('activities_students.ACTIVITIES_ID', 4)
-                        ->where('students.id', $id)
-                        ->get();
-        
-        return view('subject.assesment', compact('pas'));
+        $laporan_mapel = SubjectReport::findOrFail($id);
+        $laporan_mapel->IS_VERIFIED = $request->status;
+
+        $laporan_mapel->save();
+
+        return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Daftar nilai berhasil di verifikasis');
     }
 }
  
+

@@ -203,14 +203,13 @@
             })
         })
     
+    $('#selector-dropdown-achievementrecord-year').val({{$academic_year_id}})
+
     $('#selector-dropdown-achievementrecord-year').change(function(){
         var academicYearId = $(this).val()
-        // console.log(academicYearId)
 
         window.location = "{{ route('achievementrecord.index') }}"+"?academicYearId="+academicYearId;
     })
-
-    $('#selector-dropdown-achievementrecord-year').val({{$academic_year_id}})
 
     var types = {!!json_encode($type)!!}
     var dataGraph = {!!json_encode($data)!!}
@@ -240,8 +239,6 @@
             data: values
         })
     })
-
-    // console.log(dataSeries)
 
     Highcharts.chart('achievementChartStatistic', {
         chart: {

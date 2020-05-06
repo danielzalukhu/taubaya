@@ -12,7 +12,7 @@ class SubjectReport extends Model
 
     public function subject()
     {
-        return $this->belongsTo('App\Subject' ,'SUBJECT_ID');
+        return $this->belongsTo('App\Subject' ,'SUBJECTS_ID');
     }
 
     public function subjectrecord()

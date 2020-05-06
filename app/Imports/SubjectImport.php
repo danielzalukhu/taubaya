@@ -83,7 +83,8 @@ class SubjectImport implements ToCollection
                                 ->select('students.*', 'activities_students.*')
                                 ->groupBy('activities_students.STUDENTS_ID')
                                 ->get();            
-                                                    
+                                         
+        $result = array();
         foreach ($arrayOfStudent as $student) 
         {
             $tmp_nama = $student->FNAME ." ". $student->LNAME;
@@ -102,7 +103,7 @@ class SubjectImport implements ToCollection
         
             foreach ($tmp_nilai as $nilai)
             {             
-                if($nilai->STUDENTS_ID){
+                if($nilai->STUDENTS_ID === $student->STUDENTS_ID){
                     if($nilai->ACTIVITIES_ID === 1){  
                         array_push($tmp_tugas, $nilai->SCORE);
                     }else if($nilai->ACTIVITIES_ID === 2){                        
@@ -190,7 +191,10 @@ class SubjectImport implements ToCollection
                 'US' => json_encode($tmp_us),
                 'UN' => json_encode($tmp_un),
             ]);
+            
+            //array_push($result, "SubjectRecordId: ". $subject_record->id ."tugas: ".json_encode($tmp_tugas));
         }
+        //dd($result);
     }
 
     public function countActivity($id, $activity_id)

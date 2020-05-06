@@ -18,7 +18,7 @@ class ImportController extends Controller
       
       Excel::import(new SubjectImport($request), $request->file('assesment_import'));
       Session::flash('sukses','Import penilaian siswa berhasil ditambahkan');
-      return redirect('assesment');    		
+      return redirect('subject/assesment');    		
     }
 
     public function importStudent(Request $request)
