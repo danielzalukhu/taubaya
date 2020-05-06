@@ -67,7 +67,7 @@
                                             <th>NAMA SISWA</th>
                                             <th>ALASAN</th>
                                             <th>DESKRIPSI</th>
-                                            <th>AKSI</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>

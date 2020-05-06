@@ -233,7 +233,7 @@
                                         <tr>
                                             <th>TIPE</th>
                                             <th>DESKRIPSI</th>
-                                            <th>DETAIL</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody-absent-academic-year">

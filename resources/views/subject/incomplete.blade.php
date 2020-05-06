@@ -36,7 +36,7 @@
                                         <th>NAMA SISWA</th>
                                         <th>TANGGAL</th>
                                         <th colspan="2">KODE - DEKSRIPSI</th>
-                                        <th>AKSI</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>

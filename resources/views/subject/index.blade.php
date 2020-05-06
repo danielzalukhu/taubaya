@@ -28,7 +28,7 @@
                                             <th>NAMA MAPEL</th>
                                             <th>KKM</th>
                                             <th>TIPE</th>
-                                            <th>AKSI</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -29,7 +29,7 @@
                                         <th>DEKSRIPSI</th>
                                         <th>TINGKAT</th>
                                         <th>POIN</th>
-                                        <th>AKSI</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>

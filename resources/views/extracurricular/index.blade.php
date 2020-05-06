@@ -32,7 +32,7 @@
                                             <th>#</th>
                                             <th>NAMA EKSKUL</th>
                                             <th>DESKRIPSI</th>
-                                            <th>AKSI</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>

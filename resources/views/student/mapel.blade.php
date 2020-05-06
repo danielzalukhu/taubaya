@@ -28,7 +28,7 @@
                                             <th>#</th>
                                             <th>NAMA MAPEL</th>
                                             <th>INFORMASI</th>
-                                            <th>AKSI</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>

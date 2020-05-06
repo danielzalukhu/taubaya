@@ -34,7 +34,7 @@
                                             <th>NISN</th>
                                             <th>NAMA SISWA</th>
                                             <th>KELAS</th>
-                                            <th>AKSI</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>

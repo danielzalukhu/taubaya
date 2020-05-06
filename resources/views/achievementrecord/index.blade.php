@@ -78,7 +78,7 @@
                                             <th>TAHUN AJARAN</th>
                                             <th>NAMA PENGHARGAAN</th>
                                             <th>DESKRIPSI</th>
-                                            <th>AKSI</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
