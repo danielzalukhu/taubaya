@@ -207,9 +207,14 @@ class SubjectController extends Controller
 
     public function assesmentImport() 
     {    
-        $laporan_mapel = SubjectReport::all();    
+        $laporan_mapel = SubjectReport::all();  
+        $is_verified = "";  
+        foreach($laporan_mapel as $lm)
+        {
+            $is_verified = $lm->IS_VERIFIED;
+        }
     
-        return view('subject.assesment', compact('laporan_mapel'));
+        return view('subject.assesment', compact('laporan_mapel', 'is_verified'));
     }
 
     public function editAssesment($id)
@@ -294,14 +299,15 @@ class SubjectController extends Controller
         return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Data nilai siswa berhasil dihapus');
     }
 
-    public function setStatus(Request $request, $id)
+    public function setStatus(Request $request)
     {
-        $laporan_mapel = SubjectReport::findOrFail($id);
-        $laporan_mapel->IS_VERIFIED = $request->status;
+        $laporan_mapel = SubjectReport::where('IS_VERIFIED', 0)->get();
+        foreach($laporan_mapel as $lm){
+            $lm->IS_VERIFIED = $request->status;
+            $lm->save();
+        }                
 
-        $laporan_mapel->save();
-
-        return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Daftar nilai berhasil di verifikasis');
+        return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Daftar nilai berhasil di verifikasi');
     }
 }
  

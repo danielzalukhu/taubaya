@@ -396,7 +396,7 @@
             data: {academicYearId: academicYearId, studentId: studentId},
 
             success: function(result){
-                $('#tbody-absent-academic-year').empty()
+                $('#tbody-absent-academic-year').empty
                 result.forEach(function(obj){
                     $('#tbody-absent-academic-year').append(
                         `

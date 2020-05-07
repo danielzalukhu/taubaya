@@ -23,10 +23,10 @@ Route::resource('student', 'StudentController')->middleware('auth');
 
 // IMPORT
 Route::get('subject/assesment', 'SubjectController@assesmentImport')->middleware('auth')->name('subject.assesment');
-Route::get('subject/assesment/edit/{id}', 'SubjectController@editAssesment')->middleware('auth')->name('subject.editAssesment');
-Route::post('subject/assesment/update/{id}', 'SubjectController@updateAssesment')->middleware('auth')->name('subject.updateAssesment');
-Route::get('subject/assesment/delete/{id}', 'SubjectController@destroyAssesment')->middleware('auth')->name('subject.destroyAssesment');
-Route::get('subject/assesment/status/{id}', 'SubjectController@setStatus')->middleware('auth')->name('subject.setStatus');
+Route::get('subject/assesment/{id}/edit', 'SubjectController@editAssesment')->middleware('auth')->name('subject.editAssesment');
+Route::post('subject/assesment/{id}/update', 'SubjectController@updateAssesment')->middleware('auth')->name('subject.updateAssesment');
+Route::get('subject/assesment/{id}/delete', 'SubjectController@destroyAssesment')->middleware('auth')->name('subject.destroyAssesment');
+Route::get('subject/assesment/status', 'SubjectController@setStatus')->middleware('auth')->name('subject.setStatus');
 Route::post('student', 'ImportController@importStudent')->name('student.importStudent');
 Route::post('subject/assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');
 
