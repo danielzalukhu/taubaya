@@ -32,7 +32,7 @@ class Staff extends Model
 
     public function department()
     {
-        return $this->belongsTo('App\Department', 'DEPARTMENTS_ID');
+        return $this->belongsToMany('App\Department', 'extracurriculars_reports');
     }
 
     public function extracurricular()

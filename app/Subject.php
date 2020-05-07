@@ -23,4 +23,9 @@ class Subject extends Model
     {
         return $this->hasMany('App\ActivityStudent');
     }
+
+    public function department()
+    {
+        return $this->belongsTo('App\Department', 'DEPARTMENTS_ID');
+    }
 }

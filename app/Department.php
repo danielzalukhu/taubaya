@@ -8,6 +8,11 @@ class Department extends Model
 {
     public function staff()
     {
-        return $this->hasMany('App\Staff');
+        return $this->belongsToMany('App\Staff', 'extracurriculars_reports');
+    }
+
+    public function subject()
+    {
+        return $this->hasMany('App\Subject');
     }
 }
