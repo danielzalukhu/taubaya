@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMataPelajaranTable extends Migration
+class CreateDepartemenKaryawanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateMataPelajaranTable extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('departments_staffs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('CODE', 45);
-            $table->string('DESCRIPTION', 255);
-            $table->double('MINIMALPOIN');
-            $table->ENUM('TYPE', ['MN', 'MK', 'MPK', 'DBK', 'DPK', 'KK']);
+            $table->unsignedInteger('STAFFS_ID');
+            $table->foreign('STAFFS_ID')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('DEPARTMENTS_ID');
             $table->foreign('DEPARTMENTS_ID')->references('id')->on('departments')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
@@ -32,6 +30,6 @@ class CreateMataPelajaranTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('departments_staffs');
     }
 }
