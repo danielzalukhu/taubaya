@@ -63,7 +63,11 @@
                         <div class="box">   
                             <div class="box-header">
                                 <div class="right">
-                                    
+                                @foreach($laporan_mapel as $lm)
+                                    <a href="{{ route('subject.setStatus', $lm->id) }}?status=1" class="btn btn-success btn-sm"  onclick="return confirm('Are you sure?')">
+                                        <i class="fa fa-check"></i>VERIFIKASI NILAI
+                                    </a>
+                                @endforeach
                                 </div>
                             </div>                     
                             <div class="box-body">
@@ -146,9 +150,6 @@
                                             <td>{{ $lm->FINAL_SCORE }}</td>
                                             <td>
                                                 @if($lm->IS_VERIFIED == 0)                                      
-                                                    <a href="{{ route('subject.setStatus', $lm->id) }}?status=1" class="btn btn-success btn-sm"  onclick="return confirm('Are you sure?')">
-                                                        <i class="fa fa-check"></i> 
-                                                    </a>
                                                     <a href="{{ route('subject.editAssesment', $lm->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>

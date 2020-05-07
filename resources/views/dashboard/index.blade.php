@@ -9,37 +9,6 @@
 //  }
 ?> -->
 
-<style>
-  .modal-header, h4, .close 
-  {
-    background-color:    #170f7f  ;
-    color:white !important;
-    text-align: center;
-    font-size: 50px;
-  }
-  #judulPesan
-  {
-    text-align: center;
-    font-size: 40px;
-    color: #f60f24;
-  }
-  #pesan
-  {
-    color:black !important;
-    text-align: center;
-    font-size: 20px;
-  }
-  .modal-footer 
-  {
-    background-color: #f9f9f9;
-    
-  }
-  #tombolModal
-  {
-    background-color:  #f9f508 ;
-  }
-</style>
-
 @stop
 
 @section('content')

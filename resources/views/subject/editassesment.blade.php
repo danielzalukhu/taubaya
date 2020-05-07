@@ -66,6 +66,7 @@
                                             @endphp
                                             @foreach($scores as $score)
                                                 <input name="a_nilai_tugas[]" type="number" class="form-control" value="{{ $score }}">            
+                                                <br>
                                             @endforeach
                                         @if($errors->has('a_nilai_tugas'))
                                             <span class="help-block">{{$errors->first('a_nilai_tugas')}}</span>
@@ -79,6 +80,7 @@
                                             @endphp
                                             @foreach($scores as $score)
                                                 <input name="a_nilai_ph[]" type="number" class="form-control" value="{{ $score }}">            
+                                                <br>
                                             @endforeach
                                         @if($errors->has('a_nilai_ph'))
                                             <span class="help-block">{{$errors->first('a_nilai_ph')}}</span>
