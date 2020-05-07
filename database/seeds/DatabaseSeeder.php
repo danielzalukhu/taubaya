@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ActivitySeeder::class);        
         $this->call(KdSeeder::class);   
         $this->call(ExtracurricularSeeder::class);
+        $this->call(DepartmentStaffSeeder::class);
 
         Model::reguard();
     }
