@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Auth;
 
 class Staff extends Model
 {
@@ -35,9 +37,10 @@ class Staff extends Model
 
     public function getDepartmentName(){
         $department = DepartmentStaff::select("departments.NAME")
-                        ->join('departments','departments.id','=','departments_staffs.STAFFS_ID')
+                        ->join('departments','departments.id','=','departments_staffs.DEPARTMENTS_ID')
                         ->WHERE("departments_staffs.STAFFS_ID", $this->id)
                         ->first();
+
         return $department->NAME;
     }
 

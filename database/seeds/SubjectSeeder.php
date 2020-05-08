@@ -1165,10 +1165,10 @@ class SubjectSeeder extends Seeder
             'DEPARTMENTS_ID' => '9'
         ]);
 
-        // 10-TP
+        // 10-TPm
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-A-1',
+            'CODE' => '10-TPm-A-1',
             'DESCRIPTION' => 'Pendidikan Agama dan Budi Pekerti',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1176,7 +1176,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-A-2',
+            'CODE' => '10-TPm-A-2',
             'DESCRIPTION' => 'Pendidikan Pancasila dan Kewarganegaraan',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1184,7 +1184,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-A-3',
+            'CODE' => '10-TPm-A-3',
             'DESCRIPTION' => 'Bahasa Indonesia',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1192,7 +1192,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-A-4',
+            'CODE' => '10-TPm-A-4',
             'DESCRIPTION' => 'Matematika',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1200,7 +1200,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-A-5',
+            'CODE' => '10-TPm-A-5',
             'DESCRIPTION' => 'Sejarah Indonesia',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1208,7 +1208,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-A-6',
+            'CODE' => '10-TPm-A-6',
             'DESCRIPTION' => 'Bahasa Inggris',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1216,7 +1216,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-B-1',
+            'CODE' => '10-TPm-B-1',
             'DESCRIPTION' => 'Seni Budaya',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MK',
@@ -1224,7 +1224,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-B-2',
+            'CODE' => '10-TPm-B-2',
             'DESCRIPTION' => 'Pendidikan Jasmani, Olah Raga, dan Kesehatan',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MK',
@@ -1232,7 +1232,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-B-3',
+            'CODE' => '10-TPm-B-3',
             'DESCRIPTION' => 'Bahasa Jawa',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MK',
@@ -1240,7 +1240,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-C1-1',
+            'CODE' => '10-TPm-C1-1',
             'DESCRIPTION' => 'Fisika',
             'MINIMALPOIN' => '75',
             'TYPE' => 'DBK',
@@ -1248,7 +1248,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-C1-2',
+            'CODE' => '10-TPm-C1-2',
             'DESCRIPTION' => 'Kimia',
             'MINIMALPOIN' => '75',
             'TYPE' => 'DBK',
@@ -1256,7 +1256,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-C1-3',
+            'CODE' => '10-TPm-C1-3',
             'DESCRIPTION' => 'Simulasi dan Komunikasi Digital',
             'MINIMALPOIN' => '80',
             'TYPE' => 'DBK',
@@ -1264,7 +1264,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-C2-1',
+            'CODE' => '10-TPm-C2-1',
             'DESCRIPTION' => 'Gambar Teknik Mesin',
             'MINIMALPOIN' => '80',
             'TYPE' => 'DPK',
@@ -1272,7 +1272,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-C2-2',
+            'CODE' => '10-TPm-C2-2',
             'DESCRIPTION' => 'Pekejeraan Dasar Teknik Mesin',
             'MINIMALPOIN' => '80',
             'TYPE' => 'DPK',
@@ -1280,7 +1280,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '10-TP-C2-3',
+            'CODE' => '10-TPm-C2-3',
             'DESCRIPTION' => 'Dasar Perancangan Teknik Mesin',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1288,10 +1288,10 @@ class SubjectSeeder extends Seeder
         ]);
 
 
-        // 11-TP
+        // 11-TPm
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-A-1',
+            'CODE' => '11-TPm-A-1',
             'DESCRIPTION' => 'Pendidikan Agama dan Budi Pekerti',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1299,7 +1299,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-A-2',
+            'CODE' => '11-TPm-A-2',
             'DESCRIPTION' => 'Pendidikan Pancasila dan Kewarganegaraan',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1307,7 +1307,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-A-3',
+            'CODE' => '11-TPm-A-3',
             'DESCRIPTION' => 'Bahasa Indonesia',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1315,7 +1315,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-A-4',
+            'CODE' => '11-TPm-A-4',
             'DESCRIPTION' => 'Matematika',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1323,7 +1323,7 @@ class SubjectSeeder extends Seeder
         ]);        
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-A-6',
+            'CODE' => '11-TPm-A-6',
             'DESCRIPTION' => 'Bahasa Inggris',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1331,7 +1331,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-B-2',
+            'CODE' => '11-TPm-B-2',
             'DESCRIPTION' => 'Pendidikan Jasmani dan Olahraga',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MK',
@@ -1339,7 +1339,7 @@ class SubjectSeeder extends Seeder
         ]);        
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-C3-1',
+            'CODE' => '11-TPm-C3-1',
             'DESCRIPTION' => 'Gambar Teknik Manufaktur',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1347,7 +1347,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-C3-2',
+            'CODE' => '11-TPm-C3-2',
             'DESCRIPTION' => 'Teknik Pemesinan Bubut',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1355,7 +1355,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-C3-3',
+            'CODE' => '11-TPm-C3-3',
             'DESCRIPTION' => 'Teknik Pemesinan Frais',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1363,7 +1363,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-C3-5',
+            'CODE' => '11-TPm-C3-5',
             'DESCRIPTION' => 'Teknik Pemesinan NC/CNC dan CAM',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1371,17 +1371,17 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '11-TP-C3-6',
+            'CODE' => '11-TPm-C3-6',
             'DESCRIPTION' => 'Produk Kreatif dan Kewirausahaan',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
             'DEPARTMENTS_ID' => '10'
         ]);
 
-        // 12-TP
+        // 12-TPm
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-A-1',
+            'CODE' => '12-TPm-A-1',
             'DESCRIPTION' => 'Pendidikan Agama dan Budi Pekerti',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1389,7 +1389,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-A-2',
+            'CODE' => '12-TPm-A-2',
             'DESCRIPTION' => 'Pendidikan Pancasila dan Kewarganegaraan',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1397,7 +1397,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-A-3',
+            'CODE' => '12-TPm-A-3',
             'DESCRIPTION' => 'Bahasa Indonesia',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1405,7 +1405,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-A-4',
+            'CODE' => '12-TPm-A-4',
             'DESCRIPTION' => 'Matematika',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1413,7 +1413,7 @@ class SubjectSeeder extends Seeder
         ]);        
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-A-6',
+            'CODE' => '12-TPm-A-6',
             'DESCRIPTION' => 'Bahasa Inggris',
             'MINIMALPOIN' => '75',
             'TYPE' => 'MN',
@@ -1421,7 +1421,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-C3-1',
+            'CODE' => '12-TPm-C3-1',
             'DESCRIPTION' => 'Gambar Teknik Manufaktur',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1429,7 +1429,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-C3-2',
+            'CODE' => '12-TPm-C3-2',
             'DESCRIPTION' => 'Teknik Pemesinan Bubut',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1437,7 +1437,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-C3-3',
+            'CODE' => '12-TPm-C3-3',
             'DESCRIPTION' => 'Teknik Pemesinan Frais',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1445,7 +1445,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-C3-4',
+            'CODE' => '12-TPm-C3-4',
             'DESCRIPTION' => 'Teknik Pemesinan Gerinda',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1453,7 +1453,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-C3-5',
+            'CODE' => '12-TPm-C3-5',
             'DESCRIPTION' => 'Teknik Pemesinan NC/CNC dan CAM',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
@@ -1461,7 +1461,7 @@ class SubjectSeeder extends Seeder
         ]);
 
         DB::table('subjects')->insert([
-            'CODE' => '12-TP-C3-6',
+            'CODE' => '12-TPm-C3-6',
             'DESCRIPTION' => 'Produk Kreatif dan Kewirausahaan',
             'MINIMALPOIN' => '80',
             'TYPE' => 'KK',
