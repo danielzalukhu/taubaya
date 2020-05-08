@@ -254,7 +254,6 @@
         yAxis: {
             min: 0,
             allowDecimals: false,
-            tickInterval: 5,
             title: {
                 text: 'JUMLAH PENGHARGAAN TERCATAT'
             }

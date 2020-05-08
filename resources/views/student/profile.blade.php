@@ -396,7 +396,7 @@
             data: {academicYearId: academicYearId, studentId: studentId},
 
             success: function(result){
-                $('#tbody-absent-academic-year').empty
+                $('#tbody-absent-academic-year').empty()
                 result.forEach(function(obj){
                     $('#tbody-absent-academic-year').append(
                         `
@@ -506,6 +506,8 @@
             })
         })
 
+
+
         Highcharts.chart('chartViolation', {
             chart: {
                 type: 'column'
@@ -519,16 +521,19 @@
             },
             yAxis: {
                 min: 0,
+                tickInterval: 1,
                 title: {
                     text: 'JUMLAH PELANGGARAN TERCATAT'
                 }
             },
+            colors: 
+                ['#F21402', '#028CF2 ', '#E4F202 ', '028CF2'],
             credits: {
                 enabled: false,
             },
             plotOptions: {
                 column: {
-                    pointPadding: 0.2,
+                    pointPadding: 0.1,
                     borderWidth: 0
                 }
             },
@@ -646,39 +651,39 @@
         })
     })
 
-    Highcharts.chart('chartAbsent', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        credits: {
-            enabled: false
-        },
-        title: {
-            text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                },
-                showInLegend: true
-            }
-        },
-        series: [{
-            name: 'TYPE',
-            colorByPoint: true,
-            data: dataSeries
-        }]
-    });
+    // Highcharts.chart('chartAbsent', {
+    //     chart: {
+    //         plotBackgroundColor: null,
+    //         plotBorderWidth: null,
+    //         plotShadow: false,
+    //         type: 'pie'
+    //     },
+    //     credits: {
+    //         enabled: false
+    //     },
+    //     title: {
+    //         text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
+    //     },
+    //     tooltip: {
+    //         pointFormat: '{series.name}: <b>{point.percentage}%</b>'
+    //     },
+    //     plotOptions: {
+    //         pie: {
+    //             allowPointSelect: true,
+    //             cursor: 'pointer',
+    //             dataLabels: {
+    //                 enabled: true,
+    //                 format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+    //             },
+    //             showInLegend: true
+    //         }
+    //     },
+    //     series: [{
+    //         name: 'TYPE',
+    //         colorByPoint: true,
+    //         data: dataSeries
+    //     }]
+    // });
 </script>
 @Stop
 
