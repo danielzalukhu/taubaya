@@ -7,7 +7,6 @@ use Auth;
 use App\Student;
 use App\AchievementRecord;
 use App\ViolationRecord;
-use App\Subject;
 use Session;
 use DB;
 
@@ -27,10 +26,13 @@ class DashboardController extends Controller
         $request->session()->put('session_end_ay', $tahun_ajaran[0]->END_DATE);
         
         if(Auth::guard('web')->user()->ROLE === "STAFF")
+        {
             $request->session()->put('session_user_id', Auth::user()->id);
-        else
+        }
+        else{
             $request->session()->put('session_student_class', Auth::user()->student->grade->NAME);
-
+        }
+        
         //END GLOBAL SESSION 
 
         $jumlah_siswa = $this->countStudent()->siswa;

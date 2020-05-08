@@ -9,6 +9,9 @@ use App\ViolationRecord;
 use App\AchievementRecord;
 use App\AcademicYear;
 use App\Subject;
+use App\Staff;
+use App\DepartmentStaff;
+use App\Grade;
 use DB;
 
 class StudentController extends Controller
@@ -21,7 +24,7 @@ class StudentController extends Controller
     public function index()
     {
         $siswa = Student::all();
-                               
+                              
         return view('student.index', compact('siswa'));
     }
 
@@ -226,7 +229,34 @@ class StudentController extends Controller
             $selected_mapel = Subject::where('CODE', 'LIKE',  'C3%' . $student_class[1] . '%')->get();
         }
 
-        return view('student.mapel', compact('selected_mapel'));
+        return view('student.mapel-ku', compact('selected_mapel'));
+    }
+
+    public function mapelguru(Request $request)
+    {
+        $get_department_id = DepartmentStaff::select('DEPARTMENTS_ID')
+                                    ->where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                    ->get();
+
+        $get_grade_id = Grade::select('NAME')
+                            ->where('STAFFS_ID', $request->session()->get('session_user_id'))
+                            ->get();
+
+        $tmp_subject = [];
+
+        foreach($get_department_id as $deparment_id){
+            foreach($get_grade_id as $grade_id){
+                $selected_mapel = Subject::select('CODE', 'DESCRIPTION')
+                            ->where('DEPARTMENTS_ID', $deparment_id->DEPARTMENTS_ID)
+                            ->where('CODE', 'LIKE', '%' . $grade_id->NAME . '%')
+                            ->get();
+                array_push($tmp_subject, $selected_mapel);
+            }
+        }
+        
+        $subject = $tmp_subject[0];
+
+        return view('student.mapel-guru', compact('subject'));
     }
 }
 
