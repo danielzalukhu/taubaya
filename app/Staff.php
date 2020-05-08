@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\ViolationRecord;
-use App\Absent;
 
 class Staff extends Model
 {
@@ -30,9 +28,17 @@ class Staff extends Model
         return $this->hasOne('App\User', 'USERS_EMAIL');
     }
 
-    public function department()
+    public function departmentstaff()
     {
-        return $this->belongsToMany('App\Department', 'extracurriculars_reports');
+        return $this->belongsTo('App\DepartmentStaff', 'STAFFS_ID');
+    }
+
+    public function getDepartmentName(){
+        $department = DepartmentStaff::select("departments.NAME")
+                        ->join('departments','departments.id','=','departments_staffs.STAFFS_ID')
+                        ->WHERE("departments_staffs.STAFFS_ID", $this->id)
+                        ->first();
+        return $department->NAME;
     }
 
     public function extracurricular()

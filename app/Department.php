@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
-    public function staff()
+    protected $table = 'departments';
+    
+    public function departmentstaff()
     {
-        return $this->belongsToMany('App\Staff', 'extracurriculars_reports');
+        return $this->belongsTo('App\DepartmentStaff', 'DEPARTMENTS_ID');
     }
 
     public function subject()

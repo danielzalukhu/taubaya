@@ -11,11 +11,11 @@ class DepartmentStaff extends Model
 
     public function department()
     {
-        return $this->belongsTo('App\Department' ,'DEPARTMENTS_ID');
+        return $this->belongsTo('App\Department');
     }
 
     public function staff()
     {
-        return $this->belongsTo('App\Staff' ,'STAFFS_ID');
+        return $this->belongsTo('App\Staff');
     }
 }

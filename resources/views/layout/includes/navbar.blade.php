@@ -27,7 +27,7 @@
                                 @if(Auth::guard('web')->user()->ROLE === "STAFF")
                                     {{ Auth::guard('web')->user()->staff->ROLE }} 
                                     {{ " - " }}
-                                    {{ Auth::guard('web')->user()->staff->department->NAME }}
+                                    {{ Auth::guard('web')->user()->staff->getDepartmentName() }}
                                 @else
                                     {{ Auth::guard('web')->user()->ROLE }}
                                 @endif

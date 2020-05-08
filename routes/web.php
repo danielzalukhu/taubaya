@@ -19,6 +19,7 @@ Route::get('violation/chart', 'StudentController@returnDataViolationChart')->mid
 Route::get('student/{id}/profile', 'StudentController@profile')->middleware('auth')->name('student.profile');
 Route::get('student/detailabsent' , 'StudentController@showDetailAbsent')->middleware('auth')->name('student.detailAbsent');
 Route::get('student/mapelku', 'StudentController@mapelku')->middleware('auth')->name('student.mapelku');
+Route::get('student/mapelguru', 'StudentController@mapelguru')->middleware('auth')->name('student.mapelguru');
 Route::resource('student', 'StudentController')->middleware('auth');
 
 // IMPORT
