@@ -53,8 +53,8 @@ class ExtracurricularController extends Controller
     public function edit($id)
     {
         $ekskul = Extracurricular::find($id);
-        $karyawan = Staff::select('staffs.*')
-                        ->where('DEPARTMENTS_ID', 3)
+        $karyawan = Staff::join('departments_staffs', 'staffs.id', 'departments_staffs.STAFFS_ID')
+                        ->where('departments_staffs.DEPARTMENTS_ID', 3)
                         ->get();
 
         return view('extracurricular.edit', compact('ekskul', 'karyawan'));
