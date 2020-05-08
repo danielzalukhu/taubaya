@@ -38,10 +38,10 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>
-            @if(Auth::guard('web')->user()->ROLE === "STUDENT" && Auth::guard('web')->user()->ROLE === "PARENT")
-              <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+              <li><a href="{{route('student.mapelguru')}}"><i class="fa fa-book"></i>MAPEL-GURU</a></li>              
             @else
-              <li><a href="#"><i class="fa fa-book"></i>MAPEL-GURU</a></li>
+              <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
             @endif                    
           </ul>
         </li>
