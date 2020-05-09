@@ -312,9 +312,8 @@ class SubjectController extends Controller
         
         $detail_mapel = SubjectReport::where('SUBJECTS_ID', $mapel->id)->get();  
         
-        dd($detail_mapel);
-
-    }
+        return view('student.detail-subject', compact('detail_mapel'));
+    }   
 }
  
 

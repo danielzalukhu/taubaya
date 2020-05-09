@@ -1,8 +1,8 @@
 @extends('layout.master')
 
 @section('header')
-    <link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
-@endsection
+  <link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+@stop
 
 @section('content')
     <div class="main">
@@ -13,61 +13,16 @@
                         <button type="button" class="close" data-dismiss="alert">×</button> 
                         <strong>{{ $sukses }}</strong>
                     </div>
-                @elseif($error = Session::get('error'))    
-                    <div class="alert alert-danger alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button> 
-                        <strong>{{ $error }}</strong>
-                    </div> 
                 @endif
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="panel-heading">
-                            <h3 class="box-title">IMPORT FILE</h3>
+                        <div class="panel-heading">                      
+                            <h3 class="box-title">DETAIL MATA PELAJARAN </h3>
                         </div>
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">IMPORT EXCEL (XLSX/XLS)</h3>
-                            </div>
-                            <div class="box-body">
-                                <form action="{{ route('subject.importAssesment') }}" method="POST"  enctype="multipart/form-data">
-                                    
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                                    <div class="form-group{{ $errors->has('assesment_import') ? 'has-error' : '' }} ">
-                                        <input name="assesment_import" type="file" class="form-control">
-                                        @if($errors->has('assesment_import'))
-                                            <span class="help-block">{{$errors->first('assesment_import')}}</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>              
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="panel-heading">
-                            <h3 class="box-title">DAFTAR NILAI SISWA</h3>            
-                        </div>
-                        <div class="box">   
-                            <div class="box-header">
-                                <div class="right">
-                                    <a href="{{ route('subject.setStatus') }}?status=1" 
-                                       class="btn btn-success btn-sm pull-right"  
-                                       id="buttonVerifikasi" 
-                                       onclick="return confirm('Are you sure?')">
-                                        <i class="fa fa-check"></i> VERIFIKASI NILAI
-                                    </a>   
-                                </div>
-                            </div>                     
+                        <div class="box">
                             <div class="box-body">
                                 <div class="table-responsive">
-                                    <table id="table-assesment" class="table table-hover table-bordered table-striped">
+                                    <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -78,27 +33,27 @@
                                             <th>ULANGAN HARIAN</th>
                                             <th>UJIAN TENGAH SEMESTER</th>
                                             <th>UJIAN AKHIR SEMESTER</th>
-                                            <th>NILAI AKHIR</th>
+                                            <th>NILAI AKHIR</th>                                            
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php $i=1 @endphp
-                                        @foreach($laporan_mapel as $lm)
-                                            @if($lm->IS_VERIFIED == 0) 
+                                        @foreach($detail_mapel as $dm)
+                                            @if($dm->IS_VERIFIED == 1) 
                                                 <tr>
                                                     <td>{{ $i++ }}</td>
-                                                    <td>{{ $lm->subjectrecord->student->NISN }}</td>
+                                                    <td>{{ $dm->subjectrecord->student->NISN }}</td>
                                                     <td>
-                                                        {{ $lm->subjectrecord->student->FNAME }}
+                                                        {{ $dm->subjectrecord->student->FNAME }}
                                                         {{" "}}
-                                                        {{ $lm->subjectrecord->student->LNAME}}
+                                                        {{ $dm->subjectrecord->student->LNAME}}
                                                     </td>
-                                                    <td>{{ $lm->subject->DESCRIPTION }}</td>
+                                                    <td>{{ $dm->subject->DESCRIPTION }}</td>
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php
-                                                                $scores = json_decode($lm->TUGAS);
+                                                                $scores = json_decode($dm->TUGAS);
                                                             @endphp
                                                             @foreach($scores as $score)
                                                             <tr>
@@ -110,7 +65,7 @@
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php
-                                                                $scores = json_decode($lm->PH);
+                                                                $scores = json_decode($dm->PH);
                                                             @endphp
                                                             @foreach($scores as $score)
                                                             <tr>
@@ -122,7 +77,7 @@
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php
-                                                                $scores = json_decode($lm->PTS);
+                                                                $scores = json_decode($dm->PTS);
                                                             @endphp
                                                             @foreach($scores as $score)
                                                             <tr>
@@ -134,7 +89,7 @@
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php
-                                                                $scores = json_decode($lm->PAS);
+                                                                $scores = json_decode($dm->PAS);
                                                             @endphp
                                                             @foreach($scores as $score)
                                                             <tr>
@@ -143,13 +98,13 @@
                                                             @endforeach
                                                         </table>
                                                     </td>                                                
-                                                    <td>{{ $lm->FINAL_SCORE }}</td>
+                                                    <td>{{ $dm->FINAL_SCORE }}</td>
                                                     <td>
-                                                        @if($lm->IS_VERIFIED == 0)                                                                             
-                                                            <a href="{{ route('subject.editAssesment', $lm->id) }}" class="btn btn-warning btn-sm">
+                                                        @if($dm->IS_VERIFIED == 0)                                                                             
+                                                            <a href="{{ route('subject.editAssesment', $dm->id) }}" class="btn btn-warning btn-sm">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
-                                                            <form action="{{ route('subject.destroyAssesment', $lm->id) }}" method="GET" class="inline">
+                                                            <form action="{{ route('subject.destroyAssesment', $dm->id) }}" method="GET" class="inline">
                                                                 @method('delete')
                                                                 @csrf
                                                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
@@ -160,7 +115,7 @@
                                                     </td>
                                                 </tr>
                                             @endif
-                                        @endforeach                                    
+                                        @endforeach  
                                     </tbody>
                                     </table>
                                 </div>
@@ -168,16 +123,15 @@
                         </div>
                     </div>
                 </div>
-
-            </div>
+            </div>  
         </div>
     </div>
 @stop
 
 @section('footer')
-<script>        
+<script>
     $(function () {
-        $('#table-assesment').DataTable()
+        $('#example1').DataTable()
             $('#example2').DataTable({
             'paging'      : true,
             'lengthChange': false,
@@ -189,8 +143,3 @@
         })
 </script>
 @stop
-
-
-
-
-
