@@ -27,7 +27,8 @@ class SubjectImport implements ToCollection
     /**
     * @param Collection $collection
     */
-    private $id_mapel;
+    private $mapel;
+    private $kodeKelas;
 
     public function collection(Collection $collection)
     {   
@@ -35,39 +36,58 @@ class SubjectImport implements ToCollection
         {
             if($key >= 1)
             {
-                $subject_id = $row[4];
-                $tmp_id_mapel = $this->selectSubjectId($subject_id);
+                $subject_name = $row[4];
+                $tmp_mapel = $this->selectSubjectDescription($subject_name);
                 
-                foreach($tmp_id_mapel as $im)
+                foreach($tmp_mapel as $tmp)
                 {
-                    $id_mapel = $im->id;
+                    $mapel = $tmp->DESCRIPTION;
                 }
-
-                if($key >= 5)
-                {                  
-                    $student_id = $row[4];
-                    $id_siswa = $this->selectStudentId($student_id)[0]->id;
-
-                    $activity_id = explode("; ", $row[6])[1];
-                    $id_aktivitas = $this->selectActivityId($activity_id)[0]->id;
-
-                    $kd_id = $row[7];
-                    $id_kd = $this->selectKdId($kd_id)[0]->id;
-
-                    $nilai = $row[8];        
+                
+                if($key >= 3)
+                {
+                    $grade_code = $row[4];                
+                    $tmp_grade = $this->selectGradeCode($grade_code);
+                
+                    foreach($tmp_grade as $tm)
+                    {
+                        $kodeKelas = $tm->NAME;
+                    }
                     
-                    $a = ActivityStudent::create([
-                        'STUDENTS_ID' => $id_siswa,
-                        'ACTIVITIES_ID' => $id_aktivitas,
-                        'SUBJECTS_ID' => $id_mapel,
-                        'SCORE' => $nilai,                    
-                    ]);
+                    if($key >= 5)
+                    {                  
+                        $student_id = $row[4];
+                        $id_siswa = $this->selectStudentId($student_id)[0]->id;
 
-                    ActivityKD::create([
-                        'KD_ID' => $id_kd,
-                        'ACTIVITIES_ID' => $id_aktivitas,
-                    ]);
-                }      
+                        $activity_id = explode("; ", $row[6])[1];
+                        $id_aktivitas = $this->selectActivityId($activity_id)[0]->id;
+
+                        $kd_id = $row[7];
+                        $id_kd = $this->selectKdId($kd_id)[0]->id;
+
+                        $nilai = $row[8];        
+                        
+                        $tmp_id_mapel = $this->selectSubjectId($mapel, $kodeKelas);
+
+                        foreach($tmp_id_mapel as $tim)
+                        {
+                            $id_mapel = $tim->id;
+                        }
+
+                        $a = ActivityStudent::create([
+                            'STUDENTS_ID' => $id_siswa,
+                            'ACTIVITIES_ID' => $id_aktivitas,
+                            'SUBJECTS_ID' => $id_mapel,
+                            'SCORE' => $nilai,                     
+                        ]);
+
+                        ActivityKD::create([
+                            'KD_ID' => $id_kd,
+                            'ACTIVITIES_ID' => $id_aktivitas,
+                        ]);
+                    }      
+                }
+                
             }            
         }         
         $this->formula();    
@@ -233,12 +253,29 @@ class SubjectImport implements ToCollection
         return $aktivitas;
     }
 
-    public function selectSubjectId($value)
+    public function selectSubjectDescription($value)
     {
-        $mapel = DB::SELECT('SELECT id
+        $mapel = DB::SELECT('SELECT DESCRIPTION
                              FROM subjects 
                              WHERE subjects.DESCRIPTION = "' . $value . '"');
         return $mapel;
+    }
+
+    public function selectGradeCode($value)
+    {
+        $kelas = DB::SELECT('SELECT NAME
+                             FROM grades 
+                             WHERE grades.NAME = "' . $value . '"');
+        return $kelas;                            
+    }
+
+    public function selectSubjectId($subjectName, $gradeCode)
+    {
+        $mapel = Subject::select('id')
+                        ->where('DESCRIPTION', $subjectName)
+                        ->where('CODE', 'LIKE' , '%'. $gradeCode .'%')
+                        ->get();
+        return $mapel;                        
     }
 
     public function selectKdId($value)
@@ -248,4 +285,5 @@ class SubjectImport implements ToCollection
                           WHERE NUMBER =  "' . $value . '"');
         return $kd;                          
     }
+    
 }

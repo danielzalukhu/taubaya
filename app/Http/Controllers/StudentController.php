@@ -246,7 +246,7 @@ class StudentController extends Controller
 
         foreach($get_department_id as $deparment_id){
             foreach($get_grade_id as $grade_id){
-                $selected_mapel = Subject::select('CODE', 'DESCRIPTION')
+                $selected_mapel = Subject::select('id', 'CODE', 'DESCRIPTION')
                             ->where('DEPARTMENTS_ID', $deparment_id->DEPARTMENTS_ID)
                             ->where('CODE', 'LIKE', '%' . $grade_id->NAME . '%')
                             ->get();
@@ -255,7 +255,6 @@ class StudentController extends Controller
         }
         
         $subject = $tmp_subject[0];
-
         return view('student.mapel-guru', compact('subject'));
     }
 }

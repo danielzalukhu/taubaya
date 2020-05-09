@@ -304,6 +304,16 @@ class SubjectController extends Controller
 
         return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Daftar nilai berhasil di verifikasi dan tersimpan!');
     }
+
+    public function subjectDetail($id)
+    {
+        $mapel = Subject::find($id);
+        
+        $detail_mapel = SubjectReport::where('SUBJECTS_ID', $mapel->id)->get();  
+        
+        dd($detail_mapel);
+
+    }
 }
  
 

@@ -33,13 +33,13 @@
                                     </thead>
                                     <tbody>
                                     @php $i=1 @endphp
-                                    @foreach($subject as $ts)
+                                    @foreach($subject as $s)
                                         <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td>{{ $ts->CODE }}</td>
-                                            <td>{{ $ts->DESCRIPTION }}</td>
+                                            <td>{{ $s->CODE }}</td>
+                                            <td>{{ $s->DESCRIPTION }}</td>
                                             <td>
-                                                <a href="#" class="btn btn-info btn-sm">
+                                                <a href="{{ route ('subject.detail', ['id' => $s->id] ) }}" class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-warning btn-sm">
