@@ -241,7 +241,7 @@ class StudentController extends Controller
         $get_grade_id = Grade::select('NAME')
                             ->where('STAFFS_ID', $request->session()->get('session_user_id'))
                             ->get();
-
+        // dd($get_department_id);
         $tmp_subject = [];
 
         foreach($get_department_id as $deparment_id){
@@ -253,7 +253,7 @@ class StudentController extends Controller
                 array_push($tmp_subject, $selected_mapel);
             }
         }
-        
+        // DD($tmp_subject);
         $subject = $tmp_subject[0];
         return view('student.mapel-guru', compact('subject'));
     }

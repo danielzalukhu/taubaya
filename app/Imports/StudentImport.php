@@ -17,7 +17,7 @@ class StudentImport implements ToCollection
 
     public function collection(Collection $collection)
     {
-        //dd($collection);
+        // dd($collection);
         foreach($collection as $key => $row)
         {          
             if($key >= 3)
@@ -29,7 +29,7 @@ class StudentImport implements ToCollection
                 {
                     $id_kelas = $ig->id;
                 }
-
+                // dd($id_kelas);
                 if($key >= 5)
                 {
                     $studentName = explode(" ", $row[5], 2);

@@ -89,22 +89,24 @@ class SubjectImport implements ToCollection
                 }
                 
             }            
-        }         
-        $this->formula();    
+        }        
+        $this->formula($a->SUBJECTS_ID);    
     }
 
-    public function formula()
+    public function formula($mapel_id)
     {
         $tmp_nilai = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
                                     ->select('students.*', 'activities_students.*')
+                                    ->where('activities_students.SUBJECTS_ID', $mapel_id)
                                     ->get();
-
+        // dd($tmp_nilai);
+        
         $arrayOfStudent = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
                                 ->select('students.*', 'activities_students.*')
+                                ->where('activities_students.SUBJECTS_ID', $mapel_id)
                                 ->groupBy('activities_students.STUDENTS_ID')
-                                ->get();            
-                                         
-        $result = array();
+                                ->get();                                     
+
         foreach ($arrayOfStudent as $student) 
         {
             $tmp_nama = $student->FNAME ." ". $student->LNAME;
@@ -198,7 +200,7 @@ class SubjectImport implements ToCollection
             // dd($fix_total_score_round);
             // $a = array($avarage_tugas, $avarage_ph, $avarage_pts, $avarage_pas, $total_score_student);
             // dd($a);
-
+            // dd($student->SUBJECTS_ID);
             $subject_report = SubjectReport::create([
                 'SUBJECTS_ID' => $student->SUBJECTS_ID,
                 'SUBJECT_RECORD_ID' => $subject_record->id,
@@ -211,10 +213,9 @@ class SubjectImport implements ToCollection
                 'US' => json_encode($tmp_us),
                 'UN' => json_encode($tmp_un),
             ]);
-            
+
             //array_push($result, "SubjectRecordId: ". $subject_record->id ."tugas: ".json_encode($tmp_tugas));
         }
-        //dd($result);
     }
 
     public function countActivity($id, $activity_id)

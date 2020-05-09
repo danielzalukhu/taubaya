@@ -207,7 +207,8 @@ class SubjectController extends Controller
 
     public function assesmentImport() 
     {    
-        $laporan_mapel = SubjectReport::all();  
+        $laporan_mapel = SubjectReport::where('IS_VERIFIED', '=', 0)->get();
+        // dd($laporan_mapel);
     
         return view('subject.assesment', compact('laporan_mapel'));
     }
