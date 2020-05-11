@@ -29,6 +29,7 @@ Route::post('subject/assesment/{id}/update', 'SubjectController@updateAssesment'
 Route::get('subject/assesment/{id}/delete', 'SubjectController@destroyAssesment')->middleware('auth')->name('subject.destroyAssesment');
 Route::get('subject/assesment/status', 'SubjectController@setStatus')->middleware('auth')->name('subject.setStatus');
 Route::get('subject/detail/academicyear', 'SubjectController@ajaxChangeSubjectDetail')->middleware('auth')->name('subject.ajaxSubjectDetail');
+Route::get('subject/detail/academicyear', 'SubjectController@ajaxChangeSubjectDetailKu')->middleware('auth')->name('subject.ajaxSubjectDetailKu');
 Route::get('subject/detail/{id}', 'SubjectController@subjectDetail')->middleware('auth')->name('subject.detail');
 Route::post('student', 'ImportController@importStudent')->middleware('auth')->name('student.importStudent');
 Route::post('subject/assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');

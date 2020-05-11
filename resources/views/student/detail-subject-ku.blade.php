@@ -46,7 +46,6 @@
                                             <th>UJIAN TENGAH SEMESTER</th>
                                             <th>UJIAN AKHIR SEMESTER</th>
                                             <th>NILAI AKHIR</th>                                            
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody-detail-subject">
@@ -134,21 +133,22 @@
         })
 
     var subjectId = '{{ $mapel->id }}'
-
+    var studentId = '{{ $siswa->id }}'
+    
     $('#dropdown-detail-subject-academic-year').val({{$academic_year_id}})    
 
     $('#dropdown-detail-subject-academic-year').change(function(){
         var academicYearId = $(this).val();
 
         $.ajax({
-            url: '{{ route("subject.ajaxSubjectDetail") }}',
+            url: '{{ route("subject.ajaxSubjectDetailKu") }}',
             type: 'get',
-            data: {academicYearId: academicYearId, subjectId: subjectId},
+            data: {academicYearId: academicYearId, subjectId: subjectId, studentId: studentId},
 
             success: function(result){
                 $('#tbody-detail-subject').empty()               
                 console.log(result)
-                
+                               
             },
             error: function(err){
                 console.log(err)
