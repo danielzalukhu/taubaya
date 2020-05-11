@@ -217,19 +217,11 @@ class StudentController extends Controller
 
     public function mapelku(Request $request)
     {
-        $student_class_login = $request->session()->get('session_student_class');
-        $student_class = explode(" ", $student_class_login);
-
-        if($student_class[0] == 10)
-        {
-            $selected_mapel = Subject::where('CODE', 'LIKE',  'C2%' . $student_class[1] . '%')->get();
-        }
-        elseif($student_class[0] == 11 && $student_class[0] == 12)
-        {
-            $selected_mapel = Subject::where('CODE', 'LIKE',  'C3%' . $student_class[1] . '%')->get();
-        }
-
-        return view('student.mapel-ku', compact('selected_mapel'));
+        $selected_mapel = Subject::select('id', 'CODE', 'DESCRIPTION')
+                                ->where('CODE', 'LIKE', '%' . $request->session()->get('session_student_class') . '%')
+                                ->get();
+        // dd($request->session()->get('session_student_class'));                    ;
+        dd($selected_mapel);
     }
 
     public function mapelguru(Request $request)
@@ -237,11 +229,11 @@ class StudentController extends Controller
         $get_department_id = DepartmentStaff::select('DEPARTMENTS_ID')
                                     ->where('STAFFS_ID', $request->session()->get('session_user_id'))
                                     ->get();
-
+        // dd($get_department_id);
         $get_grade_id = Grade::select('NAME')
                             ->where('STAFFS_ID', $request->session()->get('session_user_id'))
                             ->get();
-        // dd($get_department_id);
+        // dd($get_grade_id);
         $tmp_subject = [];
 
         foreach($get_department_id as $deparment_id){
@@ -250,11 +242,13 @@ class StudentController extends Controller
                             ->where('DEPARTMENTS_ID', $deparment_id->DEPARTMENTS_ID)
                             ->where('CODE', 'LIKE', '%' . $grade_id->NAME . '%')
                             ->get();
+
                 array_push($tmp_subject, $selected_mapel);
             }
         }
-        // DD($tmp_subject);
+        // dd($tmp_subject);
         $subject = $tmp_subject[0];
+        // dd($tmp_subject);
         return view('student.mapel-guru', compact('subject'));
     }
 }

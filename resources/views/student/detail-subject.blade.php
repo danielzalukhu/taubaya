@@ -17,18 +17,32 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">                      
-                            <h3 class="box-title">DETAIL MATA PELAJARAN </h3>
+                            <h3 class="box-title">DETAIL MATA PELAJARAN: <B>{{ $mapel->DESCRIPTION }}</B> </h3>
                         </div>
                         <div class="box">
+                            <div class="box-header">                                
+                                <h5 class="box-header-title"><b>TAHUN AJARAN:</b>
+                                    <span>
+                                        <div class="btn-group">
+                                            <select type="button" id="dropdown-detail-subject-academic-year" class="btn btn-default dropdown-toggle">
+                                                @foreach($tahun_ajaran as $ta)
+                                                    <option value='{{ $ta->id }}' class="dropdown-academic-year" academic-year-id="{{$ta->id}}">
+                                                        {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
+                                                    </option>                                                                        
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </span>        
+                                </h5>
+                            </div>
                             <div class="box-body">
                                 <div class="table-responsive">
-                                    <table id="example1" class="table table-bordered table-striped">
+                                    <table id="table-detail-subject" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>NISN</th>
                                             <th>NAMA SISWA</th>
-                                            <th>NAMA MAPEL</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
                                             <th>UJIAN TENGAH SEMESTER</th>
@@ -37,7 +51,7 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tbody-detail-subject">
                                         @php $i=1 @endphp
                                         @foreach($detail_mapel as $dm)
                                             @if($dm->IS_VERIFIED == 1) 
@@ -49,7 +63,6 @@
                                                         {{" "}}
                                                         {{ $dm->subjectrecord->student->LNAME}}
                                                     </td>
-                                                    <td>{{ $dm->subject->DESCRIPTION }}</td>
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php
@@ -112,7 +125,7 @@
                                                                 </button>
                                                             </form>      
                                                         @endif
-                                                    </td>
+                                                    </td>                                                    
                                                 </tr>
                                             @endif
                                         @endforeach  
@@ -131,7 +144,7 @@
 @section('footer')
 <script>
     $(function () {
-        $('#example1').DataTable()
+        $('#table-detail-subject').DataTable()
             $('#example2').DataTable({
             'paging'      : true,
             'lengthChange': false,
@@ -141,5 +154,28 @@
             'autoWidth'   : false
             })
         })
+
+    var subjectId = '{{ $mapel->id }}'
+
+    $('#dropdown-detail-subject-academic-year').val({{$academic_year_id}})    
+
+    $('#dropdown-detail-subject-academic-year').change(function(){
+        var academicYearId = $(this).val();
+
+        $.ajax({
+            url: '{{ route("subject.ajaxSubjectDetail") }}',
+            type: 'get',
+            data: {academicYearId: academicYearId, subjectId: subjectId},
+
+            success: function(result){
+                $('#tbody-detail-subject').empty()               
+                console.log(result)
+                
+            },
+            error: function(err){
+                console.log(err)
+            }
+        });
+    });
 </script>
 @stop

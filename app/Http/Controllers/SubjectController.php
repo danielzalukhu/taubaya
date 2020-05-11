@@ -306,14 +306,37 @@ class SubjectController extends Controller
         return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Daftar nilai berhasil di verifikasi dan tersimpan!');
     }
 
-    public function subjectDetail($id)
+    public function subjectDetail(Request $request, $id)
     {
         $mapel = Subject::find($id);
         
         $detail_mapel = SubjectReport::where('SUBJECTS_ID', $mapel->id)->get();  
         
-        return view('student.detail-subject', compact('detail_mapel'));
+        $tahun_ajaran = AcademicYear::all();
+        
+        $academic_year_id = 0;
+        $maxId = DB::select('SELECT max(id) as id
+                             FROM academic_years')[0]->id;        
+
+        if($request->has('academicYearId')){
+            $academic_year_id = $request->academicYearId;
+        }
+        else{
+            $academic_year_id = $maxId;
+        }
+        
+        return view('student.detail-subject', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
     }   
+
+    public function ajaxChangeSubjectDetail(Request $request)
+    {
+        $ajaxDetailPelajaran = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                            ->select('subject_reports.*')
+                                            ->where('subject_records.ACADEMIC_YEAR_ID', $request->academicYearId)
+                                            ->where('subject_reports.SUBJECTS_ID', $request->subjectId)
+                                            ->get();
+        return $ajaxDetailPelajaran;
+    }
 }
  
 

@@ -389,7 +389,7 @@
 
     $('#selector-dropdown-absent-year').change(function(){
         var academicYearId = $(this).val();
-
+        
         $.ajax({
             url: '{{ route("absent.academicYearAjax") }}',
             type: 'get',
