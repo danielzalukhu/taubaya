@@ -30,8 +30,9 @@ class DashboardController extends Controller
         }
         else{
             $request->session()->put('session_student_class', Auth::user()->student->grade->NAME);
+            $request->session()->put('session_student_id', Auth::user()->student->id);
         }
-        // dd($request->session()->get('session_student_class'));
+        // dd($request->session()->get('session_student_id'));
 
         //END GLOBAL SESSION 
 
