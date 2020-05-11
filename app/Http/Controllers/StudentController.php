@@ -217,11 +217,11 @@ class StudentController extends Controller
 
     public function mapelku(Request $request)
     {
-        $selected_mapel = Subject::select('id', 'CODE', 'DESCRIPTION')
+        $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
                                 ->where('CODE', 'LIKE', '%' . $request->session()->get('session_student_class') . '%')
                                 ->get();
-        // dd($request->session()->get('session_student_class'));                    ;
-        dd($selected_mapel);
+        
+        return view('student.mapel-ku', compact('subject'));
     }
 
     public function mapelguru(Request $request)
@@ -229,11 +229,13 @@ class StudentController extends Controller
         $get_department_id = DepartmentStaff::select('DEPARTMENTS_ID')
                                     ->where('STAFFS_ID', $request->session()->get('session_user_id'))
                                     ->get();
-        // dd($get_department_id);
+        
         $get_grade_id = Grade::select('NAME')
                             ->where('STAFFS_ID', $request->session()->get('session_user_id'))
                             ->get();
-        // dd($get_grade_id);
+        
+        $a = array($get_department_id, $get_grade_id);
+        
         $tmp_subject = [];
 
         foreach($get_department_id as $deparment_id){
@@ -246,9 +248,9 @@ class StudentController extends Controller
                 array_push($tmp_subject, $selected_mapel);
             }
         }
-        // dd($tmp_subject);
+        
         $subject = $tmp_subject[0];
-        // dd($tmp_subject);
+
         return view('student.mapel-guru', compact('subject'));
     }
 }

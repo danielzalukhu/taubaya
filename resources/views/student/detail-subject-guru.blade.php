@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">                      
-                            <h3 class="box-title">DETAIL MATA PELAJARAN: <B>{{ $mapel->DESCRIPTION }}</B> </h3>
+                            <h3 class="box-title">DETAIL NILAI MATA PELAJARAN: <B>{{ $mapel->DESCRIPTION }}</B> </h3>
                         </div>
                         <div class="box">
                             <div class="box-header">                                

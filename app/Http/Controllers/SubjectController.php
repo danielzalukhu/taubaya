@@ -14,6 +14,7 @@ use App\SubjectReport;
 use App\SubjectRecord;
 use DB;
 use Carbon\Carbon;
+use Auth;
 
 class SubjectController extends Controller
 {
@@ -312,20 +313,21 @@ class SubjectController extends Controller
         
         $detail_mapel = SubjectReport::where('SUBJECTS_ID', $mapel->id)->get();  
         
+        $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                        ->select('subject_records.*', 'subject_reports.*')
+                                        ->where('subject_reports.SUBJECTS_ID', $mapel->id)
+                                        ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                        ->get();
+        // dd($detail_mapel_ku);
         $tahun_ajaran = AcademicYear::all();
         
-        $academic_year_id = 0;
-        $maxId = DB::select('SELECT max(id) as id
+        $academic_year_id = DB::select('SELECT max(id) as id
                              FROM academic_years')[0]->id;        
-
-        if($request->has('academicYearId')){
-            $academic_year_id = $request->academicYearId;
-        }
-        else{
-            $academic_year_id = $maxId;
-        }
         
-        return view('student.detail-subject', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
+        if(Auth::guard('web')->user()->ROLE === "STAFF")
+            return view('student.detail-subject-guru', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
+        else
+            return view('student.detail-subject-ku', compact('mapel', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id'));
     }   
 
     public function ajaxChangeSubjectDetail(Request $request)

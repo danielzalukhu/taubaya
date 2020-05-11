@@ -26,32 +26,22 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>KODE MAPEL</th>
                                             <th>NAMA MAPEL</th>
-                                            <th>INFORMASI</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     @php $i=1 @endphp
-                                    @foreach($selected_mapel as $sm)
+                                    @foreach($subject as $s)
                                         <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td>{{ $sm->DESCRIPTION }}</td>
-                                            <td></td>
+                                            <td>{{ $s->CODE }}</td>
+                                            <td>{{ $s->DESCRIPTION }}</td>
                                             <td>
-                                                <a href="#" class="btn btn-info btn-sm">
+                                                <a href="{{ route ('subject.detail', ['id' => $s->id] ) }}" class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <form action="#" method="POST" class="inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>                                            
+                                                </a>                                         
                                             </td>
                                         </tr>
                                     @endforeach
