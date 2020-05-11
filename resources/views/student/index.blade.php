@@ -42,21 +42,32 @@
                                     @foreach($siswa as $s)
                                         <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td><a href="{{ route('student.profile', ['id'=>$s->id]) }}">{{$s->NISN}}</a></td>
+                                            <td>{{ $s->NISN }}</a></td>
                                             <td>{{ $s->FNAME }}{{" "}}{{ $s->LNAME }}</td>
                                             <td>{{ $s->grade->NAME }}</td>
-                                            <td>
-                                                <a href="#" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>                                            
-                                            </td>
+                                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                                                <td>
+                                                    <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                    <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form> 
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>                                                                                               
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                     </tbody>
