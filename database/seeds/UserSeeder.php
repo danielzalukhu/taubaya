@@ -148,6 +148,54 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'NAME' => 'Nyai Sooman',
+            'EMAIL' => 'nyai@staff.ac.id',
+            'PASSWORD' => Hash::make('nyai'),
+            'ROLE' => 'STAFF',
+            'STAFFS_ID' => '18'
+        ]);
+
+        DB::table('users')->insert([
+            'NAME' => 'Kadir Park',
+            'EMAIL' => 'kadir@staff.ac.id',
+            'PASSWORD' => Hash::make('kadir'),
+            'ROLE' => 'STAFF',
+            'STAFFS_ID' => '19'
+        ]);
+
+        DB::table('users')->insert([
+            'NAME' => 'Agung Choi',
+            'EMAIL' => 'agung@staff.ac.id',
+            'PASSWORD' => Hash::make('agung'),
+            'ROLE' => 'STAFF',
+            'STAFFS_ID' => '20'
+        ]);
+
+        DB::table('users')->insert([
+            'NAME' => 'Eko Lee',
+            'EMAIL' => 'eko@staff.ac.id',
+            'PASSWORD' => Hash::make('eko'),
+            'ROLE' => 'STAFF',
+            'STAFFS_ID' => '21'
+        ]);
+
+        DB::table('users')->insert([
+            'NAME' => 'Dimas Lee',
+            'EMAIL' => 'dimas@staff.ac.id',
+            'PASSWORD' => Hash::make('dimas'),
+            'ROLE' => 'STAFF',
+            'STAFFS_ID' => '22'
+        ]);
+
+        DB::table('users')->insert([
+            'NAME' => 'Hotman Cho',
+            'EMAIL' => 'hotman@staff.ac.id',
+            'PASSWORD' => Hash::make('hotman'),
+            'ROLE' => 'STAFF',
+            'STAFFS_ID' => '23'
+        ]);
+
+        DB::table('users')->insert([
             'NAME' => 'Ahmad Abdul',
             'EMAIL' => 'abdul@student.ac.id',
             'PASSWORD' => Hash::make('abdul'),

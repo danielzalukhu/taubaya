@@ -102,42 +102,42 @@ class GradeSeeder extends Seeder
             'DESCRIPTION' => 'Tingkat Ketiga',
             'GRADE' => '12',
             'PROGRAMS_ID' => '1',
-            'STAFFS_ID' => '6'
+            'STAFFS_ID' => '18'
         ]);
         DB::table('grades')->insert([
             'NAME' => '12-TAV',
             'DESCRIPTION' => 'Tingkat Ketiga',
             'GRADE' => '12',
             'PROGRAMS_ID' => '2',
-            'STAFFS_ID' => '7'
+            'STAFFS_ID' => '19'
         ]);
         DB::table('grades')->insert([
             'NAME' => '12-TKJ',
             'DESCRIPTION' => 'Tingkat Ketiga',
             'GRADE' => '12',
             'PROGRAMS_ID' => '3',
-            'STAFFS_ID' => '8'
+            'STAFFS_ID' => '20'
         ]);
         DB::table('grades')->insert([
             'NAME' => '12-TKR',
             'DESCRIPTION' => 'Tingkat Ketiga',
             'GRADE' => '12',
             'PROGRAMS_ID' => '4',
-            'STAFFS_ID' => '9'
+            'STAFFS_ID' => '21'
         ]);
         DB::table('grades')->insert([
             'NAME' => '12-TPm',
             'DESCRIPTION' => 'Tingkat Ketiga',
             'GRADE' => '12',
             'PROGRAMS_ID' => '5',
-            'STAFFS_ID' => '10'
+            'STAFFS_ID' => '22'
         ]);
         DB::table('grades')->insert([
             'NAME' => '12-TSM',
             'DESCRIPTION' => 'Tingkat Ketiga',
             'GRADE' => '12',
             'PROGRAMS_ID' => '6',
-            'STAFFS_ID' => '11'
+            'STAFFS_ID' => '23'
         ]);
     }
 }

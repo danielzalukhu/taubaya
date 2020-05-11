@@ -113,5 +113,41 @@ class StaffSeeder extends Seeder
             'NAME' => 'Tiara Nyaolo',
             'ROLE' => 'TEACHER',
         ]);
+
+        DB::table('staffs')->insert([
+            'NIK' => '20209384293',
+            'NAME' => 'Nyai Sooman',
+            'ROLE' => 'TEACHER',
+        ]);
+
+        DB::table('staffs')->insert([
+            'NIK' => '20207369450',
+            'NAME' => 'Kadir Park',
+            'ROLE' => 'TEACHER',
+        ]);
+
+        DB::table('staffs')->insert([
+            'NIK' => '20203726495',
+            'NAME' => 'Agung Choi',
+            'ROLE' => 'TEACHER',
+        ]);
+
+        DB::table('staffs')->insert([
+            'NIK' => '20200694829',
+            'NAME' => 'Eko Lee',
+            'ROLE' => 'TEACHER',
+        ]);
+
+        DB::table('staffs')->insert([
+            'NIK' => '20208272832',
+            'NAME' => 'Dimas Lee',
+            'ROLE' => 'TEACHER',
+        ]);
+
+        DB::table('staffs')->insert([
+            'NIK' => '20208462849',
+            'NAME' => 'Hotman Cho',
+            'ROLE' => 'TEACHER',
+        ]);
     }
 }

@@ -42,58 +42,88 @@ class DepartmentStaffSeeder extends Seeder
         ]);
 
         DB::table('departments_staffs')->insert([
-            'STAFFS_ID' => '12',
+            'STAFFS_ID' => '7',
             'DEPARTMENTS_ID' => '6'        
         ]);
 
         DB::table('departments_staffs')->insert([
-            'STAFFS_ID' => '7',
-            'DEPARTMENTS_ID' => '7'        
-        ]);
-    
-        DB::table('departments_staffs')->insert([
-            'STAFFS_ID' => '13',
-            'DEPARTMENTS_ID' => '7'        
+            'STAFFS_ID' => '18',
+            'DEPARTMENTS_ID' => '6'        
         ]);
 
         DB::table('departments_staffs')->insert([
             'STAFFS_ID' => '8',
-            'DEPARTMENTS_ID' => '8'        
+            'DEPARTMENTS_ID' => '7'        
         ]);
-        
-        DB::table('departments_staffs')->insert([
-            'STAFFS_ID' => '14',
-            'DEPARTMENTS_ID' => '8'        
-        ]);
-
+    
         DB::table('departments_staffs')->insert([
             'STAFFS_ID' => '9',
-            'DEPARTMENTS_ID' => '9'        
+            'DEPARTMENTS_ID' => '7'        
         ]);
 
-        
         DB::table('departments_staffs')->insert([
-            'STAFFS_ID' => '15',
-            'DEPARTMENTS_ID' => '9'        
+            'STAFFS_ID' => '19',
+            'DEPARTMENTS_ID' => '7'        
         ]);
 
         DB::table('departments_staffs')->insert([
             'STAFFS_ID' => '10',
+            'DEPARTMENTS_ID' => '8'        
+        ]);
+        
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '11',
+            'DEPARTMENTS_ID' => '8'        
+        ]);
+
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '20',
+            'DEPARTMENTS_ID' => '8'        
+        ]);
+
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '12',
+            'DEPARTMENTS_ID' => '9'        
+        ]);
+
+        
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '13',
+            'DEPARTMENTS_ID' => '9'        
+        ]);
+
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '21',
+            'DEPARTMENTS_ID' => '9'        
+        ]);
+
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '14',
             'DEPARTMENTS_ID' => '10'        
         ]);
         
         DB::table('departments_staffs')->insert([
-            'STAFFS_ID' => '16',
+            'STAFFS_ID' => '15',
             'DEPARTMENTS_ID' => '10'        
         ]);
 
         DB::table('departments_staffs')->insert([
-            'STAFFS_ID' => '11',
+            'STAFFS_ID' => '22',
+            'DEPARTMENTS_ID' => '10'        
+        ]);
+
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '16',
             'DEPARTMENTS_ID' => '11'        
         ]);
 
         DB::table('departments_staffs')->insert([
             'STAFFS_ID' => '17',
+            'DEPARTMENTS_ID' => '11'        
+        ]);
+
+        DB::table('departments_staffs')->insert([
+            'STAFFS_ID' => '23',
             'DEPARTMENTS_ID' => '11'        
         ]);
     }
