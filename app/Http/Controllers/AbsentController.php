@@ -43,23 +43,8 @@ class AbsentController extends Controller
                              FROM absents a
                              WHERE ACADEMIC_YEAR_ID =  " . $academic_year_id . "
                              GROUP BY TIPE, TAHUNAJARAN");  
-        
-        // $hitungHariEfektif = DB::select("SELECT DATEDIFF(ay.END_DATE, ay.START_DATE) AS TOTALHARI, (SELECT (TOTALHARI - COUNT(a.TYPE))) AS PRESENT
-        //                                  FROM academic_years ay INNER JOIN absents a ON ay.id = a.ACADEMIC_YEAR_ID
-        //                                  WHERE a.ACADEMIC_YEAR_ID = '2' 
-        //                                  GROUP BY TOTALHARI " );
 
         return view('absent.index', compact('absen', 'karyawan', 'siswa', 'tahun_ajaran', 'type', 'datas', 'academic_year_id'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -87,22 +72,9 @@ class AbsentController extends Controller
             $absen->save();
         }
 
-        //dd($absen);
-        //dd($request->all());
         $absen->save();
 
         return redirect('absent')->with('sukses', 'Absent has been saved');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -146,7 +118,7 @@ class AbsentController extends Controller
             $absen->RECEIPT_IMG = $request->file('a_image')->getClientOriginalName();
             $absen->save();
         }
-        //dd($request->all());
+        
         $absen->save();
 
         return redirect(action('AbsentController@index', $absen->id))->with('sukses', 'Absent has been chaged');
