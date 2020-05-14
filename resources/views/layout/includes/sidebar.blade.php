@@ -74,55 +74,54 @@
               <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
               <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>                          
             @else
-              <li><a href=""><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>            
+              <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>            
             @endif
           </ul>
         </li>
 
+        @if(Auth::guard('web')->user()->ROLE === "STAFF")
         <li class="treeview">
           <a href="#">
-            @if(Auth::guard('web')->user()->ROLE === "STAFF")
               <i class="fa fa-trophy"></i> <span>PENGHARGAAN</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
-            @endif
           </a>
           <ul class="treeview-menu">
               <li><a href="{{route('achievement.index')}}"><i class="fa fa-thumbs-up"></i>DAFTAR PENGHARGAAN</a></li>
               <li><a href="{{route('achievementrecord.index')}}"><i class="fa fa-list-ol"></i>CATAT PENGHARGAAN</a></li>
           </ul>
         </li>
+        @endif
 
-
+        @if(Auth::guard('web')->user()->ROLE === "STAFF")
         <li class="treeview">
-          <a href="#">
-            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+          <a href="#">           
               <i class="fa fa-thumbs-down"></i> <span>PELANGGARAN</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
-            @endif
           </a>
           <ul class="treeview-menu">
             <li><a href="{{route('violation.index')}}"><i class="fa fa fa-warning"></i>DAFTAR PELANGGARAN</a></li>
             <li><a href="{{route('violationrecord.index')}}"><i class="fa fa-list-ol"></i>CATAT PELANGGARAN</a></li>
           </ul>
         </li>
+        @endif
 
+        @if(Auth::guard('web')->user()->ROLE === "STAFF")
         <li class="treeview">
           <a href="#">
-            @if(Auth::guard('web')->user()->ROLE === "STAFF")
               <i class="fa fa-hand-paper-o"></i> <span>ABSEN</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
-            @endif
           </a>
           <ul class="treeview-menu">
             <li><a href="{{route('absent.index')}}"><i class="fa fa-list-ol"></i>DAFTAR ABSEN</a></li>
           </ul>
         </li>
+        @endif
 
       </ul>
     </section>

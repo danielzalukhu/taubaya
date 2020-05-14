@@ -13,6 +13,7 @@ use App\Staff;
 use App\DepartmentStaff;
 use App\Grade;
 use DB;
+use Auth;
 
 class StudentController extends Controller
 {
@@ -44,6 +45,7 @@ class StudentController extends Controller
     public function profile(Request $request, $id)
     {
         $siswa = Student::find($id);
+        $siswaku = Student::where('STUDENTS_ID', $id);
 
         // LEFT COLOMN DATA
         $absen = DB::select('SELECT *
@@ -144,12 +146,20 @@ class StudentController extends Controller
                                  FROM absents a
                                  WHERE a.STUDENTS_ID = " . $id . "
                                  GROUP BY TIPE, TAHUN");
-    
-        return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
-                                               'catatan_penghargaan', 'total_achievement_point',
-                                               'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
-                                               'type', 'dataAchievement',
-                                               'tipeAbsen', 'dataAbsen'));
+
+        if(Auth::guard('web')->user()->ROLE === "STAFF")
+            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
+                                                   'catatan_penghargaan', 'total_achievement_point',
+                                                   'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
+                                                   'type', 'dataAchievement',
+                                                   'tipeAbsen', 'dataAbsen'));
+        else                                                   
+            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
+                                                   'catatan_penghargaan', 'total_achievement_point',
+                                                   'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
+                                                   'type', 'dataAchievement',
+                                                   'tipeAbsen', 'dataAbsen'));
+
     }
 
     public function showDetailAbsent(Request $request)

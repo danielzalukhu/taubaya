@@ -8,6 +8,7 @@ use App\ExtracurricularRecord;
 use App\ExtracurricularReport;
 use App\Staff;
 use App\Student;
+use Auth;
 
 class ExtracurricularController extends Controller
 {
@@ -18,8 +19,10 @@ class ExtracurricularController extends Controller
      */
     public function index()
     {
-        $ekskul = Extracurricular::all();
+        $ekskul = Extracurricular::all();    
+
         return view('extracurricular.index', compact('ekskul'));
+
     }
 
     /**
@@ -92,12 +95,20 @@ class ExtracurricularController extends Controller
         return redirect(action('ExtracurricularController@index'))->with('sukses', 'Daftar ekskul berhasil dihapus');
     }
 
-    public function ekskulAssesment()
+    public function ekskulAssesment(Request $request)
     {
         $ekskul = Extracurricular::all();
         $siswa = Student::all();
         $ekskul_report = ExtracurricularReport::all();
-        return view('extracurricular.assesment', compact('ekskul', 'siswa', 'ekskul_report'));
+        $ekskulku = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
+                                    ->select('extracurricular_reports.*', 'extracurricular_records.*')
+                                    ->where('extracurricular_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                    ->get();
+
+        if(Auth::guard('web')->user()->ROLE === "STAFF")
+            return view('extracurricular.assesment', compact('ekskul', 'siswa', 'ekskul_report'));
+        else
+            return view('extracurricular.assesment', compact('ekskul', 'ekskulku', 'siswa', 'ekskul_report'));
     }
 
     public function storeAssesment(Request $request)
