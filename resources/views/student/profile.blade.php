@@ -28,9 +28,6 @@
 
                     <ul class="list-group list-group-unbordered">
                       <li class="list-group-item">
-                        <b>MATA PELAJARAN</b> <a class="pull-right">JUMLAH</a>
-                      </li>
-                      <li class="list-group-item">
                         <b>POIN PELANGGARAN</b> 
                         <a class="pull-right">{{$point_record}}</a>
                       </li>

@@ -156,12 +156,13 @@
         })
 
     var subjectId = '{{ $mapel->id }}'
+    
 
     $('#dropdown-detail-subject-academic-year').val({{$academic_year_id}})    
 
     $('#dropdown-detail-subject-academic-year').change(function(){
-        var academicYearId = $(this).val();
-
+        var academicYearId = $(this).val();        
+    
         $.ajax({
             url: '{{ route("subject.ajaxSubjectDetail") }}',
             type: 'get',
@@ -169,7 +170,24 @@
 
             success: function(result){
                 $('#tbody-detail-subject').empty()               
-                console.log(result)
+                var $tmp = <?php echo json_encode(result) ?>
+                console.log($tmp)
+
+                result.forEach(function(obj){                                
+                    var tugas = jQuery.parseJSON( obj.TUGAS );
+                    var ph = jQuery.parseJSON( obj.PH );
+                    var pts = jQuery.parseJSON( obj.PTS );
+                    var pas = jQuery.parseJSON( obj.PAS );
+
+                    $('#tbody-detail-subject').append(
+                        `
+                        <tr>
+                            <td>${obj.FINAL_SCORE}</td>
+                        </tr>
+
+                        `
+                    )
+                });
                 
             },
             error: function(err){

@@ -23,10 +23,8 @@ class AbsentController extends Controller
         $karyawan = Staff::all();
         $siswa = Student::all();
         $tahun_ajaran = AcademicYear::all();
-
-        $academic_year_id = 0;
-        $maxId = DB::select('SELECT max(id) as id
-                                FROM academic_years')[0]->id;
+        
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         if($request->has('academicYearId')){
             $academic_year_id = $request->academicYearId;
@@ -34,15 +32,15 @@ class AbsentController extends Controller
         else{
             $academic_year_id = $maxId;
         }
-
-        $type = DB::select("SELECT TYPE AS TIPE
-                            FROM absents 
-                            GROUP BY TYPE");
-
-        $datas = DB::select("SELECT a.TYPE AS TIPE, ACADEMIC_YEAR_ID AS TAHUNAJARAN, COUNT(*) AS JUMLAH
-                             FROM absents a
-                             WHERE ACADEMIC_YEAR_ID =  " . $academic_year_id . "
-                             GROUP BY TIPE, TAHUNAJARAN");  
+            
+        $type = Absent::select(DB::raw('TYPE AS TIPE'))                            
+                        ->groupBy('TYPE')
+                        ->get();
+             
+        $datas = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))                                    
+                             ->where('ACADEMIC_YEAR_ID', $academic_year_id)
+                             ->groupBy('TIPE', 'TAHUNAJARAN')
+                             ->get();                             
 
         return view('absent.index', compact('absen', 'karyawan', 'siswa', 'tahun_ajaran', 'type', 'datas', 'academic_year_id'));
     }
@@ -140,10 +138,11 @@ class AbsentController extends Controller
 
     public function ajaxChangeAbsentRecord(Request $request)
     {
-        $ajaxAbsen = DB::select('SELECT TYPE, COUNT(TYPE) as TOTAL			
-                                 FROM absents 
-                                 WHERE ACADEMIC_YEAR_ID = ' . $request->academicYearId . ' AND  STUDENTS_ID = "' . $request->studentId .'"
-                                 GROUP BY TYPE');
+        $ajaxAbsen = Absent::select('TYPE', DB::raw('COUNT(TYPE) AS TOTAL'))                                 
+                        ->where('ACADEMIC_YEAR_ID', $request->academicYearId)
+                        ->where('STUDENTS_ID', $request->studentId)
+                        ->groupBy('TYPE')
+                        ->get();
         return $ajaxAbsen;
     }
 }

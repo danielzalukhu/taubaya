@@ -1,7 +1,5 @@
 <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
           <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
@@ -29,6 +27,7 @@
             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
           </a>
         </li>
+        
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>SISWA</span>
@@ -37,11 +36,10 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>
             @if(Auth::guard('web')->user()->ROLE === "STAFF")
-              <li><a href="{{route('student.mapelguru')}}"><i class="fa fa-book"></i>MAPEL-GURU</a></li>              
-            @else
-              <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
+              <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>            
+            @else              
+              <li><a href="{{route('student.profile', [ 'id'=>request()->session()->get('session_student_id') ])}} "><i class="fa fa-book"></i>PROFIL-KU</a></li>
             @endif                    
           </ul>
         </li>
@@ -53,46 +51,58 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu">
-            <li><a href="{{route('subject.index')}}"><i class="fa fa-list-ol"></i>DAFTAR MAPEL</a></li>
-            <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>LAPOR KETIDAKTUNTASAN </a></li>
-            <li><a href="{{route('subject.assesment')}}"><i class="fa fa-pencil"></i>INPUT PENILAIAN</a></li>
+          <ul class="treeview-menu">          
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+              <li><a href="{{route('student.mapelguru')}}"><i class="fa fa-book"></i>MAPEL-GURU</a></li> 
+              <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>LAPOR KETIDAKTUNTASAN </a></li>
+              <li><a href="{{route('subject.assesment')}}"><i class="fa fa-pencil"></i>INPUT PENILAIAN</a></li>              
+            @else
+              <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
+            @endif
           </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-heart"></i> <span>EKSTRAKURIKULER</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+              <i class="fa fa-heart"></i> <span>EKSTRAKURIKULER</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
-            <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+              <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
+              <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>                          
+            @else
+              <li><a href=""><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>            
+            @endif
           </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-trophy"></i> <span>PENGHARGAAN</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+              <i class="fa fa-trophy"></i> <span>PENGHARGAAN</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            @endif
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('achievement.index')}}"><i class="fa fa-thumbs-up"></i>DAFTAR PENGHARGAAN</a></li>
-            <li><a href="{{route('achievementrecord.index')}}"><i class="fa fa-list-ol"></i>CATAT PENGHARGAAN</a></li>
+              <li><a href="{{route('achievement.index')}}"><i class="fa fa-thumbs-up"></i>DAFTAR PENGHARGAAN</a></li>
+              <li><a href="{{route('achievementrecord.index')}}"><i class="fa fa-list-ol"></i>CATAT PENGHARGAAN</a></li>
           </ul>
         </li>
 
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-thumbs-down"></i> <span>PELANGGARAN</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+              <i class="fa fa-thumbs-down"></i> <span>PELANGGARAN</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            @endif
           </a>
           <ul class="treeview-menu">
             <li><a href="{{route('violation.index')}}"><i class="fa fa fa-warning"></i>DAFTAR PELANGGARAN</a></li>
@@ -102,10 +112,12 @@
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-hand-paper-o"></i> <span>ABSEN</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+              <i class="fa fa-hand-paper-o"></i> <span>ABSEN</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            @endif
           </a>
           <ul class="treeview-menu">
             <li><a href="{{route('absent.index')}}"><i class="fa fa-list-ol"></i>DAFTAR ABSEN</a></li>

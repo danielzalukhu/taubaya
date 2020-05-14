@@ -27,10 +27,8 @@ class AchievementRecordController extends Controller
         $karyawan = Staff::all();
         $tahun_ajaran = AcademicYear::all();
 
-        // utk grafik
-        $academic_year_id = 0;
-        $maxId = DB::select('SELECT max(id) as id
-                                FROM academic_years')[0]->id;
+        // UNTUK GRAFIK
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         if($request->has('academicYearId')){
             $academic_year_id = $request->academicYearId;
@@ -39,19 +37,22 @@ class AchievementRecordController extends Controller
             $academic_year_id = $maxId;
         }
 
-        $type = DB::select("SELECT a.GRADE as TINGKAT
-                            FROM achievements a
-                            GROUP BY TINGKAT");
+        $type = Achievement::select(DB::raw('GRADE AS TINGKAT'))
+                        ->groupBy('TINGKAT')
+                        ->get();
         
-        $data = DB::select("SELECT a.GRADE AS TINGKAT, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                            FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
-                            WHERE ACADEMIC_YEAR_ID = " . $academic_year_id ." 
-                            GROUP BY TINGKAT, BULAN
-                            ORDER BY BULAN ASC");                             
-        
-        $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH
-                                             FROM academic_years
-                                             WHERE id = " . $academic_year_id )[0];                                           
+        $data = Achievement::join('achievement_records', 'achievements.id', 'achievement_records.ACHIEVEMENTS_ID')
+                                    ->select(DB::raw('GRADE AS TINGKAT'), DB::raw('MONTH(achievement_records.DATE) AS BULAN'), DB::raw('COUNT(*) AS JUMLAH'))
+                                    ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                    ->groupBy('TINGKAT', 'BULAN')
+                                    ->orderBy('BULAN', 'ASC')
+                                    ->get();                             
+
+        $selected_tahun_ajaran = AcademicYear::select(DB::raw('MONTH(START_DATE) AS STARTMONTH'), 
+                                                      DB::raw('MONTH(END_DATE) AS ENDMONTH'))                                            
+                                            ->where('id', $academic_year_id)
+                                            ->get()[0];
+
 
         return view('achievementrecord.index', compact('catatan_penghargaan', 'siswa', 'penghargaan', 'karyawan', 'tahun_ajaran', 'type', 'data', 'selected_tahun_ajaran', 'academic_year_id'));
     }
