@@ -12,6 +12,7 @@ use App\Subject;
 use App\Staff;
 use App\DepartmentStaff;
 use App\Grade;
+use App\Achievement;
 use DB;
 use Auth;
 
@@ -45,20 +46,19 @@ class StudentController extends Controller
     public function profile(Request $request, $id)
     {
         $siswa = Student::find($id);
+        
         $siswaku = Student::where('STUDENTS_ID', $id);
 
-        // LEFT COLOMN DATA
-        $absen = DB::select('SELECT *
-                            FROM absents 
-                            WHERE STUDENTS_ID = ' . $id .' 
-                            ORDER BY START_DATE, END_DATE ASC');
+        $absen = Absent::where('STUDENTS_ID', $id)
+                    ->orderBy('START_DATE', 'END_DATE', 'ASC')
+                    ->get();
 
-        $catatan_absen = DB::select("SELECT TYPE, COUNT(TYPE) as TOTAL			
-                                     FROM absents 
-                                     WHERE STUDENTS_ID = ' . $id . ' AND ACADEMIC_YEAR_ID = '" . $request->session()->get('session_academic_year_id') . "'
-                                     GROUP BY TYPE");  
+        $catatan_absen = Absent::select('TYPE', DB::raw('COUNT(TYPE) AS TOTAL'))
+                            ->where('STUDENTS_ID', $id)
+                            ->where('ACADEMIC_YEAR_ID', $request->session()->get('session_academic_year_id'))
+                            ->groupBy('TYPE')
+                            ->get();
 
-        // RIGHT COLOMN DATA
         $tahun_ajaran = AcademicYear::all();
                                            
         $catatan_pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
@@ -66,34 +66,30 @@ class StudentController extends Controller
                             ->where('STUDENTS_ID', '=', $id)
                             ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'));
 
-        $point = DB::select('SELECT SUM(TOTAL) as point
-                            FROM violation_records
-                            WHERE STUDENTS_ID = ' . $id);
-
-        for($i = 0; $i < count($point); $i++){
-            $point_record = $point[$i]->point; 
-        } 
+        $point = ViolationRecord::select(DB::raw('SUM(TOTAL) AS POINT'))                        
+                            ->where('STUDENTS_ID', $id)
+                            ->get();
         
-        $achievement_point = DB::select('SELECT POINT
-                                         FROM achievement_records JOIN achievements on achievements.id = achievement_records.ACHIEVEMENTS_ID 
-                                         WHERE STUDENTS_ID = ' . $id);
+        foreach($point as $p){
+            $point_record = $p->POINT;
+        }
+                
+        $achievement_point = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
+                                        ->select('POINT')
+                                        ->where('achievement_records.STUDENTS_ID', $id)
+                                        ->get();    
         
-        $total_achievement_point = 0;
-        
-        for($i = 0; $i < count($achievement_point); $i++){
-            $total_achievement_point = $achievement_point[$i]->POINT; 
-        } 
+        foreach($achievement_point as $ap){
+            $total_achievement_point = $ap->POINT;
+        }
         
         $catatan_penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                                        
                                             ->select('achievements.*', 'achievement_records.*')
                                             ->where('STUDENTS_ID', '=', $id)
                                             ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'));
 
-        // GRAFIK TAB VIOLATION
-
-        $academic_year_id = 0;
-        $maxId = DB::select('SELECT max(id) as id
-                             FROM academic_years')[0]->id;
+    
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         if($request->has('academicYearId')){
             $academic_year_id = $request->academicYearId;
@@ -101,6 +97,13 @@ class StudentController extends Controller
         else{
             $academic_year_id = $maxId;
         }
+        
+        $selected_tahun_ajaran = AcademicYear::select(DB::raw('MONTH(START_DATE) AS STARTMONTH'), 
+                                                      DB::raw('MONTH(END_DATE) AS ENDMONTH'))                                            
+                                            ->where('id', $academic_year_id)
+                                            ->get()[0];   
+
+        // GRAFIK TAB VIOLATION
 
         $kategori = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
                                         WHEN v.NAME LIKE 'B%' THEN 'BERAT'
@@ -118,34 +121,32 @@ class StudentController extends Controller
                             FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
                             WHERE ACADEMIC_YEAR_ID = " . $academic_year_id . " AND STUDENTS_ID = " . $id . "
                             GROUP BY KATEGORI, BULAN
-                            ORDER BY BULAN ASC");
-
-        $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH
-                                             FROM academic_years
-                                             WHERE id = " . $academic_year_id . " ")[0];                                           
+                            ORDER BY BULAN ASC");                                                                            
 
         // GRAFIK TAB ACHIEVEMENT
 
-        $type = DB::select("SELECT a.GRADE as TINGKAT
-                                FROM achievements a
-                                GROUP BY TINGKAT");
-        
+        $type = Achievement::select(DB::raw('GRADE AS TINGKAT'))
+                        ->groupBy('TINGKAT')
+                        ->get();
+
         $dataAchievement = DB::select("SELECT a.GRADE AS TINGKAT, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
                                        FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
                                        WHERE ACADEMIC_YEAR_ID = " . $academic_year_id ."  AND STUDENTS_ID = " . $id . "
                                        GROUP BY TINGKAT, BULAN
-                                       ORDER BY BULAN ASC");                
-                                        
-        // GRAFIK TAB ABSENT 
+                                       ORDER BY BULAN ASC");  
+          
         
-        $tipeAbsen = DB::select("SELECT TYPE AS TIPE
-                            FROM absents 
-                            GROUP BY TYPE");
+        // GRAFIK TAB ABSENT 
 
-        $dataAbsen = DB::select("SELECT a.TYPE AS TIPE, YEAR(a.START_DATE) AS TAHUN, COUNT(*) AS JUMLAH
-                                 FROM absents a
-                                 WHERE a.STUDENTS_ID = " . $id . "
-                                 GROUP BY TIPE, TAHUN");
+        $tipeAbsen = Absent::select(DB::raw('TYPE AS TIPE'))
+                        ->groupBy('TIPE')
+                        ->get();
+                        
+        $dataAbsen = Absent::select(DB::raw('TYPE AS TIPE'), 
+                                    DB::raw('START_DATE AS TAHUN'),
+                                    DB::raw('COUNT(*) AS JUMLAH'))
+                        ->where('STUDENTS_ID', $id)                                    
+                        ->groupBy('TIPE', 'TAHUN');
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
             return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
@@ -191,9 +192,10 @@ class StudentController extends Controller
                             GROUP BY KATEGORI, BULAN
                             ORDER BY BULAN ASC ");
 
-        $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH
-                            FROM academic_years
-                            WHERE id = " . $request->academicYearId . " ")[0]; 
+        $selected_tahun_ajaran = AcademicYear::select(DB::raw('MONTH(START_DATE) AS STARTMONTH'), 
+                                                      DB::raw('MONTH(END_DATE) AS ENDMONTH'))                                            
+                                        ->where('id', $request->academicYearId)
+                                        ->get()[0]; 
                             
         $data['category'] = $category;
         $data['dataViolation'] = $dataViolation;
@@ -203,21 +205,21 @@ class StudentController extends Controller
     }
 
     public function returnDataAchievementChart(Request $request)
-    {
+    {        
         $type = DB::select("SELECT a.GRADE as TINGKAT
                                 FROM achievements a
                                 GROUP BY TINGKAT");
         
         $dataAchievement = DB::select("SELECT a.GRADE AS TINGKAT, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                            FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
-                            WHERE ACADEMIC_YEAR_ID = " . $request->academicYearId ."  AND STUDENTS_ID = " . $request->studentId . "
-                            GROUP BY TINGKAT, BULAN
-                            ORDER BY BULAN ASC");    
-        
-        $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH
-                            FROM academic_years
-                            WHERE id = " . $request->academicYearId . " ")[0];
-        
+                                       FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
+                                       WHERE ACADEMIC_YEAR_ID = " . $request->academicYearId ."  AND STUDENTS_ID = " . $request->studentId . "
+                                       GROUP BY TINGKAT, BULAN
+                                       ORDER BY BULAN ASC");                  
+                
+        $selected_tahun_ajaran = AcademicYear::select(DB::raw('MONTH(START_DATE) AS STARTMONTH'), 
+                                                      DB::raw('MONTH(END_DATE) AS ENDMONTH'))                                            
+                                        ->where('id', $request->academicYearId)
+                                        ->get()[0]; 
         $data['type'] = $type;
         $data['dataAchievement'] = $dataAchievement;
         $data['selected_tahun_ajaran'] = $selected_tahun_ajaran;

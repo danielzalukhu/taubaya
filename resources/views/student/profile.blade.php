@@ -561,7 +561,7 @@
     })
 
     var types = {!!json_encode($type)!!}
-    var dataGraph = {!!json_encode($data)!!}
+    var dataGraph = {!!json_encode($dataAchievement)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
 
     chartAchievement(types, dataGraph, selectedTahunAjaran)
@@ -578,9 +578,9 @@
             var values = []
             for(var i=startMonth; i <= endMonth; i++){
                 values[i-startMonth] = 0
-                dataCategory.push('Bulan ' + i)
+                dataCategory.push('Bulan '+ i)
             }
-
+            
             dataGraph.forEach(function(obj){
                 if(obj.TINGKAT == item.TINGKAT){
                     values[obj.BULAN - startMonth] = obj.JUMLAH
