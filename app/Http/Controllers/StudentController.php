@@ -27,28 +27,25 @@ class StudentController extends Controller
     {       
         $kelas = Grade::all();
 
-        if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){        
+        $min_grade_id = Grade::select(DB::raw('MIN(id) as id'))->get()[0]->id;
+        
+        if($request->has('gradeId')){                
+            $grade_id = $request->gradeId;
+        }
+        else{
+            $grade_id = $min_grade_id;
+        }
+        
+        if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){                    
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
                                     ->first()->id;
             $siswa = Student::where('GRADES_ID', $kelas_guru)->get();
         }
         else{
-            if($request->has('gradeId')){                
-                $siswa = Student::where('GRADES_ID', $request->gradeId)->get();                
-            }
-            else{
-                $siswa = Student::where('GRADES_ID', 1)->get();
-            }
-            
+            $siswa = Student::where('GRADES_ID', $grade_id)->get();            
         }
         
-        return view('student.index', compact('kelas', 'siswa'));
-    }
-
-    public function ajaxShowStudentByGrade(Request $request)
-    {
-        $siswa = Student::where('GRADES_ID', $request->gradeId)->get();
-        return $siswa;
+        return view('student.index', compact('kelas', 'siswa', 'grade_id'));
     }
 
     /**
@@ -96,12 +93,12 @@ class StudentController extends Controller
         }
                 
         $achievement_point = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
-                                        ->select('POINT')
+                                        ->select(DB::raw('SUM(POINT) AS POINT'))
                                         ->where('achievement_records.STUDENTS_ID', $id)
                                         ->get();    
         
         foreach($achievement_point as $ap){
-            $total_achievement_point = $ap->POINT;
+            $total_achievement_point = $ap->POINT;        
         }
         
         $catatan_penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                                        
@@ -178,8 +175,7 @@ class StudentController extends Controller
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
                                                    'tipeAbsen', 'dataAbsen'));
-        else         
-            // dd($total_achievement_point);                                          
+        else                                               
             return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
                                                    'catatan_penghargaan', 'total_achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
@@ -285,10 +281,28 @@ class StudentController extends Controller
                 array_push($tmp_subject, $selected_mapel);
             }
         }
-        
-        $subject = $tmp_subject[0];
 
-        return view('student.mapel-guru', compact('subject'));
+        $kelas = Grade::all();
+        
+        $gname = Grade::select('NAME')
+                            ->where('id', Grade::select(DB::raw('MIN(id) as id'))->first()->id)
+                            ->get()[0]->NAME;
+        
+        $gid = Grade::select(DB::raw('MIN(id) as id'))->first()->id;
+        
+        if($request->has('gradeName')){                
+            $grade_name = $request->gradeName;
+        }
+        else{
+            $grade_name = $gname;
+        }
+        
+        if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
+            $subject = $tmp_subject[0];
+        elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+            $subject = Subject::where('CODE', 'LIKE', '%' . $grade_name  . '%')->get();
+        
+        return view('student.mapel-guru', compact('subject', 'kelas', 'grade_name', 'gid'));
     }
 }
 

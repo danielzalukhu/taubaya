@@ -122,39 +122,6 @@
 
 @section('footer')
 <script>
-    // $(document).ready(function(){
-        
-    //     fill_datatable();
-    
-    //     function fill_datatable(gradeId = ''){
-    //         var dataTable = $('#example1').DataTable({
-    //             processing: true,
-    //             serverSide: true,
-    //             ajax: {
-    //                 url: '{{ route("student.index") }}',
-    //                 type: "GET",
-    //                 data: { gradeId: gradeId }
-    //             }, 
-    //             columns: [
-    //                 {'data': 'id', 'name': 'id'},
-    //                 {'data': 'NISN', 'name': 'NISN'},
-    //                 {'data': 'FNAME', 'name': 'FNAME'},
-    //                 {'data': 'LNAME', 'name': 'LNAME'},
-    //                 {'data': 'GRADES_ID', 'name': 'GRADES_ID'},
-    //             ]
-    //         });
-    //     }
-        
-    //     $('#dropdown-daftar-kelas').change(function(){
-    //         var gradeId = $(this).val();
-    
-    //         if(gradeId != ''){
-    //             fill_datatable(gradeId);
-    //         }
-    //     })
-    
-    // })
-    
     $(function () {
         $('#example1').DataTable()
             $('#example2').DataTable({
@@ -166,53 +133,13 @@
             'autoWidth'   : false
             })
         })
-    
-    $('#dropdown-daftar-kelas').change(function(){
-        var gradeId = $(this).val();
-        window.location = "{{ route('student.index') }}"+"?grade="+gradeId;
-    })
-
-    $('#dropdown-daftar-kelas').change(function(){
-        var gradeId = $(this).val();
         
-        $.ajax({
-            url: '{{ route("student.selectStudentByGrade") }}',
-            type: 'get',
-            data: {gradeId: gradeId},
+    $('#dropdown-daftar-kelas').val({{$grade_id}});
 
-            success: function(result){
-                $('#list-student').empty()
-                
-                result.forEach(function(obj){
-                    $('#list-student').append(
-                        `
-                        <tr>
-                            <td>#</td>
-                            <td>${obj.NISN}</td>
-                            <td>${obj.FNAME} ${obj.LNAME}</td>
-                            <td>${obj.GRADES_ID}</td>
-                            <td>
-                                <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
-                                    <i class="fa fa-eye"></i>
-                                </a>                                
-                                <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form> 
-                            </td>
-                        </tr>
-
-                        `
-                    )
-                })
-            },
-            error: function(err){
-                console.log(err)
-            }
-        })
-    });        
+    $('#dropdown-daftar-kelas').change(function(){
+        var gradeId = $(this).val();
+        var route =  "{{ route('student.index') }}"  
+        window.location = route+"?gradeId="+gradeId;        
+    })     
 </script>
 @stop

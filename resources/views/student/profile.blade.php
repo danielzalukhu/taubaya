@@ -36,6 +36,10 @@
                         <a class="pull-right">{{$total_achievement_point}}</a>
                       </li>
                       <li class="list-group-item">
+                        <b>ABSENSI</b> 
+                        <a class="pull-right">%</a>
+                      </li>
+                      <!-- <li class="list-group-item">
                         <b>TOTAL POIN</b> 
                         <a class="pull-right">
                             @if($point_record > 75)
@@ -44,7 +48,7 @@
                                 {{$point_record}}
                             @endif
                         </a>
-                      </li>
+                      </li> -->
                     </ul>
                   </div>
               </div>

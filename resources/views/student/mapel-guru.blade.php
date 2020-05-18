@@ -20,6 +20,27 @@
                             <h3 class="box-title">MATA PELAJARAN-GURU</h3>
                         </div>
                         <div class="box">
+                            <div class="box-header">
+                                <div class="right">
+                                    @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+                                        <h5 class="box-header-title"><b>DAFTAR KELAS: </b>
+                                            <span>
+                                                <div class="btn-group">
+                                                    <select type="button" id="dropdown-daftar-kelas" class="btn btn-default dropdown-toggle">
+                                                        @foreach($kelas as $k)
+                                                            <option value='{{ $k->NAME }}' grade-id='{{$k->NAME}}'>
+                                                                {{ $k->NAME }}
+                                                            </option>                                                                        
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </span>        
+                                        </h5>
+                                    @elseif(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
+                                        <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modalTambahSiswa">INPUT DAFTAR SISWA</button>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="box-body">
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped">
@@ -80,5 +101,14 @@
             'autoWidth'   : false
             })
         })
+
+    // $('#dropdown-daftar-kelas').val({{ $gid }})
+
+    $('#dropdown-daftar-kelas').change(function(){
+        var gradeName = $(this).val();
+        // console.log(gradeName)
+        var route =  "{{ route('student.mapelguru') }}"  
+        window.location = route+"?gradeName="+gradeName;        
+    })  
 </script>
 @stop
