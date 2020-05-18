@@ -563,7 +563,7 @@
     var types = {!!json_encode($type)!!}
     var dataGraph = {!!json_encode($dataAchievement)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
-
+    
     chartAchievement(types, dataGraph, selectedTahunAjaran)
 
     function chartAchievement(types, dataGraph, selectedTahunAjaran){
@@ -592,6 +592,8 @@
                 data: values
             })
         })
+
+        // console.log(dataCategory)
         
         Highcharts.chart('chartAchievement', {
             chart: {

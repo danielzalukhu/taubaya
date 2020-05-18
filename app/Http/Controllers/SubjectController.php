@@ -323,8 +323,7 @@ class SubjectController extends Controller
         
         $tahun_ajaran = AcademicYear::all();
         
-        $academic_year_id = DB::select('SELECT max(id) as id
-                             FROM academic_years')[0]->id;        
+        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
         
         if(Auth::guard('web')->user()->ROLE === "STAFF")
             return view('student.detail-subject-guru', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
