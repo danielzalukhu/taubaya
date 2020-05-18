@@ -166,7 +166,12 @@
             'autoWidth'   : false
             })
         })
-   
+    
+    $('#dropdown-daftar-kelas').change(function(){
+        var gradeId = $(this).val();
+        window.location = "{{ route('student.index') }}"+"?grade="+gradeId;
+    })
+
     $('#dropdown-daftar-kelas').change(function(){
         var gradeId = $(this).val();
         

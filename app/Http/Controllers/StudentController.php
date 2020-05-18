@@ -33,21 +33,15 @@ class StudentController extends Controller
             $siswa = Student::where('GRADES_ID', $kelas_guru)->get();
         }
         else{
-            $siswa = Student::where('GRADES_ID', 1)->get();
-        }
-
-        // if(request()->ajax()){
-        //     if(!empty($request->gradeId)){
-        //         $data = Student::where('GRADES_ID', $request->gradeId)->get();
-        //     }
-        //     else{
-        //         $data = Student::where('GRADES_ID', 1)->get();
-        //     }
-
-        //     return datatables()->of($data)->make(true);
-        // }
-
+            if($request->has('gradeId')){                
+                $siswa = Student::where('GRADES_ID', $request->gradeId)->get();                
+            }
+            else{
+                $siswa = Student::where('GRADES_ID', 1)->get();
+            }
             
+        }
+        
         return view('student.index', compact('kelas', 'siswa'));
     }
 
