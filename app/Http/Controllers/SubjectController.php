@@ -313,21 +313,30 @@ class SubjectController extends Controller
         
         $siswa = Student::find($request->session()->get('session_student_id'));
 
+        $tahun_ajaran = AcademicYear::all();
+        
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+
         $detail_mapel = SubjectReport::where('SUBJECTS_ID', $mapel->id)->get();  
+        
+        if($request->has('academicYearId')){
+            $academic_year_id = $request->academicYearId;
+        }
+        else{
+            $academic_year_id = $maxId;
+        }
         
         $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                         ->select('subject_records.*', 'subject_reports.*')
                                         ->where('subject_reports.SUBJECTS_ID', $mapel->id)
+                                        ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                         ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
-                                        ->get();
-        
-        $tahun_ajaran = AcademicYear::all();
-        
-        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
-        
+                                        ->get();            
+
         if(Auth::guard('web')->user()->ROLE === "STAFF")
             return view('student.detail-subject-guru', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
         else
+            
             return view('student.detail-subject-ku', compact('mapel', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id'));
     }   
 
@@ -339,17 +348,6 @@ class SubjectController extends Controller
                                             ->where('subject_reports.SUBJECTS_ID', $request->subjectId)
                                             ->get();
         return $ajaxDetailPelajaran;
-    }
-
-    public function ajaxChangeSubjectDetailKu(Request $request)
-    {
-        $ajaxDetailPelajaranKu = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                        ->select('subject_reports.*')
-                                        ->where('subject_records.ACADEMIC_YEAR_ID', $request->academicYearId)
-                                        ->where('subject_reports.SUBJECTS_ID', $request->subjectId)
-                                        ->where('subject_records.STUDENTS_ID', $request->studentId)
-                                        ->get();
-        return $ajaxDetailPelajaranKu;                                        
     }
 }
  

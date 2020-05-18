@@ -156,29 +156,36 @@
             })
         })
 
-    var subjectId = '{{ $mapel->id }}'
     var studentId = '{{ $siswa->id }}'
-    
+    var subjectId = '{{ $mapel->id }}'
+
     $('#dropdown-detail-subject-academic-year').val({{$academic_year_id}})    
 
     $('#dropdown-detail-subject-academic-year').change(function(){
-        var academicYearId = $(this).val();
+        var academicYearId = $(this).val()   
+        var route =  "{{ route('subject.detail', ':id') }}"  
+        route = route.replace(':id', '{{ $mapel->id }}')
+        window.location = route+"?academicYearId="+academicYearId;        
+    })
 
-        $.ajax({
-            url: '{{ route("subject.ajaxSubjectDetailKu") }}',
-            type: 'get',
-            data: {academicYearId: academicYearId, subjectId: subjectId, studentId: studentId},
+    // $('#dropdown-detail-subject-academic-year').change(function(){
+    //     var academicYearId = $(this).val();
 
-            success: function(result){
-                $('#tbody-detail-subject').empty()               
-                console.log(result)
+    //     $.ajax({
+    //         url: '{{ route("subject.ajaxSubjectDetailKu") }}',
+    //         type: 'get',
+    //         data: {academicYearId: academicYearId, subjectId: subjectId, studentId: studentId},
+
+    //         success: function(result){
+    //             $('#tbody-detail-subject').empty()               
+    //             console.log(result)
                                
-            },
-            error: function(err){
-                console.log(err)
-            }
-        });
-    });
+    //         },
+    //         error: function(err){
+    //             console.log(err)
+    //         }
+    //     });
+    // });
     
     var category = {!!json_encode($tahun_ajaran)!!}
     var dataCategory = []

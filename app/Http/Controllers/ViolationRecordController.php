@@ -28,9 +28,8 @@ class ViolationRecordController extends Controller
         $karyawan = Staff::all();
         
         // UNTUK GRAFIK
-        $academic_year_id = 0;
-        $maxId = DB::select('SELECT max(id) as id
-                             FROM academic_years')[0]->id;        
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
+                               
         if($request->has('academicYearId')){
             $academic_year_id = $request->academicYearId;
         }

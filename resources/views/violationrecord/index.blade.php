@@ -214,9 +214,7 @@
         })
      
     $('#selector-dropdown-violationrecord-year').change(function(){
-        var academicYearId = $(this).val()
-        // console.log(academicYearId)
-
+        var academicYearId = $(this).val()        
         window.location = "{{ route('violationrecord.index') }}"+"?academicYearId="+academicYearId;
     })
     
