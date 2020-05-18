@@ -22,7 +22,23 @@
                         <div class="box">
                             <div class="box-header">
                                 <div class="right">
-                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modalTambahSiswa">INPUT DAFTAR SISWA</button>
+                                    @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+                                        <h5 class="box-header-title"><b>DAFTAR KELAS: </b>
+                                            <span>
+                                                <div class="btn-group">
+                                                    <select type="button" id="dropdown-daftar-kelas" class="btn btn-default dropdown-toggle">
+                                                        @foreach($kelas as $k)
+                                                            <option value='{{ $k->id }}' grade-id="{{$k->id}}">
+                                                                {{ $k->NAME }}
+                                                            </option>                                                                        
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </span>        
+                                        </h5>
+                                    @elseif(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
+                                        <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modalTambahSiswa">INPUT DAFTAR SISWA</button>
+                                    @endif
                                 </div>
                             </div>
                             <div class="box-body">
@@ -37,7 +53,7 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="list-student">
                                     @php $i=1 @endphp
                                     @foreach($siswa as $s)
                                         <tr>
@@ -45,29 +61,18 @@
                                             <td>{{ $s->NISN }}</a></td>
                                             <td>{{ $s->FNAME }}{{" "}}{{ $s->LNAME }}</td>
                                             <td>{{ $s->grade->NAME }}</td>
-                                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
-                                                <td>
-                                                    <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
-                                                    <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
-                                                        @method('delete')
-                                                        @csrf
-                                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form> 
-                                                </td>
-                                            @else
-                                                <td>
-                                                    <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>                                                                                               
-                                                </td>
-                                            @endif
+                                            <td>
+                                                <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form> 
+                                            </td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -117,6 +122,39 @@
 
 @section('footer')
 <script>
+    // $(document).ready(function(){
+        
+    //     fill_datatable();
+    
+    //     function fill_datatable(gradeId = ''){
+    //         var dataTable = $('#example1').DataTable({
+    //             processing: true,
+    //             serverSide: true,
+    //             ajax: {
+    //                 url: '{{ route("student.index") }}',
+    //                 type: "GET",
+    //                 data: { gradeId: gradeId }
+    //             }, 
+    //             columns: [
+    //                 {'data': 'id', 'name': 'id'},
+    //                 {'data': 'NISN', 'name': 'NISN'},
+    //                 {'data': 'FNAME', 'name': 'FNAME'},
+    //                 {'data': 'LNAME', 'name': 'LNAME'},
+    //                 {'data': 'GRADES_ID', 'name': 'GRADES_ID'},
+    //             ]
+    //         });
+    //     }
+        
+    //     $('#dropdown-daftar-kelas').change(function(){
+    //         var gradeId = $(this).val();
+    
+    //         if(gradeId != ''){
+    //             fill_datatable(gradeId);
+    //         }
+    //     })
+    
+    // })
+    
     $(function () {
         $('#example1').DataTable()
             $('#example2').DataTable({
@@ -128,5 +166,48 @@
             'autoWidth'   : false
             })
         })
+   
+    $('#dropdown-daftar-kelas').change(function(){
+        var gradeId = $(this).val();
+        
+        $.ajax({
+            url: '{{ route("student.selectStudentByGrade") }}',
+            type: 'get',
+            data: {gradeId: gradeId},
+
+            success: function(result){
+                $('#list-student').empty()
+                
+                result.forEach(function(obj){
+                    $('#list-student').append(
+                        `
+                        <tr>
+                            <td>#</td>
+                            <td>${obj.NISN}</td>
+                            <td>${obj.FNAME} ${obj.LNAME}</td>
+                            <td>${obj.GRADES_ID}</td>
+                            <td>
+                                <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
+                                    <i class="fa fa-eye"></i>
+                                </a>                                
+                                <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form> 
+                            </td>
+                        </tr>
+
+                        `
+                    )
+                })
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+    });        
 </script>
 @stop

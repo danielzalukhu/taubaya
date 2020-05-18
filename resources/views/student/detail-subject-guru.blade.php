@@ -170,8 +170,7 @@
 
             success: function(result){
                 $('#tbody-detail-subject').empty()               
-                var $tmp = <?php echo json_encode(result) ?>
-                console.log($tmp)
+                
 
                 result.forEach(function(obj){                                
                     var tugas = jQuery.parseJSON( obj.TUGAS );

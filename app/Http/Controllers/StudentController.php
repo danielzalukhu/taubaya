@@ -23,11 +23,38 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
+    {       
+        $kelas = Grade::all();
+
+        if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){        
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                    ->first()->id;
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();
+        }
+        else{
+            $siswa = Student::where('GRADES_ID', 1)->get();
+        }
+
+        // if(request()->ajax()){
+        //     if(!empty($request->gradeId)){
+        //         $data = Student::where('GRADES_ID', $request->gradeId)->get();
+        //     }
+        //     else{
+        //         $data = Student::where('GRADES_ID', 1)->get();
+        //     }
+
+        //     return datatables()->of($data)->make(true);
+        // }
+
+            
+        return view('student.index', compact('kelas', 'siswa'));
+    }
+
+    public function ajaxShowStudentByGrade(Request $request)
     {
-        $siswa = Student::all();
-                              
-        return view('student.index', compact('siswa'));
+        $siswa = Student::where('GRADES_ID', $request->gradeId)->get();
+        return $siswa;
     }
 
     /**
@@ -146,7 +173,10 @@ class StudentController extends Controller
                                     DB::raw('START_DATE AS TAHUN'),
                                     DB::raw('COUNT(*) AS JUMLAH'))
                         ->where('STUDENTS_ID', $id)                                    
-                        ->groupBy('TIPE', 'TAHUN');
+                        ->groupBy('TIPE', 'TAHUN')
+                        ->get();
+
+        // RETURN VIEW 
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
             return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
@@ -154,7 +184,8 @@ class StudentController extends Controller
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
                                                    'tipeAbsen', 'dataAbsen'));
-        else                                                   
+        else         
+            // dd($total_achievement_point);                                          
             return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
                                                    'catatan_penghargaan', 'total_achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
