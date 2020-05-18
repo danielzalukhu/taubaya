@@ -317,14 +317,18 @@ class SubjectController extends Controller
         
         $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
-        $detail_mapel = SubjectReport::where('SUBJECTS_ID', $mapel->id)->get();  
-        
         if($request->has('academicYearId')){
             $academic_year_id = $request->academicYearId;
         }
         else{
             $academic_year_id = $maxId;
         }
+
+        $detail_mapel = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                    ->select('subject_reports.*')
+                                    ->where('subject_records.ACADEMIC_YEAR_ID', $request->academicYearId)
+                                    ->where('subject_reports.SUBJECTS_ID', $mapel->id)
+                                    ->get();
         
         $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                         ->select('subject_records.*', 'subject_reports.*')
@@ -339,16 +343,6 @@ class SubjectController extends Controller
             
             return view('student.detail-subject-ku', compact('mapel', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id'));
     }   
-
-    public function ajaxChangeSubjectDetail(Request $request)
-    {
-        $ajaxDetailPelajaran = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                            ->select('subject_reports.*')
-                                            ->where('subject_records.ACADEMIC_YEAR_ID', $request->academicYearId)
-                                            ->where('subject_reports.SUBJECTS_ID', $request->subjectId)
-                                            ->get();
-        return $ajaxDetailPelajaran;
-    }
 }
  
 

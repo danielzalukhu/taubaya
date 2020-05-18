@@ -172,7 +172,7 @@
     //     var academicYearId = $(this).val();
 
     //     $.ajax({
-    //         url: '{{ route("subject.ajaxSubjectDetailKu") }}',
+    //         url: '',
     //         type: 'get',
     //         data: {academicYearId: academicYearId, subjectId: subjectId, studentId: studentId},
 
