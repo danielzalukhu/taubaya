@@ -190,55 +190,19 @@
         window.location = route+"?academicYearId="+academicYearId;        
     })
 
-    // $('#dropdown-detail-subject-academic-year').change(function(){
-    //     var academicYearId = $(this).val();        
-    
-    //     $.ajax({
-    //         url: '',
-    //         type: 'get',
-    //         data: {academicYearId: academicYearId, subjectId: subjectId},
-
-    //         success: function(result){
-    //             $('#tbody-detail-subject').empty()               
-                
-
-    //             result.forEach(function(obj){                                
-    //                 var tugas = jQuery.parseJSON( obj.TUGAS );
-    //                 var ph = jQuery.parseJSON( obj.PH );
-    //                 var pts = jQuery.parseJSON( obj.PTS );
-    //                 var pas = jQuery.parseJSON( obj.PAS );
-
-    //                 $('#tbody-detail-subject').append(
-    //                     `
-    //                     <tr>
-    //                         <td>${obj.FINAL_SCORE}</td>
-    //                     </tr>
-
-    //                     `
-    //                 )
-    //             });
-                
-    //         },
-    //         error: function(err){
-    //             console.log(err)
-    //         }
-    //     });
-    // });
-
-
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {
             type: 'line'
         },
         title: {
-            text: 'Statistik Nilai Akhir Per Semester'
+            text: 'Statistik Nilai Akhir Kelas Per Semester'
         },
         xAxis: { 
             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         },
         yAxis: {
             title: {
-                text: 'Nilai Akhir'
+                text: 'Nilai'
             }
         },
         plotOptions: {
@@ -250,14 +214,14 @@
             }
         },
         series: [{
-            name: 'Nilai',
-            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 90, 18.3, 13.9, 9.6]
+            name: 'Nilai Akhir',
+            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5]
         }, {
             name: 'KKM',
-            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6]
         },{
             name: 'Nilai Rata-Rata Kelas',
-            data: [5, 6, 7, 8, 10, 7, 5, 5, 6, 10.5, 9.1, 7.3]
+            data: [5, 6, 7, 8, 10, 7, 5, 5]
         }]
     });
 

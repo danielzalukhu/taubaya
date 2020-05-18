@@ -168,33 +168,25 @@
         window.location = route+"?academicYearId="+academicYearId;        
     })
 
-    // $('#dropdown-detail-subject-academic-year').change(function(){
-    //     var academicYearId = $(this).val();
-
-    //     $.ajax({
-    //         url: '',
-    //         type: 'get',
-    //         data: {academicYearId: academicYearId, subjectId: subjectId, studentId: studentId},
-
-    //         success: function(result){
-    //             $('#tbody-detail-subject').empty()               
-    //             console.log(result)
-                               
-    //         },
-    //         error: function(err){
-    //             console.log(err)
-    //         }
-    //     });
-    // });
-    
     var category = {!!json_encode($tahun_ajaran)!!}
+    var kkm = {!! json_encode($kkm) !!}
+    var finalScore = {!! json_encode($detail_mapel_ku) !!}
+
     var dataCategory = []
+    var series1 = []
+    var series2 = []
+    var series3 = []
+
     category.forEach(function(item){
         var catName = item.NAME
         dataCategory.push(catName)
+        
+        kkm.forEach(function(item){
+            var tmp_kkm = item.MINIMALPOIN
+            series2.push(tmp_kkm)
+        })        
+
     })
-    // console.log(dataCategory)
-    
 
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {
@@ -208,7 +200,7 @@
         },
         yAxis: {
             title: {
-                text: 'Nilai Akhir'
+                text: 'Nilai'
             }
         },
         plotOptions: {
@@ -220,14 +212,14 @@
             }
         },
         series: [{
-            name: 'Nilai',
-            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 90, 18.3, 13.9, 9.6]
+            name: 'Nilai Akhir',
+            data: [75.0, 85, 90.5, 66, 72, 88, 67, 80]
         }, {
             name: 'KKM',
-            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            data: series2
         },{
             name: 'Nilai Rata-Rata Kelas',
-            data: [5, 6, 7, 8, 10, 7, 5, 5, 6, 10.5, 9.1, 7.3]
+            data: [75.6, 82, 82, 74, 67.67, 77, 70, 70.8]
         }]
     });
 
