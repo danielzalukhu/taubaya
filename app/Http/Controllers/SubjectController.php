@@ -339,6 +339,10 @@ class SubjectController extends Controller
 
         $tahun_ajaran = AcademicYear::all();
 
+        $ta_start_end = AcademicYear::select(DB::raw('MIN(id) AS START'), 
+                                             DB::raw('MAX(id) AS END'))                                            
+                                    ->get()[0]; 
+
         $kkm = Subject::select('MINIMALPOIN')->where('id', $mapel->id)->get();
 
         $nilai_rata_kelas = 0;
@@ -350,7 +354,7 @@ class SubjectController extends Controller
             return view('student.detail-subject-guru', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
         else
             
-            return view('student.detail-subject-ku', compact('mapel', 'kkm', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id'));
+            return view('student.detail-subject-ku', compact('mapel', 'kkm', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'ta_start_end', 'academic_year_id'));
     }   
 }
  

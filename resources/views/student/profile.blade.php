@@ -508,7 +508,6 @@
         })
 
 
-
         Highcharts.chart('chartViolation', {
             chart: {
                 type: 'column'
@@ -597,7 +596,7 @@
             })
         })
 
-        // console.log(dataCategory)
+        console.log(dataSeries)
         
         Highcharts.chart('chartAchievement', {
             chart: {

@@ -168,26 +168,44 @@
         window.location = route+"?academicYearId="+academicYearId;        
     })
 
-    var category = {!!json_encode($tahun_ajaran)!!}
+    var categories = {!! json_encode($tahun_ajaran) !!}    
     var kkm = {!! json_encode($kkm) !!}
     var finalScore = {!! json_encode($detail_mapel_ku) !!}
-
-    var dataCategory = []
+    
+    var category = []
     var series1 = []
     var series2 = []
     var series3 = []
 
-    category.forEach(function(item){
-        var catName = item.NAME
-        dataCategory.push(catName)
+    categories.forEach(function(item){
+        var catName = item.TYPE + " " + item.NAME        
+        category.push(catName)
         
-        kkm.forEach(function(item){
-            var tmp_kkm = item.MINIMALPOIN
+        var c = {!! json_encode($ta_start_end) !!}
+        var s = c.START
+        var e = c.END
+        var values = []
+
+        for(var i=s; i <= e; i++){
+            values[i-s] = 0
+            finalScore.forEach(function(obj_score){
+                if(obj_score.ACADEMIC_YEAR_ID == item.id){
+                    values[obj_score.ACADEMIC_YEAR_ID - s] = obj_score.FINAL_SCORE                    
+                }
+            })
+
+        }
+        
+        series1.push(values);
+
+        kkm.forEach(function(obj_kkm){
+            var tmp_kkm = obj_kkm.MINIMALPOIN
             series2.push(tmp_kkm)
         })        
+    })    
 
-    })
-
+    console.log(series1)
+    
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {
             type: 'line'
@@ -196,7 +214,7 @@
             text: 'Statistik Nilai Akhir Per Semester'
         },
         xAxis: { 
-            categories: dataCategory
+            categories: category
         },
         yAxis: {
             title: {
@@ -208,12 +226,15 @@
                 dataLabels: {
                     enabled: true
                 },
-                enableMouseTracking: false
+                enableMouseTracking: true
             }
+        },
+        credits: {
+            enabled: false
         },
         series: [{
             name: 'Nilai Akhir',
-            data: [75.0, 85, 90.5, 66, 72, 88, 67, 80]
+            data: series1
         }, {
             name: 'KKM',
             data: series2
