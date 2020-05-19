@@ -234,13 +234,5 @@ class UserSeeder extends Seeder
             'ROLE' => 'STUDENT',
             'STUDENTS_ID' => '5'
         ]);
-
-        DB::table('users')->insert([
-            'NAME' => 'Alfredo Agustino Auritus Thelan',
-            'EMAIL' => 'alfredo@student.ac.id',
-            'PASSWORD' => Hash::make('alfredo'),
-            'ROLE' => 'STUDENT',
-            'STUDENTS_ID' => '6'
-        ]);
     }
 }
