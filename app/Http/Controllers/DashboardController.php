@@ -7,6 +7,7 @@ use Auth;
 use App\Student;
 use App\AchievementRecord;
 use App\ViolationRecord;
+use App\Grade;
 use Session;
 use DB;
 
@@ -31,36 +32,42 @@ class DashboardController extends Controller
         else{
             $request->session()->put('session_student_class', Auth::user()->student->grade->NAME);
             $request->session()->put('session_student_id', Auth::user()->student->id);
-        }
-        // dd($request->session()->get('session_user_id'));
+        }        
         
         //END GLOBAL SESSION 
-
-        $jumlah_siswa = $this->countStudent()->siswa;
-        $jumlah_penghargaan = $this->countAchievement()->penghargaan;
-        $jumlah_pelanggaran = $this->countViolation()->pelanggaran;
-        $siswa_bermasalah = $this->getTroubleStudent()->siswa;
+                
+        $jumlah_siswa = $this->countStudent($request->session()->get('session_user_id'));
+        $jumlah_penghargaan = $this->countAchievement();
+        $jumlah_pelanggaran = $this->countViolation();
+        $siswa_bermasalah = $this->getTroubleStudent();
         
-
+        // dd($kelas_guru);
         return view('dashboard.index', compact('tahun_ajaran', 'jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
     }
 
-    public function countStudent()
+    public function countStudent($user_id)
     {
-        $siswa = Student::all()->count();
-        return view('dashboard.index', compact('siswa'));
+        if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){  
+            $kelas_guru = Grade::where('STAFFS_ID', $user_id)
+                                    ->first()->id; 
+            $siswa = Student::select(DB::raw('COUNT(*) AS BANYAKSISWA'))->where('GRADES_ID', $kelas_guru)->first()->BANYAKSISWA;                
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER"){
+            $siswa = Student::all()->count();               
+        }
+        return $siswa;
     }
 
     public function countAchievement()
     {
-        $penghargaan = AchievementRecord::all()->count();
-        return view('dashboard.index', compact('penghargaan'));
+        $penghargaan = AchievementRecord::all()->count();   
+        return $penghargaan;
     }
 
     public function countViolation()
     {
         $pelanggaran = ViolationRecord::all()->count();
-        return view('dashboard.index', compact('pelanggaran'));
+        return $pelanggaran;
     }
 
     public function getTroubleStudent()
@@ -73,7 +80,7 @@ class DashboardController extends Controller
                             ->having('TOTALPOIN', ">=", 50 )
                             ->get();                             
 
-        return view('dashboard.index', compact('siswa'));
+        return $siswa;
     }
 }
 

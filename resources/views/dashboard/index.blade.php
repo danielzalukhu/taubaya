@@ -28,6 +28,7 @@
 
         <section class="content">
             <div class="row">
+                @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
                 <div class="col-lg-3 col-xs-6">
                   <div class="small-box bg-blue">
                     <div class="inner">
@@ -40,6 +41,33 @@
                     <a href="{{route('student.index')}}" class="small-box-footer">Daftar Siswa.. <i class="fa fa-arrow-circle-right"></i></a>
                   </div>
                 </div>
+                @elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+                <div class="col-lg-3 col-xs-6">
+                  <div class="small-box bg-blue">
+                    <div class="inner">
+                      <h3>{{$jumlah_siswa}}</h3>
+                      <p>SISWA</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-users"></i>
+                    </div>
+                    <a href="{{route('student.index')}}" class="small-box-footer">Daftar Siswa.. <i class="fa fa-arrow-circle-right"></i></a>
+                  </div>
+                </div>
+                @else
+                <div class="col-lg-3 col-xs-6">
+                  <div class="small-box bg-blue">
+                    <div class="inner">
+                      <h3>PROFIL</h3>
+                      <p>KU</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-users"></i>
+                    </div>
+                    <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">Lihat yuk.. <i class="fa fa-arrow-circle-right"></i></a>
+                  </div>
+                </div>
+                @endif
 
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-green">
