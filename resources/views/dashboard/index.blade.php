@@ -28,20 +28,7 @@
 
         <section class="content">
             <div class="row">
-                @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
-                <div class="col-lg-3 col-xs-6">
-                  <div class="small-box bg-blue">
-                    <div class="inner">
-                      <h3>{{$jumlah_siswa}}</h3>
-                      <p>SISWA</p>
-                    </div>
-                    <div class="icon">
-                      <i class="fa fa-users"></i>
-                    </div>
-                    <a href="{{route('student.index')}}" class="small-box-footer">Daftar Siswa.. <i class="fa fa-arrow-circle-right"></i></a>
-                  </div>
-                </div>
-                @elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+                @if(Auth::guard('web')->user()->ROLE === "STAFF")
                 <div class="col-lg-3 col-xs-6">
                   <div class="small-box bg-blue">
                     <div class="inner">

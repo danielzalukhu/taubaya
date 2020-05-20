@@ -35,14 +35,21 @@ class DashboardController extends Controller
         }        
         
         //END GLOBAL SESSION 
-                
-        $jumlah_siswa = $this->countStudent($request->session()->get('session_user_id'));
-        $jumlah_penghargaan = $this->countAchievement();
+                        
         $jumlah_pelanggaran = $this->countViolation();
         $siswa_bermasalah = $this->getTroubleStudent();
-        
-        // dd($kelas_guru);
-        return view('dashboard.index', compact('tahun_ajaran', 'jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
+
+        if(Auth::guard('web')->user()->ROLE === "STAFF"){
+            $jumlah_siswa = $this->countStudent($request->session()->get('session_user_id'));
+            $jumlah_penghargaan = $this->countAchievement($request->session()->get('session_user_id'));
+
+            return view('dashboard.index', compact('tahun_ajaran', 'jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
+        }
+        elseif(Auth::guard('web')->user()->ROLE === "STUDENT"){
+            $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_student_id'));
+            
+            return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
+        }            
     }
 
     public function countStudent($user_id)
@@ -55,12 +62,35 @@ class DashboardController extends Controller
         elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER"){
             $siswa = Student::all()->count();               
         }
+
         return $siswa;
     }
 
-    public function countAchievement()
+    public function countAchievement($user_id)
     {
-        $penghargaan = AchievementRecord::all()->count();   
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
+            $kelas_guru = Grade::where('STAFFS_ID', $user_id)
+                                    ->first()->id; 
+
+            $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                        ->select(DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'))
+                                        ->where('students.GRADES_ID', $kelas_guru)
+                                        ->first()->BANYAKPENGHARGAAN;
+        }
+        elseif(Auth::guard('web')->user()->ROLE == "HEADMASTER"){
+            $penghargaan = AchievementRecord::all()->count();
+        }
+        
+        return $penghargaan;
+    }
+
+    public function countAchievementKu($student_id)
+    {
+        $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                    ->select(DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'))
+                                    ->where('students.id', $student_id)
+                                    ->first()->BANYAKPENGHARGAAN;
+
         return $penghargaan;
     }
 

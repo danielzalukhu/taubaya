@@ -9,6 +9,7 @@ use Auth;
 class Staff extends Model
 {
     protected $table = 'staffs';
+    protected $fillable = ['NIK', 'NAME', 'ROLE', 'created_at', 'updated_at'];
 
     public function violationrecord()
     {
