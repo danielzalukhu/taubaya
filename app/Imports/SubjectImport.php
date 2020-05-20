@@ -78,9 +78,10 @@ class SubjectImport implements ToCollection
                             'STUDENTS_ID' => $id_siswa,
                             'ACTIVITIES_ID' => $id_aktivitas,
                             'SUBJECTS_ID' => $id_mapel,
+                            'ACADEMIC_YEAR_ID' => $this->request->session()->get("session_academic_year_id"),
                             'SCORE' => $nilai,                     
                         ]);
-
+                        
                         ActivityKD::create([
                             'KD_ID' => $id_kd,
                             'ACTIVITIES_ID' => $id_aktivitas,
@@ -94,19 +95,20 @@ class SubjectImport implements ToCollection
     }
 
     public function formula($mapel_id)
-    {
+    {                    
         $tmp_nilai = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
-                                    ->select('students.*', 'activities_students.*')
-                                    ->where('activities_students.SUBJECTS_ID', $mapel_id)
-                                    ->get();
-        // dd($tmp_nilai);
+                                ->select('students.*', 'activities_students.*')
+                                ->where('activities_students.SUBJECTS_ID', $mapel_id)
+                                ->where('activities_students.ACADEMIC_YEAR_ID', $this->request->session()->get("session_academic_year_id"))
+                                ->get();  
         
         $arrayOfStudent = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
                                 ->select('students.*', 'activities_students.*')
                                 ->where('activities_students.SUBJECTS_ID', $mapel_id)
+                                ->where('activities_students.ACADEMIC_YEAR_ID', $this->request->session()->get("session_academic_year_id"))
                                 ->groupBy('activities_students.STUDENTS_ID')
-                                ->get();                                     
-
+                                ->get();        
+              
         foreach ($arrayOfStudent as $student) 
         {
             $tmp_nama = $student->FNAME ." ". $student->LNAME;
@@ -201,6 +203,7 @@ class SubjectImport implements ToCollection
             // $a = array($avarage_tugas, $avarage_ph, $avarage_pts, $avarage_pas, $total_score_student);
             // dd($a);
             // dd($student->SUBJECTS_ID);
+
             $subject_report = SubjectReport::create([
                 'SUBJECTS_ID' => $student->SUBJECTS_ID,
                 'SUBJECT_RECORD_ID' => $subject_record->id,

@@ -33,7 +33,7 @@ class DashboardController extends Controller
             $request->session()->put('session_student_id', Auth::user()->student->id);
         }
         // dd($request->session()->get('session_user_id'));
-
+        
         //END GLOBAL SESSION 
 
         $jumlah_siswa = $this->countStudent()->siswa;

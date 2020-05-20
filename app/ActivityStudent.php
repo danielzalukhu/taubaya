@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityStudent extends Model
 {
     protected $table = 'activities_students';
-    protected $fillable = ['STUDENTS_ID', 'ACTIVITIES_ID', 'SUBJECTS_ID', 'SCORE'];
+    protected $fillable = ['STUDENTS_ID', 'ACTIVITIES_ID', 'SUBJECTS_ID', 'ACADEMIC_YEAR_ID', 'SCORE'];
     
     public function activity()
     {
@@ -22,5 +22,10 @@ class ActivityStudent extends Model
     public function subject()
     {
         return $this->belongsTo('App\Subject', 'SUBJECTS_ID');
+    }
+
+    public function academicyear()
+    {
+        return $this->belongsTo('App\AcademicYear', 'ACADEMIC_YEAR_ID');
     }
 }

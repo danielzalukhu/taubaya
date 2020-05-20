@@ -33,4 +33,9 @@ class AcademicYear extends Model
     {
         return $this->hasMany('App\SubjectRecord');
     }
+
+    public function activitystudent()
+    {
+        return $this->hasMany('App\ActivityStudent');
+    }
 }
