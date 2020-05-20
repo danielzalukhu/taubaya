@@ -213,6 +213,9 @@
                 enableMouseTracking: false
             }
         },
+        credits: {
+            enabled: false
+        },
         series: [{
             name: 'Nilai Akhir',
             data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5]

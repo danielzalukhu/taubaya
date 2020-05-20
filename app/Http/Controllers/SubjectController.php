@@ -12,6 +12,7 @@ use App\AcademicYear;
 use App\ActivityStudent;
 use App\SubjectReport;
 use App\SubjectRecord;
+use App\Grade;
 use DB;
 use Carbon\Carbon;
 use Auth;
@@ -335,26 +336,33 @@ class SubjectController extends Controller
                                         ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
                                         ->get();            
 
-        // DATA GRAFIK
+        // DATA GRAFIK HALAMAN detail-subject-ku
 
         $tahun_ajaran = AcademicYear::all();
 
-        $ta_start_end = AcademicYear::select(DB::raw('MIN(id) AS START'), 
-                                             DB::raw('MAX(id) AS END'))                                            
-                                    ->get()[0]; 
-
         $kkm = Subject::select('MINIMALPOIN')->where('id', $mapel->id)->get();
 
-        $nilai_rata_kelas = 0;
+        $x = explode("-", $mapel->CODE, 3);
+        $y = $x[0] . "-" . $x[1];
+        
+        $sub_query = Grade::select('id')->where('NAME', 'LIKE', '%'.$y.'%')->get()[0]->id;
 
+        $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                ->select(DB::raw('SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID) AS RATAKELAS'))
+                                ->where('students.GRADES_ID', '=', $sub_query)
+                                ->where('subject_reports.SUBJECTS_ID', $mapel->id)
+                                ->get();
 
         // RETURN VIEW 
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
             return view('student.detail-subject-guru', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
         else
-            
-            return view('student.detail-subject-ku', compact('mapel', 'kkm', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'ta_start_end', 'academic_year_id'));
+            // dd($rata_kelas);
+            return view('student.detail-subject-ku', 
+                   compact('mapel', 'kkm', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id',
+                           'rata_kelas'));
     }   
 }
  

@@ -171,7 +171,10 @@
     var categories = {!! json_encode($tahun_ajaran) !!}    
     var kkm = {!! json_encode($kkm) !!}
     var finalScore = {!! json_encode($detail_mapel_ku) !!}
+    var averageScorePerClass = {!! json_encode($rata_kelas) !!}
     
+    console.log(averageScorePerClass)
+
     var category = []
     var series1 = []
     var series2 = []
@@ -181,30 +184,28 @@
         var catName = item.TYPE + " " + item.NAME        
         category.push(catName)
         
-        var c = {!! json_encode($ta_start_end) !!}
-        var s = c.START
-        var e = c.END
-        var values = []
-
-        for(var i=s; i <= e; i++){
-            values[i-s] = 0
-            finalScore.forEach(function(obj_score){
-                if(obj_score.ACADEMIC_YEAR_ID == item.id){
-                    values[obj_score.ACADEMIC_YEAR_ID - s] = obj_score.FINAL_SCORE                    
-                }
-            })
-
-        }
-        
+        var values = 0;
+    
+        finalScore.forEach(function(obj_score){
+            if(obj_score.ACADEMIC_YEAR_ID == item.id){
+                values = obj_score.FINAL_SCORE                    
+            }
+        })
+    
         series1.push(values);
 
         kkm.forEach(function(obj_kkm){
             var tmp_kkm = obj_kkm.MINIMALPOIN
             series2.push(tmp_kkm)
-        })        
+        })       
+        
+        averageScorePerClass.forEach(function(obj_rata){
+            var tmp_rata = obj_rata.RATAKELAS
+            series3.push(tmp_rata)
+        })
     })    
 
-    console.log(series1)
+    console.log(series3)
     
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {
@@ -240,7 +241,7 @@
             data: series2
         },{
             name: 'Nilai Rata-Rata Kelas',
-            data: [75.6, 82, 82, 74, 67.67, 77, 70, 70.8]
+            data: series3
         }]
     });
 
