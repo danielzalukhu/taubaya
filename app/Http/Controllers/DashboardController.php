@@ -26,13 +26,13 @@ class DashboardController extends Controller
         $request->session()->put('session_end_ay', $tahun_ajaran[0]->END_DATE);
         
         if(Auth::guard('web')->user()->ROLE === "STAFF"){
-            $request->session()->put('session_user_id', Auth::user()->id);
+            $request->session()->put('session_user_id', Auth::user()->staff->id);
         }
         else{
             $request->session()->put('session_student_class', Auth::user()->student->grade->NAME);
             $request->session()->put('session_student_id', Auth::user()->student->id);
         }
-        // dd($request->session()->get('session_student_id'));
+        // dd($request->session()->get('session_user_id'));
 
         //END GLOBAL SESSION 
 
