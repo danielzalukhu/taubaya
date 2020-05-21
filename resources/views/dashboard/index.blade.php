@@ -49,13 +49,15 @@
                       <p>KU</p>
                     </div>
                     <div class="icon">
-                      <i class="fa fa-users"></i>
-                    </div>
-                    <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">Lihat yuk.. <i class="fa fa-arrow-circle-right"></i></a>
+                      <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">
+                        <i class="fa fa-users"></i>
+                      </a>
+                    </div>                    
                   </div>
                 </div>
                 @endif
 
+                @if(Auth::guard('web')->user()->ROLE === "STAFF")
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-green">
                       <div class="inner">
@@ -68,7 +70,23 @@
                       <a href="{{route('achievementrecord.index')}}" class="small-box-footer">Daftar Penghargaan..<i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                @else
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-green">
+                      <div class="inner">
+                        <h3>{{$jumlah_penghargaan}}</h3>
+                        <p>PENGHARGAAN</p>
+                      </div>      
+                      <div class="icon">
+                        <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">
+                          <i class="ion ion-trophy"></i>
+                        </a>
+                      </div>      
+                    </div>
+                </div>
+                @endif
 
+                @if(Auth::guard('web')->user()->ROLE === "STAFF")
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-yellow">
                       <div class="inner">
@@ -81,7 +99,23 @@
                       <a href="{{route('violationrecord.index')}}" class="small-box-footer">Daftar Pelanggaran.. <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                @else
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-yellow">
+                      <div class="inner">
+                        <h3>{{$jumlah_pelanggaran}}</h3>
+                        <p>PELANGGARAN</p>
+                      </div>         
+                      <div class="icon">
+                        <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">
+                          <i class="ion ion-person-add"></i>
+                        </a>
+                      </div>                                      
+                    </div>
+                </div>
+                @endif
                 
+                @if(Auth::guard('web')->user()->ROLE === "STAFF")
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-red">
                       <div class="inner">
@@ -94,10 +128,27 @@
                       <a href="{{route('absent.index')}}" class="small-box-footer">Daftar Absensi..<i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                @else
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-red">
+                      <div class="inner">
+                        <h3>{{date("D")}}<sup style="font-size: 20px"></sup></h3>
+                        <p>{{date("d-m-Y")}}</p>
+                      </div>
+                      <div class="icon">
+                        <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">
+                          <i class="ion ion-pie-graph"></i>
+                        </a>
+                      </div>
+                    </div>
+                </div>
+                @endif
+
             </div>
 
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
             <div class="row"> 
-              <div class="col-lg-6"> 
+              <div class="col-lg-12"> 
                 <div class="box box-warning">
                   <div class="box-header with-border">
                       <h3 class="box-title">Daftar Siswa Bermasalah</h3>
@@ -149,10 +200,9 @@
                     <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-default btn-flat pull-right">Lihat Daftar Pelanggaran</a>
                   </div>
               </div>
-              <div class="col-lg-4">
-
-              </div>
             </div>
+            @endif
+            
         </section>
     </div>
 </div>
