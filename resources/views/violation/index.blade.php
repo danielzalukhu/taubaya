@@ -20,9 +20,11 @@
                         </div>
                         <div class="box">
                             <div class="box-header">
+                                @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")
                                 <div class="right">
                                     <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">BUAT DAFTAR PELANGGARAN</button>
                                 </div>
+                                @endif
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">

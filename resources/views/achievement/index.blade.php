@@ -17,8 +17,15 @@
                     <div class="col-xs-12">
                         <div class="panel-heading">
                             <h3 class="box-title">DAFTAR PENGHARGAAN</h3>            
-                        </div>
+                        </div>                        
                         <div class="box">
+                            <div class="box-header">
+                                @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")
+                                <div class="right">
+                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">BUAT DAFTAR PENGHARGAAN</button>
+                                </div>
+                                @endif
+                            </div>
                             <div class="box-body">
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped">
@@ -86,6 +93,19 @@
                             </select>
                             @if($errors->has('a_type'))
                                 <span class="help-block">{{$errors->first('a_type')}}</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group{{ $errors->has('a_grade') ? 'has-error' : '' }} ">
+                            <label>Tingkat</label>
+                            <select name="a_grade" class="form-control" id="inputGroupSelect01">
+                                <option value="Nasional">NASIONAL</option>
+                                <option value="Propinsi">PROPINSI</option>
+                                <option value="Kota">KOTA</option>
+                                <option value="Sekolah">SEKOLAH</option>
+                            </select>
+                            @if($errors->has('a_grade'))
+                                <span class="help-block">{{$errors->first('a_grade')}}</span>
                             @endif
                         </div>
 
