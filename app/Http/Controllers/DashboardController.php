@@ -36,17 +36,18 @@ class DashboardController extends Controller
         
         //END GLOBAL SESSION 
                         
-        $jumlah_pelanggaran = $this->countViolation();
         $siswa_bermasalah = $this->getTroubleStudent();
 
         if(Auth::guard('web')->user()->ROLE === "STAFF"){
             $jumlah_siswa = $this->countStudent($request->session()->get('session_user_id'));
             $jumlah_penghargaan = $this->countAchievement($request->session()->get('session_user_id'));
+            $jumlah_pelanggaran = $this->countViolation($request->session()->get('session_user_id'));
 
             return view('dashboard.index', compact('tahun_ajaran', 'jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
         }
         elseif(Auth::guard('web')->user()->ROLE === "STUDENT"){
             $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_student_id'));
+            $jumlah_pelanggaran = $this->countViolationKu($request->session()->get('session_student_id'));
             
             return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah'));
         }            
@@ -60,6 +61,9 @@ class DashboardController extends Controller
             $siswa = Student::select(DB::raw('COUNT(*) AS BANYAKSISWA'))->where('GRADES_ID', $kelas_guru)->first()->BANYAKSISWA;                
         }
         elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER"){
+            $siswa = Student::all()->count();               
+        }
+        else{
             $siswa = Student::all()->count();               
         }
 
@@ -77,7 +81,10 @@ class DashboardController extends Controller
                                         ->where('students.GRADES_ID', $kelas_guru)
                                         ->first()->BANYAKPENGHARGAAN;
         }
-        elseif(Auth::guard('web')->user()->ROLE == "HEADMASTER"){
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $penghargaan = AchievementRecord::all()->count();
+        }
+        else{
             $penghargaan = AchievementRecord::all()->count();
         }
         
@@ -94,10 +101,35 @@ class DashboardController extends Controller
         return $penghargaan;
     }
 
-    public function countViolation()
-    {
-        $pelanggaran = ViolationRecord::all()->count();
+    public function countViolation($user_id)
+    {        
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
+            $kelas_guru = Grade::where('STAFFS_ID', $user_id)
+                                    ->first()->id; 
+
+            $pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                        ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
+                                        ->where('students.GRADES_ID', $kelas_guru)
+                                        ->first()->BANYAKPELANGGARAN;
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $pelanggaran = ViolationRecord::all()->count();
+        }
+        else{
+            $pelanggaran = ViolationRecord::all()->count();
+        }
+        
         return $pelanggaran;
+    }
+
+    public function countViolationKu($student_id)
+    {
+        $pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                        ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
+                                        ->where('students.id', $student_id)
+                                        ->first()->BANYAKPELANGGARAN;
+
+        return $pelanggaran;                                            
     }
 
     public function getTroubleStudent()

@@ -65,7 +65,7 @@
                       <div class="icon">
                         <i class="ion ion-trophy"></i>
                       </div>
-                      <a href="{{route('achievement.index')}}" class="small-box-footer">Daftar Penghargaan..<i class="fa fa-arrow-circle-right"></i></a>
+                      <a href="{{route('achievementrecord.index')}}" class="small-box-footer">Daftar Penghargaan..<i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 

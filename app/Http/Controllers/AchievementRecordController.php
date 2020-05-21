@@ -8,7 +8,9 @@ use App\Staff;
 use App\Student;
 use App\Achievement;
 use App\AcademicYear;
+use App\Grade;
 use DB;
+use Auth;
 use Carbon\Carbon;
 
 class AchievementRecordController extends Controller
@@ -19,42 +21,132 @@ class AchievementRecordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $catatan_penghargaan = AchievementRecord::all(); 
-        
-        $siswa = Student::all();
+    {  
         $penghargaan = Achievement::all();
-        $karyawan = Staff::all();
         $tahun_ajaran = AcademicYear::all();
 
-        // UNTUK GRAFIK
-        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+        // UNTUK CEK REQUEST DARI VIEW
 
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+        
         if($request->has('academicYearId')){
             $academic_year_id = $request->academicYearId;
-        }
+        }        
         else{
             $academic_year_id = $maxId;
         }
 
+        $catatan_penghargaan = $this->showAchievement($request->session()->get('session_user_id'), $academic_year_id);
+
+        $kelas = Grade::all();
+
+        // UNTUK GRAFIK
+
         $type = Achievement::select(DB::raw('GRADE AS TINGKAT'))
                         ->groupBy('TINGKAT')
-                        ->get();
+                        ->get();          
         
-        $data = Achievement::join('achievement_records', 'achievements.id', 'achievement_records.ACHIEVEMENTS_ID')
-                                    ->select(DB::raw('GRADE AS TINGKAT'), DB::raw('MONTH(achievement_records.DATE) AS BULAN'), DB::raw('COUNT(*) AS JUMLAH'))
-                                    ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                                    ->groupBy('TINGKAT', 'BULAN')
-                                    ->orderBy('BULAN', 'ASC')
-                                    ->get();                             
-
         $selected_tahun_ajaran = AcademicYear::select(DB::raw('MONTH(START_DATE) AS STARTMONTH'), 
-                                                      DB::raw('MONTH(END_DATE) AS ENDMONTH'))                                            
-                                            ->where('id', $academic_year_id)
-                                            ->get()[0];
+                                                          DB::raw('MONTH(END_DATE) AS ENDMONTH'))                                            
+                                ->where('id', $academic_year_id)
+                                ->get()[0];
+        
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->first()->id; 
 
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();                            
+            
+            $data = Achievement::join('achievement_records', 'achievements.id', 'achievement_records.ACHIEVEMENTS_ID')
+                        ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                        ->select(DB::raw('GRADE AS TINGKAT'), DB::raw('MONTH(achievement_records.DATE) AS BULAN'), DB::raw('COUNT(*) AS JUMLAH'))
+                        ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                        ->where('students.GRADES_ID', $kelas_guru)
+                        ->groupBy('TINGKAT', 'BULAN')
+                        ->orderBy('BULAN', 'ASC')
+                        ->get();                                         
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $siswa = Student::all();       
 
-        return view('achievementrecord.index', compact('catatan_penghargaan', 'siswa', 'penghargaan', 'karyawan', 'tahun_ajaran', 'type', 'data', 'selected_tahun_ajaran', 'academic_year_id'));
+            $data = Achievement::join('achievement_records', 'achievements.id', 'achievement_records.ACHIEVEMENTS_ID')
+                        ->select(DB::raw('GRADE AS TINGKAT'), DB::raw('MONTH(achievement_records.DATE) AS BULAN'), DB::raw('COUNT(*) AS JUMLAH'))
+                        ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                        ->groupBy('TINGKAT', 'BULAN')
+                        ->orderBy('BULAN', 'ASC')
+                        ->get();     
+        }   
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $data = Achievement::join('achievement_records', 'achievements.id', 'achievement_records.ACHIEVEMENTS_ID')
+                        ->select(DB::raw('GRADE AS TINGKAT'), DB::raw('MONTH(achievement_records.DATE) AS BULAN'), DB::raw('COUNT(*) AS JUMLAH'))
+                        ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                        ->groupBy('TINGKAT', 'BULAN')
+                        ->orderBy('BULAN', 'ASC')
+                        ->get();  
+        }
+        else{
+            $data = Achievement::join('achievement_records', 'achievements.id', 'achievement_records.ACHIEVEMENTS_ID')
+                            ->select(DB::raw('GRADE AS TINGKAT'), DB::raw('MONTH(achievement_records.DATE) AS BULAN'), DB::raw('COUNT(*) AS JUMLAH'))
+                            ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                            ->groupBy('TINGKAT', 'BULAN')
+                            ->orderBy('BULAN', 'ASC')
+                            ->get();  
+        }
+        
+        return view('achievementrecord.index', compact('catatan_penghargaan', 'kelas', 'penghargaan', 'tahun_ajaran', 'type', 'data', 'selected_tahun_ajaran', 'academic_year_id'));     
+    }
+
+    public function showAchievement($user_id, $ay)
+    {
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
+            $kelas_guru = Grade::where('STAFFS_ID', $user_id)
+                                    ->first()->id; 
+
+            $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                        ->select('achievement_records.*')
+                                        ->where('students.GRADES_ID', $kelas_guru)
+                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
+                                        ->get();
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $penghargaan = AchievementRecord::where('achievement_records.ACADEMIC_YEAR_ID', $ay)->get();
+        }
+        else{
+            $penghargaan = AchievementRecord::where('achievement_records.ACADEMIC_YEAR_ID', $ay)->get();
+        }
+
+        return $penghargaan;
+    }
+
+    public function create(Request $request)
+    {
+        $penghargaan = Achievement::all();    
+        $kelas = Grade::all();            
+
+        if($request->has('gradeId')){
+            $default_student = Student::where('GRADES_ID', $request->gradeId)->get();
+        }        
+        else{
+            $default_student = Student::where('GRADES_ID', 1)->get();
+        }
+        
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->first()->id; 
+
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();                                                                   
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $siswa = Student::all();       
+        }   
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
+        }
+        else{
+            $siswa = $default_student;
+        }
+        
+        return view('achievementrecord.create', compact('siswa', 'kelas', 'penghargaan'));
     }
 
     /**
@@ -102,16 +194,22 @@ class AchievementRecordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $catatan_penghargaan = AchievementRecord::find($id);
-        
-        $siswa = Student::all();
         $penghargaan = Achievement::all();
-        $karyawan = Staff::all();
-        $tahun_ajaran = AcademicYear::all();
-        //return 'helo';
-        return view('achievementrecord.edit', compact('catatan_penghargaan', 'siswa', 'penghargaan', 'karyawan', 'tahun_ajaran'));
+
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->first()->id; 
+
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get(); 
+        }
+        else{
+            $siswa = Student::all(); 
+        }
+    
+        return view('achievementrecord.edit', compact('catatan_penghargaan', 'siswa', 'penghargaan'));
     }
 
     /**
