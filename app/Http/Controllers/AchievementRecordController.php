@@ -198,18 +198,32 @@ class AchievementRecordController extends Controller
     {
         $catatan_penghargaan = AchievementRecord::find($id);
         $penghargaan = Achievement::all();
+        $kelas = Grade::all();  
 
+        if($request->has('gradeId')){
+            $default_student = Student::where('GRADES_ID', $request->gradeId)->get();
+        }        
+        else{
+            $default_student = Student::all();
+        }
+        
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
                                 ->first()->id; 
 
-            $siswa = Student::where('GRADES_ID', $kelas_guru)->get(); 
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();                                                                   
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $siswa = Student::all();       
+        }   
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
         }
         else{
-            $siswa = Student::all(); 
+            $siswa = $default_student;
         }
     
-        return view('achievementrecord.edit', compact('catatan_penghargaan', 'siswa', 'penghargaan'));
+        return view('achievementrecord.edit', compact('catatan_penghargaan', 'kelas', 'siswa', 'penghargaan'));
     }
 
     /**

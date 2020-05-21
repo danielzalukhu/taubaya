@@ -21,21 +21,20 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">UBAH DAFTAR PENGHARGAAN SISWA</h3>            
+                            <h3 class="box-title">BUAT DAFTAR PELANGGARAN SISWA</h3>            
                         </div>
                         <div class="box">
                             <div class="box-body">
-                                <form action="{{ route ('achievementrecord.update', $catatan_penghargaan->id) }}" method="post" enctype="multipart/form-data">
-                                {{ method_field("PUT") }}
+                                <form action="{{ route ('violationrecord.store') }}" method="post" enctype="multipart/form-data">
                                 {{ csrf_field() }}
 
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    
-                                    <div class="form-group{{ $errors->has('ar_date') ? 'has-error' : '' }} ">
+      
+                                    <div class="form-group{{ $errors->has('vr_date') ? 'has-error' : '' }} ">
                                         <label>Tanggal</label>
-                                        <input name="ar_date" type="date" class="form-control"  value="{{$catatan_penghargaan->DATE}}">            
-                                        @if($errors->has('ar_date'))
-                                            <span class="help-block">{{$errors->first('ar_date')}}</span>
+                                        <input name="vr_date" type="date" class="form-control input-violation-date" aria-describedby="emailHelp" value="{{old('vr_date')}}">            
+                                        @if($errors->has('vr_date'))
+                                            <span class="help-block">{{$errors->first('vr_date')}}</span>
                                         @endif
                                     </div>
 
@@ -53,39 +52,47 @@
                                     </div>
                                     @endif
 
-                                    <div class="form-group{{ $errors->has('ar_student_name') ? 'has-error' : '' }} ">
+                                    <div class="form-group{{ $errors->has('vr_student_name') ? 'has-error' : '' }} ">
                                         <label>Nama Siswa</label>
-                                        <select name="ar_student_name" class="form-control select2" style="width: 100%;">
+                                        <select name="vr_student_name" class="form-control select2" style="width: 100%;">
                                             @foreach($siswa as $s)
-                                                <option value="{{ $s->id }}" @if($catatan_penghargaan->STUDENTS_ID == $s->id) selected @endif>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>                                                    
-                                            @endforeach                                                
+                                                <option value='{{ $s->id }}'>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>
+                                            @endforeach
                                         </select>
-                                        @if($errors->has('ar_student_name'))
-                                            <span class="help-block">{{$errors->first('ar_student_name')}}</span>
+                                        @if($errors->has('a_type'))
+                                            <span class="help-block">{{$errors->first('vr_student_name')}}</span>
                                         @endif
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('ar_achievement_name') ? 'has-error' : '' }} ">
-                                        <label>Penghargaan</label>
-                                        <select name="ar_achievement_name" class="form-control select2" style="width: 100%;">
-                                            @foreach($penghargaan as $p)
-                                                <option value="{{ $p->id }}" @if($catatan_penghargaan->ACHIEVEMENTS_ID == $p->id) selected @endif>{{ $p->TYPE }}{{" - "}}{{ $p->DESCRIPTION }}</option>                                                    
-                                            @endforeach                                                
+                                    <div class="form-group{{ $errors->has('vr_violation_name') ? 'has-error' : '' }} ">
+                                        <label>Pelanggaran</label>
+                                        <select name="vr_violation_name" class="form-control select2" style="width: 100%;">
+                                            @foreach($pelanggaran as $p)
+                                                <option value='{{ $p->id }}'>{{$p->NAME}}{{" - "}}{{ $p->DESCRIPTION }}</option>
+                                            @endforeach
                                         </select>
-                                        @if($errors->has('ar_achievement_name'))
-                                            <span class="help-block">{{$errors->first('ar_achievement_name')}}</span>
+                                        @if($errors->has('vr_violation_name'))
+                                            <span class="help-block">{{$errors->first('vr_violation_name')}}</span>
                                         @endif
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('ar_desc') ? 'has-error' : '' }} ">
+                                    <div class="form-group{{ $errors->has('vr_desc') ? 'has-error' : '' }} ">
                                         <label>Deskripsi</label>            
-                                        <textarea name="ar_desc" class="form-control" rows="3">{{ $catatan_penghargaan->DESCRIPTION }}</textarea>
-                                        @if($errors->has('ar_desc'))
-                                            <span class="help-block">{{$errors->first('ar_desc')}}</span>
+                                        <textarea name="vr_desc" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_desc')}}</textarea>
+                                        @if($errors->has('vr_desc'))
+                                            <span class="help-block">{{$errors->first('vr_desc')}}</span>
                                         @endif
                                     </div>
 
-                                    <button type="submit" class="btn btn-warning">Ubah</button>
+                                    <div class="form-group{{ $errors->has('vr_punishment') ? 'has-error' : '' }} ">
+                                        <label>Hukuman</label>
+                                        <textarea name="vr_punishment" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_punishment')}}</textarea>
+                                        @if($errors->has('vr_punishment'))
+                                            <span class="help-block">{{$errors->first('vr_punishment')}}</span>
+                                        @endif
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </form>                        
                             </div>
                         </div>
@@ -107,8 +114,7 @@
 
     $('#selected_grade').change(function(){
         var gradeId = $(this).val()   
-        var route =  "{{ route('achievementrecord.edit', ':id') }}" 
-        route = route.replace(':id', '{{ $catatan_penghargaan->id }}') 
+        var route =  "{{ route('achievementrecord.create') }}"  
         window.location = route+"?gradeId="+gradeId;        
     })
 </script>

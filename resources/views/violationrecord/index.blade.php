@@ -64,9 +64,17 @@
                         </div>
                         <div class="box">
                             <div class="box-header">
-                                <div class="right">
-                                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">BUAT CATATAN PELANGGARAN</button>
-                                </div>
+                                @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
+                                    <div class="right">
+                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PENGHARGAAN</a>
+                                    </div>
+                                @elseif(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")                                    
+                                    <div class="right">
+                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PENGHARGAAN</a>
+                                    </div>
+                                @else
+
+                                @endif
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">
@@ -121,80 +129,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Modal Create New-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="exampleModalLabel">BUAT CATATAN PELANGGARAN</h1>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('violationrecord.store') }}" method="post"  enctype="multipart/form-data">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                        <div class="form-group{{ $errors->has('vr_date') ? 'has-error' : '' }} ">
-                            <label>Tanggal</label>
-                            <input name="vr_date" type="date" class="form-control input-violation-date" aria-describedby="emailHelp" value="{{old('vr_date')}}">            
-                            @if($errors->has('vr_date'))
-                                <span class="help-block">{{$errors->first('vr_date')}}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group{{ $errors->has('vr_student_name') ? 'has-error' : '' }} ">
-                            <label>Nama Siswa</label>
-                            <select name="vr_student_name" class="form-control" id="inputGroupSelect01">
-                                @foreach($siswa as $s)
-                                    <option value='{{ $s->id }}'>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('a_type'))
-                                <span class="help-block">{{$errors->first('vr_student_name')}}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group{{ $errors->has('vr_violation_name') ? 'has-error' : '' }} ">
-                            <label>Nama Pelanggaran</label>
-                            <select name="vr_violation_name" class="form-control" id="inputGroupSelect01">
-                                @foreach($pelanggaran as $p)
-                                    <option value='{{ $p->id }}'>{{$p->NAME}}{{" - "}}{{ $p->DESCRIPTION }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('vr_violation_name'))
-                                <span class="help-block">{{$errors->first('vr_violation_name')}}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group{{ $errors->has('vr_desc') ? 'has-error' : '' }} ">
-                            <label>Deskripsi</label>            
-                            <textarea name="vr_desc" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_desc')}}</textarea>
-                            @if($errors->has('vr_desc'))
-                                <span class="help-block">{{$errors->first('vr_desc')}}</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group{{ $errors->has('vr_punishment') ? 'has-error' : '' }} ">
-                            <label>Hukuman</label>
-                            <textarea name="vr_punishment" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_punishment')}}</textarea>
-                            @if($errors->has('vr_punishment'))
-                                <span class="help-block">{{$errors->first('vr_punishment')}}</span>
-                            @endif
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> 
-    
+    </div>    
 @stop
 
 @section('footer')

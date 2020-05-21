@@ -8,6 +8,8 @@ use App\Staff;
 use App\Student;
 use App\Violation;
 use App\AcademicYear;
+use App\Grade;
+use Auth;
 use DB;
 use Carbon\Carbon;
 
@@ -20,14 +22,11 @@ class ViolationRecordController extends Controller
      */
     public function index(Request $request)
     {
-        $catatan_pelanggaran = ViolationRecord::all();
-   
-        $tahun_ajaran = AcademicYear::all();
-        $siswa = Student::all();
         $pelanggaran = Violation::all();
-        $karyawan = Staff::all();
+        $tahun_ajaran = AcademicYear::all();
         
-        // UNTUK GRAFIK
+        // UNTUK CEK REQUEST  DARI VIEW 
+
         $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
                                
         if($request->has('academicYearId')){
@@ -37,6 +36,10 @@ class ViolationRecordController extends Controller
             $academic_year_id = $maxId;
         }
 
+        $catatan_pelanggaran = $this->showViolation($request->session()->get('session_user_id'), $academic_year_id);
+        
+        // UNTUK GRAFIK
+
         $kategori = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
                                         WHEN v.NAME LIKE 'B%' THEN 'BERAT'
                                         WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
@@ -45,22 +48,122 @@ class ViolationRecordController extends Controller
                                 FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
                                 GROUP BY KATEGORI ");
 
-        $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
-                                        WHEN v.NAME LIKE 'B%' THEN 'BERAT'
-                                        WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
-                                        WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
-                                END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                                FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
-                                WHERE ACADEMIC_YEAR_ID = " . $academic_year_id . "
-                                GROUP BY KATEGORI, BULAN
-                                ORDER BY BULAN ASC");
+        $selected_tahun_ajaran = AcademicYear::select(DB::raw('MONTH(START_DATE) AS STARTMONTH'), 
+                                                          DB::raw('MONTH(END_DATE) AS ENDMONTH'))                                            
+                                ->where('id', $academic_year_id)
+                                ->get()[0];
+                                        
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->first()->id; 
 
-        $selected_tahun_ajaran = DB::select("SELECT MONTH(START_DATE) AS STARTMONTH, MONTH(END_DATE) AS ENDMONTH
-                                             FROM academic_years
-                                             WHERE id = " . $academic_year_id )[0];
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();
 
+            $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                        END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
+                        INNER JOIN students s ON vr.STUDENTS_ID = s.id                                            
+                        WHERE vr.ACADEMIC_YEAR_ID = " . $academic_year_id . " AND s.GRADES_ID = " . $kelas_guru . "
+                        GROUP BY KATEGORI, BULAN
+                        ORDER BY BULAN ASC");
+        }       
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $siswa = Student::all();
+
+            $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                        END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id                       
+                        WHERE vr.ACADEMIC_YEAR_ID = " . $academic_year_id . "
+                        GROUP BY KATEGORI, BULAN
+                        ORDER BY BULAN ASC");
+        }             
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = Student::all();
+
+            $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                        END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id                       
+                        WHERE vr.ACADEMIC_YEAR_ID = " . $academic_year_id . "
+                        GROUP BY KATEGORI, BULAN
+                        ORDER BY BULAN ASC");
+        }                    
+        else{
+            $siswa = Student::all();
+
+            $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                        END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id                       
+                        WHERE vr.ACADEMIC_YEAR_ID = " . $academic_year_id . "
+                        GROUP BY KATEGORI, BULAN
+                        ORDER BY BULAN ASC");
+        }
+                
+        return view('violationrecord.index', compact('catatan_pelanggaran', 'tahun_ajaran', 'siswa', 'pelanggaran', 'academic_year_id', 'kategori', 'data', 'selected_tahun_ajaran'));
+    }
+
+    public function showViolation($user_id, $ay)
+    {
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
+            $kelas_guru = Grade::where('STAFFS_ID', $user_id)
+                                    ->first()->id; 
+
+            $pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                        ->select('violation_records.*')
+                                        ->where('students.GRADES_ID', $kelas_guru)
+                                        ->where('violation_records.ACADEMIC_YEAR_ID', $ay)
+                                        ->get();
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $ay)->get();
+        }
+        else{
+            $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $ay)->get();
+        }
         
-        return view('violationrecord.index', compact('catatan_pelanggaran', 'tahun_ajaran', 'siswa', 'pelanggaran', 'karyawan', 'academic_year_id', 'kategori', 'data', 'selected_tahun_ajaran'));
+        return $pelanggaran;
+    }
+
+    public function create(Request $request)
+    {
+        $pelanggaran = Violation::all();    
+        $kelas = Grade::all();            
+
+        if($request->has('gradeId')){
+            $default_student = Student::where('GRADES_ID', $request->gradeId)->get();
+        }        
+        else{
+            $default_student = Student::where('GRADES_ID', 1)->get();
+        }
+        
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->first()->id; 
+
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();                                                                   
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $siswa = Student::all();       
+        }   
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
+        }
+        else{
+            $siswa = $default_student;
+        }
+
+        return view('violationrecord.create', compact('siswa', 'kelas', 'pelanggaran'));
     }
 
     /**
@@ -135,15 +238,38 @@ class ViolationRecordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $catatan_pelanggaran = ViolationRecord::find($id);
-        
-        $tahun_ajaran = AcademicYear::all();
-        $siswa = Student::all();
         $pelanggaran = Violation::all();
+        
+        $kelas = Grade::all();            
 
-        return view('violationrecord.edit', compact('catatan_pelanggaran', 'tahun_ajaran', 'siswa', 'pelanggaran'));
+        if($request->has('gradeId')){
+            $default_student = Student::where('GRADES_ID', $request->gradeId)->get();
+        }        
+        else{
+            $default_student = Student::all();
+        }
+        
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->first()->id; 
+
+            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();                                                                   
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $siswa = Student::all();       
+        }   
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
+        }
+        else{
+            $siswa = $default_student;
+        }
+
+        
+        return view('violationrecord.edit', compact('catatan_pelanggaran', 'kelas', 'siswa', 'pelanggaran'));
     }
 
     /**
