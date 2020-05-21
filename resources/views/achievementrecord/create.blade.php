@@ -1,5 +1,10 @@
 @extends('layout.master')
 
+@section('header')
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/select2/dist/css/select2.min.css')}}">
+@stop
+
 @section('content')
     <div class="main">
         <div class="main-content">
@@ -35,8 +40,8 @@
 
                                     @if(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")
                                     <div class="form-group{{ $errors->has('ar_student_name') ? 'has-error' : '' }} ">
-                                        <label>Kelas</label>
-                                        <select id="selected_grade" class="form-control" id="inputGroupSelect01">
+                                        <label>Kelas</label>                
+                                        <select id="selected_grade" class="form-control select2" style="width: 100%;">
                                             @foreach($kelas as $k)
                                                 <option value='{{ $k->id }}'>{{ $k->NAME }}</option>
                                             @endforeach
@@ -49,7 +54,7 @@
 
                                     <div class="form-group{{ $errors->has('ar_student_name') ? 'has-error' : '' }} ">
                                         <label>Nama Siswa</label>
-                                        <select name="ar_student_name" class="form-control" id="inputGroupSelect01">
+                                        <select name="ar_student_name" class="form-control select2" style="width: 100%;">
                                             @foreach($siswa as $s)
                                                 <option value='{{ $s->id }}'>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>
                                             @endforeach
@@ -61,7 +66,7 @@
 
                                     <div class="form-group{{ $errors->has('ar_achievement_name') ? 'has-error' : '' }} ">
                                         <label>Penghargaan</label>
-                                        <select name="ar_achievement_name" class="form-control" id="inputGroupSelect01">
+                                        <select name="ar_achievement_name"  class="form-control select2" style="width: 100%;">
                                             @foreach($penghargaan as $p)
                                                 <option value='{{ $p->id }}'>{{$p->TYPE}}{{" - "}}{{ $p->DESCRIPTION }}</option>
                                             @endforeach
@@ -91,7 +96,14 @@
 @stop
 
 @section('footer')
+<!-- Select2 -->
+<script src="{{asset('adminlte/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+
 <script>
+    $(function () {    
+        $('.select2').select2()
+    })
+
     $('#selected_grade').change(function(){
         var gradeId = $(this).val()   
         var route =  "{{ route('achievementrecord.create') }}"  
