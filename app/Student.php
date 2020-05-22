@@ -67,6 +67,11 @@ class Student extends Model
         return $this->hasOne('App\Token', 'TOKENS_ID');
     }
 
+    public function academicyear()
+    {
+        return $this->belongsTo('App\AcademicYear', 'ACADEMIC_YEAR_ID');
+    }
+
     public function getPhoto()
     {
         if(!$this->img_PATH)

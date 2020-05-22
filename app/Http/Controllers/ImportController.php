@@ -27,7 +27,7 @@ class ImportController extends Controller
         'student_import' => 'required|mimes:csv,xls,xlsx'
       ]);
 
-      Excel::import(new StudentImport, $request->file('student_import'));
+      Excel::import(new StudentImport($request), $request->file('student_import'));
       Session::flash('sukses','Import data siswa berhasil ditambahkan');
       return redirect('student');
     }

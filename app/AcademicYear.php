@@ -38,4 +38,9 @@ class AcademicYear extends Model
     {
         return $this->hasMany('App\ActivityStudent');
     }
+
+    public function student()
+    {
+        return $this->hasOne('App\Student');
+    }
 }

@@ -81,7 +81,7 @@ class SubjectImport implements ToCollection
                             'ACADEMIC_YEAR_ID' => $this->request->session()->get("session_academic_year_id"),
                             'SCORE' => $nilai,                     
                         ]);
-                        
+                        dd($a);
                         ActivityKD::create([
                             'KD_ID' => $id_kd,
                             'ACTIVITIES_ID' => $id_aktivitas,

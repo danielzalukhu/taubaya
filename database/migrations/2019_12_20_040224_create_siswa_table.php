@@ -44,6 +44,8 @@ class CreateSiswaTable extends Migration
             $table->foreign('BANKS_ID')->references('id')->on('banks')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('RELIGIONS_ID')->nullable();
             $table->foreign('RELIGIONS_ID')->references('id')->on('religions')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedInteger('ACADEMIC_YEAR_ID')->nullable();
+            $table->foreign('ACADEMIC_YEAR_ID')->references('id')->on('academic_years')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('GRADES_ID')->nullable();
             $table->foreign('GRADES_ID')->references('id')->on('grades')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('TOKENS_ID')->nullable();

@@ -3,6 +3,8 @@
 namespace App\Imports;
 
 use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+use App\Imports\StudentImport;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\Hash;
 use App\Student;
@@ -11,6 +13,11 @@ use DB;
 
 class StudentImport implements ToCollection
 {
+    public function __construct(Request $request)
+    {
+       $this->request = $request;
+    }
+
     /**
     * @param Collection $collection
     */
@@ -34,15 +41,16 @@ class StudentImport implements ToCollection
                 if($key >= 5)
                 {
                     $student_full_name = $row[5];
-                    $studentName = explode(" ", $row[5], 2);
+                    $studentName = explode(" ", $row[5], 2); 
 
-                    $siswa = Student::create([
-                        'NISN' => $row[4],
-                        'FNAME' => $studentName[0],
-                        'LNAME' => $studentName[1],
-                        'GRADES_ID' => $id_kelas
-                    ]); 
-
+                    $siswa = new Student();
+                    $siswa->NISN = $row[4];
+                    $siswa->FNAME = $studentName[0];
+                    $siswa->LNAME = $studentName[1];
+                    $siswa->ACADEMIC_YEAR_ID = $this->request->session()->get("session_academic_year_id");
+                    $siswa->GRADES_ID = $id_kelas;
+                    $siswa->save();
+                    
                     $user = User::create([
                         'name' => $student_full_name,
                         'email' => $studentName[0] . "@student.ac.id",
@@ -52,8 +60,6 @@ class StudentImport implements ToCollection
                                              
                     ]);
                 }   
-
-                
             }            
         }    
     }
