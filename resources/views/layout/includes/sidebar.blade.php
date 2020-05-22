@@ -36,16 +36,14 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
-              <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>            
-            @elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+            @if(Auth::guard('web')->user()->ROLE === "STAFF")
               <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>            
             @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
               <li><a href="{{route('student.profile', [ 'id'=>request()->session()->get('session_student_id') ])}} "><i class="fa fa-book"></i>PROFIL-KU</a></li>
             @endif                    
           </ul>
         </li>
-
+        
         <li class="treeview">
           <a href="#">
             <i class="fa fa-book"></i> <span>MATA PELAJARAN</span>
@@ -54,12 +52,14 @@
             </span>
           </a>
           <ul class="treeview-menu">          
-            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+            @if((Auth::guard('web')->user()->ROLE === "STUDENT"))
+              <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
+            @elseif(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
               <li><a href="{{route('student.mapelguru')}}"><i class="fa fa-book"></i>MAPEL-GURU</a></li> 
               <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>LAPOR KETIDAKTUNTASAN </a></li>
               <li><a href="{{route('subject.assesment')}}"><i class="fa fa-pencil"></i>INPUT PENILAIAN</a></li>              
             @else
-              <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
+            
             @endif
           </ul>
         </li>

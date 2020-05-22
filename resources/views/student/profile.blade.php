@@ -586,7 +586,7 @@
             })
         })
 
-        console.log(dataSeries)
+        // console.log(dataSeries)
         
         Highcharts.chart('chartAchievement', {
             chart: {
