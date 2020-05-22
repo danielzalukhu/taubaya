@@ -36,9 +36,11 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+            @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
               <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>            
-            @else              
+            @elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+              <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>            
+            @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
               <li><a href="{{route('student.profile', [ 'id'=>request()->session()->get('session_student_id') ])}} "><i class="fa fa-book"></i>PROFIL-KU</a></li>
             @endif                    
           </ul>

@@ -40,8 +40,9 @@ class AbsentController extends Controller
         $datas = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))                                    
                              ->where('ACADEMIC_YEAR_ID', $academic_year_id)
                              ->groupBy('TIPE', 'TAHUNAJARAN')
-                             ->get();                             
-
+                             ->get();     
+                                                          
+        // dd($datas);
         return view('absent.index', compact('absen', 'karyawan', 'siswa', 'tahun_ajaran', 'type', 'datas', 'academic_year_id'));
     }
 

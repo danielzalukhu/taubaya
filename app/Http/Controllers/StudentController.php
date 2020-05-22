@@ -44,7 +44,7 @@ class StudentController extends Controller
         else{
             $siswa = Student::where('GRADES_ID', $grade_id)->get();            
         }
-        
+        // dd($kelas_guru);
         return view('student.index', compact('kelas', 'siswa', 'grade_id'));
     }
 
