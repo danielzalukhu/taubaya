@@ -39,16 +39,6 @@
                         <b>ABSENSI</b> 
                         <a class="pull-right">%</a>
                       </li>
-                      <!-- <li class="list-group-item">
-                        <b>TOTAL POIN</b> 
-                        <a class="pull-right">
-                            @if($point_record > 75)
-                                {{$point_record - $total_achievement_point}}
-                            @else
-                                {{$point_record}}
-                            @endif
-                        </a>
-                      </li> -->
                     </ul>
                   </div>
               </div>
@@ -421,12 +411,12 @@
 
     $('#tbody-absent-academic-year').on('click', '.button-detail', (function(){
         var absentType = $(this).attr('absent-type');
-        var academicYearId = $(this).val();
-
+        var academicYearId = $('#selector-dropdown-absent-year').val();
+        // console.log(academicYearId)
         $.ajax({
             url: '{{route("student.detailAbsent")}}', 
             type: 'get', 
-            data: {studentId: studentId, absentType: absentType},
+            data: {studentId: studentId, absentType: absentType, academicYearId: academicYearId},
 
             success: function(result){
                 $('#tbody-absent-detail').empty()

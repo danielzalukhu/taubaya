@@ -185,10 +185,12 @@ class StudentController extends Controller
     }
 
     public function showDetailAbsent(Request $request)
-    {
-        $absen = DB::select('SELECT TYPE, START_DATE, END_DATE, DESCRIPTION
-                             FROM absents
-                             WHERE STUDENTS_ID = ' . $request->studentId . ' AND TYPE = "' . $request->absentType .'"' );
+    {        
+        $absen = Absent::select('TYPE', 'START_DATE', 'END_DATE', 'DESCRIPTION')
+                        ->where('STUDENTS_ID', $request->studentId)
+                        ->where('TYPE', $request->absentType)
+                        ->where('ACADEMIC_YEAR_ID', $request->academicYearId)
+                        ->get();
 
         return $absen;                               
     }

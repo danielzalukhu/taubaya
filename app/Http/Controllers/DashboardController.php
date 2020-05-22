@@ -22,7 +22,7 @@ class DashboardController extends Controller
                                     WHERE id = (SELECT MAX(id) as id 
                                                 FROM academic_years)');
 
-        $request->session()->put('session_academic_year_id', 3);
+        $request->session()->put('session_academic_year_id', $tahun_ajaran[0]->id);
         $request->session()->put('session_start_ay', $tahun_ajaran[0]->START_DATE);
         $request->session()->put('session_end_ay', $tahun_ajaran[0]->END_DATE);
         
@@ -33,7 +33,7 @@ class DashboardController extends Controller
             $request->session()->put('session_student_class', Auth::user()->student->grade->NAME);
             $request->session()->put('session_student_id', Auth::user()->student->id);
         }        
-        // dd($request->session()->get("session_academic_year_id"));
+        
         //END GLOBAL SESSION 
                         
         $siswa_bermasalah = $this->getTroubleStudent();
