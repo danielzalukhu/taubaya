@@ -35,7 +35,22 @@
                                                     </select>
                                                 </div>
                                             </span>        
-                                        </h5>
+                                        </h5>                                    
+                                    @elseif(Auth::guard('web')->user()->staff->ROLE === "ADMIN")
+                                        <h5 class="box-header-title"><b>DAFTAR KELAS: </b>
+                                            <span>
+                                                <div class="btn-group">
+                                                    <select type="button" id="dropdown-daftar-kelas" class="btn btn-default dropdown-toggle">
+                                                        @foreach($kelas as $k)
+                                                            <option value='{{ $k->id }}' grade-id="{{$k->id}}">
+                                                                {{ $k->NAME }}
+                                                            </option>                                                                        
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modalTambahSiswa">INPUT DAFTAR SISWA</button>                                        
+                                            </span>        
+                                        </h5>                                        
                                     @elseif(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
                                         <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#modalTambahSiswa">INPUT DAFTAR SISWA</button>
                                     @endif
