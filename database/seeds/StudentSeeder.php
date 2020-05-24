@@ -45,7 +45,7 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'abdul.jpg',
             'BANKS_ID' => '1',
             'RELIGIONS_ID' => '3',
-            'ACADEMIC_YEAR_ID' => '1',
+            'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '1',
             'GRADES_ID' => '1'
         ]);
@@ -78,7 +78,7 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'marion.jpg',
             'BANKS_ID' => '3',
             'RELIGIONS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '1',
+            'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '1',
             'GRADES_ID' => '1'
         ]);
@@ -144,7 +144,7 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'alan.jpg',
             'BANKS_ID' => '2',
             'RELIGIONS_ID' => '2',
-            'ACADEMIC_YEAR_ID' => '1',
+            'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '1',
             'GRADES_ID' => '1'
         ]);
@@ -177,7 +177,7 @@ class StudentSeeder extends Seeder
             'IMG_PATH' => 'suparto.jpg',
             'BANKS_ID' => '1',
             'RELIGIONS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '1',
+            'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '2',
             'GRADES_ID' => '1'
         ]);

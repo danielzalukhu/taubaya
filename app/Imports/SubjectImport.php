@@ -5,6 +5,7 @@ namespace App\Imports;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use App\Imports\SubjectImport;
 use App\Subject;
 use App\Student;
@@ -17,7 +18,7 @@ use App\KD;
 use DB;
 use Session;
 
-class SubjectImport implements ToCollection
+class SubjectImport implements ToCollection, WithCalculatedFormulas
 {
     public function __construct(Request $request)
     {
@@ -81,7 +82,7 @@ class SubjectImport implements ToCollection
                             'ACADEMIC_YEAR_ID' => $this->request->session()->get("session_academic_year_id"),
                             'SCORE' => $nilai,                     
                         ]);
-                        
+                        // dd($a);
                         ActivityKD::create([
                             'KD_ID' => $id_kd,
                             'ACTIVITIES_ID' => $id_aktivitas,
