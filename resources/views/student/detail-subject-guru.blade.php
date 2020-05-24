@@ -145,7 +145,7 @@
                                                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
-                                                            </form>      
+                                                            </form>                                                              
                                                         @endif
                                                     </td>                                                    
                                                 </tr>

@@ -207,12 +207,14 @@ class SubjectController extends Controller
         return redirect(action('SubjectController@incomplete'))->with('sukses', 'Laporan ketidaktuntasan berhasil dibuat');
     }
 
-    public function assesmentImport() 
+    public function assesmentImport(Request $request) 
     {    
         $laporan_mapel = SubjectReport::where('IS_VERIFIED', '=', 0)->get();
-        // dd($laporan_mapel);
-    
-        return view('subject.assesment', compact('laporan_mapel'));
+        
+        $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->first()->NAME; 
+        
+        return view('subject.assesment', compact('laporan_mapel', 'kelas_guru'));
     }
 
     public function editAssesment($id)
@@ -313,7 +315,7 @@ class SubjectController extends Controller
         $mapel = Subject::find($id);
         
         $siswa = Student::find($request->session()->get('session_student_id'));
-
+        
         $max_academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         if($request->has('academicYearId')){
@@ -323,46 +325,60 @@ class SubjectController extends Controller
             $academic_year_id = $max_academic_year_id;
         }
 
-        $detail_mapel = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                    ->select('subject_reports.*')
-                                    ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                                    ->where('subject_reports.SUBJECTS_ID', $mapel->id)
-                                    ->get();
-        
-        $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                        ->select('subject_records.*', 'subject_reports.*')
+        if(Auth::guard('web')->user()->ROLE === "STAFF"){
+            $tahun_ajaran = AcademicYear::all();     
+
+            $detail_mapel = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                        ->select('subject_reports.*')
+                                        ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('subject_reports.SUBJECTS_ID', $mapel->id)
+                                        ->get();
+            
+        }
+        else{
+            $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                        ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                        ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
                                         ->where('subject_reports.SUBJECTS_ID', $mapel->id)
                                         ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                         ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
-                                        ->get();            
+                                        ->get();  
+            
+            $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $request->session()->get('session_student_id')) ->first()->AY_ID;                        
 
-        // DATA GRAFIK HALAMAN detail-subject-ku
+            $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get();        
+            
+            $kkm = Subject::select('MINIMALPOIN')->where('id', $mapel->id)->get();
 
-        $tahun_ajaran = AcademicYear::all();
+            $data_final_score = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                        ->select('subject_records.*', 'subject_reports.*')
+                                        ->where('subject_reports.SUBJECTS_ID', $mapel->id)                                        
+                                        ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                        ->get();   
 
-        $kkm = Subject::select('MINIMALPOIN')->where('id', $mapel->id)->get();
+            $x = explode("-", $mapel->CODE, 3);
+            $y = $x[0] . "-" . $x[1];
+            
+            $sub_query = Grade::select('id')->where('NAME', 'LIKE', '%'.$y.'%')->get()[0]->id;
 
-        $x = explode("-", $mapel->CODE, 3);
-        $y = $x[0] . "-" . $x[1];
-        
-        $sub_query = Grade::select('id')->where('NAME', 'LIKE', '%'.$y.'%')->get()[0]->id;
-
-        $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
-                                ->select(DB::raw('SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID) AS RATAKELAS'))
-                                ->where('students.GRADES_ID', '=', $sub_query)
-                                ->where('subject_reports.SUBJECTS_ID', $mapel->id)
-                                ->get();
+            $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                    ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                    ->select(DB::raw('SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID) AS RATAKELAS'), 'subject_records.*')
+                                    ->where('students.GRADES_ID', '=', $sub_query)
+                                    ->where('subject_reports.SUBJECTS_ID', $mapel->id)
+                                    ->groupBy('subject_records.ACADEMIC_YEAR_ID')
+                                    ->get();                                        
+            // dd($rata_kelas);                                    
+        }
 
         // RETURN VIEW 
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
             return view('student.detail-subject-guru', compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id'));
         else
-            // dd($rata_kelas);
             return view('student.detail-subject-ku', 
-                   compact('mapel', 'kkm', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id',
-                           'rata_kelas'));
+                   compact('mapel', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id',
+                           'kkm', 'data_final_score', 'rata_kelas'));
     }   
 }
  

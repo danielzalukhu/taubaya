@@ -52,8 +52,11 @@
                                                         {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
                                                     </option>                                                                        
                                                 @endforeach
-                                            </select>
+                                            </select>                                            
                                         </div>
+                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
+                                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
+                                        <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
                                     </span>        
                                 </h5>
                             </div>
@@ -124,7 +127,15 @@
                                                             @endforeach
                                                         </table>
                                                     </td>                                                
-                                                    <td>{{ $dm->FINAL_SCORE }}</td>                                               
+                                                    <td>
+                                                        @if( $dm->FINAL_SCORE < $dm->MINIMALPOIN )
+                                                            <div class="btn btn-warning btn-sm">{{ $dm->FINAL_SCORE }}</div>
+                                                        @elseif( $dm->FINAL_SCORE == $dm->MINIMALPOIN )
+                                                            <div class="btn btn-primary btn-sm">{{ $dm->FINAL_SCORE }}</div>
+                                                        @elseif( $dm->FINAL_SCORE > $dm->MINIMALPOIN )
+                                                            <div class="btn btn-success btn-sm">{{ $dm->FINAL_SCORE }}</div>
+                                                        @endif
+                                                    </td>                                      
                                                 </tr>
                                             @endif
                                         @endforeach  
@@ -170,10 +181,10 @@
 
     var categories = {!! json_encode($tahun_ajaran) !!}    
     var kkm = {!! json_encode($kkm) !!}
-    var finalScore = {!! json_encode($detail_mapel_ku) !!}
+    var finalScore = {!! json_encode($data_final_score) !!}
     var averageScorePerClass = {!! json_encode($rata_kelas) !!}
     
-    console.log(averageScorePerClass)
+    console.log(categories)
 
     var category = []
     var series1 = []
@@ -200,8 +211,11 @@
         })       
         
         averageScorePerClass.forEach(function(obj_rata){
-            var tmp_rata = obj_rata.RATAKELAS
-            series3.push(tmp_rata)
+            if(item.id == obj_rata.ACADEMIC_YEAR_ID){
+                var tmp_rata = obj_rata.RATAKELAS
+                series3.push(tmp_rata)
+            }
+            
         })
     })    
 

@@ -56,14 +56,16 @@
                         </div>
                         <div class="box">   
                             <div class="box-header">
-                                <div class="right">
-                                    <a href="{{ route('subject.setStatus') }}?status=1" 
-                                       class="btn btn-success btn-sm pull-right"  
-                                       id="buttonVerifikasi" 
-                                       onclick="return confirm('Are you sure?')">
-                                        <i class="fa fa-check"></i> VERIFIKASI NILAI
-                                    </a>   
-                                </div>
+                                <h3 class="box-header-title" style="padding-left: 5px">KELAS: <b> {{ $kelas_guru }} </b>
+                                    <span>
+                                        <a href="{{ route('subject.setStatus') }}?status=1" 
+                                            class="btn btn-success btn-sm pull-right"  
+                                            id="buttonVerifikasi" 
+                                            onclick="return confirm('Are you sure?')">
+                                                <i class="fa fa-check"></i> VERIFIKASI NILAI
+                                        </a> 
+                                    </span>
+                                </h3>
                             </div>                     
                             <div class="box-body">
                                 <div class="table-responsive">
