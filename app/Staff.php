@@ -23,7 +23,7 @@ class Staff extends Model
 
     public function grade()
     {
-        return $this->hasMany('App\Grade', 'GRADES_ID');
+        return $this->hasMany('App\Grade');
     }
 
     public function user()

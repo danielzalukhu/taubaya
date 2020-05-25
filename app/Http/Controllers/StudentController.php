@@ -251,10 +251,10 @@ class StudentController extends Controller
     }
 
     public function mapelku(Request $request)
-    {
+    {        
         $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
-                                ->where('CODE', 'LIKE', '%' . $request->session()->get('session_student_class') . '%')
-                                ->get();
+                        ->where('CODE', 'LIKE', '%' . $request->session()->get('session_student_class') . '%')
+                        ->get();
         
         return view('student.mapel-ku', compact('subject'));
     }

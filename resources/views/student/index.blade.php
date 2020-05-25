@@ -79,7 +79,7 @@
                                             <td>
                                                 <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
-                                                </a>
+                                                </a>                                            
                                                 <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
                                                     @method('delete')
                                                     @csrf
