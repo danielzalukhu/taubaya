@@ -156,11 +156,7 @@
                                                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
-                                                            </form>
-                                                        @else
-                                                            <a href="{{ route('subject.detailSubject', [$mapel->id, $dm->subjectrecord->student->id]) }}" class="btn btn-info btn-sm">
-                                                                <i class="fa fa-eye"></i>
-                                                            </a>                                                              
+                                                            </form>                                                        
                                                         @endif
                                                     </td>                                                    
                                                 </tr>

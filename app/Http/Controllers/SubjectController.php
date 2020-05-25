@@ -309,7 +309,7 @@ class SubjectController extends Controller
 
         return redirect(action('SubjectController@assesmentImport'))->with('sukses', 'Daftar nilai berhasil di verifikasi dan tersimpan!');
     }
-
+   
     public function subjectDetail(Request $request, $id)
     {
         $mapel = Subject::find($id);
@@ -399,10 +399,7 @@ class SubjectController extends Controller
                            'kkm', 'data_final_score', 'rata_kelas'));
     }   
 
-    public function getDetailSubjectEachStudent($idsiswa, $idmapel)
-    {
-        return view('student.index');
-    }
+    
 }
  
 
