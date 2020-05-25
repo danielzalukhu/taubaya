@@ -66,28 +66,19 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>NISN</th>
-                                            <th>NAMA SISWA</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
                                             <th>UJIAN TENGAH SEMESTER</th>
                                             <th>UJIAN AKHIR SEMESTER</th>
                                             <th>NILAI AKHIR</th>                                            
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody-detail-subject">
                                         @php $i=1 @endphp
-                                        @foreach($detail_mapel as $dm)
+                                        @foreach($detail_mapel_ku as $dm)
                                             @if($dm->IS_VERIFIED == 1) 
                                                 <tr>
                                                     <td>{{ $i++ }}</td>
-                                                    <td>{{ $dm->subjectrecord->student->NISN }}</td>
-                                                    <td>
-                                                        {{ $dm->subjectrecord->student->FNAME }}
-                                                        {{" "}}
-                                                        {{ $dm->subjectrecord->student->LNAME}}
-                                                    </td>
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php
@@ -144,25 +135,7 @@
                                                         @elseif( $dm->FINAL_SCORE > $dm->MINIMALPOIN )
                                                             <div class="btn btn-success btn-sm">{{ $dm->FINAL_SCORE }}</div>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($dm->IS_VERIFIED == 0)                                                                             
-                                                            <a href="{{ route('subject.editAssesment', $dm->id) }}" class="btn btn-warning btn-sm">
-                                                                <i class="fa fa-pencil"></i>
-                                                            </a>
-                                                            <form action="{{ route('subject.destroyAssesment', $dm->id) }}" method="GET" class="inline">
-                                                                @method('delete')
-                                                                @csrf
-                                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        @else
-                                                            <a href="{{ route('subject.detailSubject', [$mapel->id, $dm->subjectrecord->student->id]) }}" class="btn btn-info btn-sm">
-                                                                <i class="fa fa-eye"></i>
-                                                            </a>                                                              
-                                                        @endif
-                                                    </td>                                                    
+                                                    </td>                                      
                                                 </tr>
                                             @endif
                                         @endforeach  
@@ -194,6 +167,7 @@
             })
         })
 
+    var studentId = '{{ $siswa->id }}'
     var subjectId = '{{ $mapel->id }}'
 
     $('#dropdown-detail-subject-academic-year').val({{$academic_year_id}})    
@@ -205,10 +179,12 @@
         window.location = route+"?academicYearId="+academicYearId;        
     })
 
-    var categories = {!! json_encode($tahun_ajaran) !!}
+    var categories = {!! json_encode($tahun_ajaran) !!}    
     var kkm = {!! json_encode($kkm) !!}
+    var finalScore = {!! json_encode($data_final_score) !!}
     var averageScorePerClass = {!! json_encode($rata_kelas) !!}
-    var badStudent = {!! json_encode($siswa_dibawah_rata) !!}
+    
+    console.log(categories)
 
     var category = []
     var series1 = []
@@ -216,35 +192,41 @@
     var series3 = []
 
     categories.forEach(function(item){
-        var catName = item.TYPE + " " + item.NAME
-        category.push(catName)    
-       
-        badStudent.forEach(function(obj_x){
-            if(item.id == obj_x.ACADEMIC_YEAR_ID){
-                var tmp_jumlah = obj_x.JUMLAH_SISWA_DIBAWAH_RATA
-                series1.push(tmp_jumlah)                
-            }  
-        })  
+        var catName = item.TYPE + " " + item.NAME        
+        category.push(catName)
+        
+        var values = 0;
+    
+        finalScore.forEach(function(obj_score){
+            if(obj_score.ACADEMIC_YEAR_ID == item.id){
+                values = obj_score.FINAL_SCORE                    
+            }
+        })
+    
+        series1.push(values);
 
+        kkm.forEach(function(obj_kkm){
+            var tmp_kkm = obj_kkm.MINIMALPOIN
+            series2.push(tmp_kkm)
+        })       
+        
         averageScorePerClass.forEach(function(obj_rata){
             if(item.id == obj_rata.ACADEMIC_YEAR_ID){
                 var tmp_rata = obj_rata.RATAKELAS
                 series3.push(tmp_rata)
+            }
+            
+        })
+    })    
 
-                kkm.forEach(function(obj_kkm){
-                    var tmp_kkm = obj_kkm.MINIMALPOIN
-                    series2.push(tmp_kkm)
-                })
-            }            
-        })              
-    })
-
+    console.log(series3)
+    
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {
             type: 'line'
         },
         title: {
-            text: 'Statistik Nilai Akhir Kelas Per Semester'
+            text: 'Statistik Nilai Akhir Per Semester'
         },
         xAxis: { 
             categories: category
@@ -266,13 +248,13 @@
             enabled: false
         },
         series: [{
-            name: 'Jumlah siswa nilai akhir dibawah rata kelas',
+            name: 'Nilai Akhir',
             data: series1
         }, {
             name: 'KKM',
             data: series2
         },{
-            name: 'Nilai rata-rata kelas',
+            name: 'Nilai Rata-Rata Kelas',
             data: series3
         }]
     });

@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 // DASHBOARD
 Route::get('/', 'DashboardController@index')->middleware('auth')->name('dashboard.index');
 
@@ -28,6 +29,7 @@ Route::get('subject/assesment/{id}/edit', 'SubjectController@editAssesment')->mi
 Route::post('subject/assesment/{id}/update', 'SubjectController@updateAssesment')->middleware('auth')->name('subject.updateAssesment');
 Route::get('subject/assesment/{id}/delete', 'SubjectController@destroyAssesment')->middleware('auth')->name('subject.destroyAssesment');
 Route::get('subject/assesment/status', 'SubjectController@setStatus')->middleware('auth')->name('subject.setStatus');
+Route::get('subject/detail/{id-siswa}/{id-mapel}', 'SubjectController@getDetailSubjectEachStudent')->middleware('auth')->name('subject.detailSubject');
 Route::get('subject/detail/{id}', 'SubjectController@subjectDetail')->middleware('auth')->name('subject.detail');
 Route::post('student', 'ImportController@importStudent')->middleware('auth')->name('student.importStudent');
 Route::post('subject/assesment/import', 'ImportController@importAssesment')->middleware('auth')->name('subject.importAssesment');

@@ -56,7 +56,6 @@
               <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
             @elseif(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
               <li><a href="{{route('student.mapelguru')}}"><i class="fa fa-book"></i>MAPEL-GURU</a></li> 
-              <!-- <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li> -->
               <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>LAPOR KETIDAKTUNTASAN </a></li>
               <li><a href="{{route('subject.assesment')}}"><i class="fa fa-pencil"></i>INPUT PENILAIAN</a></li>              
             @else
