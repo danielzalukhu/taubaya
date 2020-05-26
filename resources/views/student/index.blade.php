@@ -77,13 +77,16 @@
                                             <td>{{ $s->FNAME }}{{" "}}{{ $s->LNAME }}</td>
                                             <td>{{ $s->grade->NAME }}</td>
                                             <td>
-                                                <a href="{{ route('student.profile', ['id'=>$s->id]) }}" class="btn btn-info btn-sm">
+                                                <a href="{{ route('student.profile', ['id'=>$s->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
+                                                </a>  
+                                                <a href="{{ route('subject.studentSubject', [$s->id, $s->grade->NAME]) }}" title="Mata Pelajaran" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-book"></i>
                                                 </a>                                            
                                                 <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
                                                     @method('delete')
                                                     @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                                    <button title="Hapus" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </form> 
