@@ -14,8 +14,8 @@ class Extracurricular extends Model
         return $this->belongsTo('App\Staff', 'STAFFS_ID');
     }
 
-    public function extracurricularrecord()
+    public function extracurricularreport()
     {
-        return $this->belongsToMany('App\ExtracurricularRecord', 'extracurriculars_reports')->withPivot(['SCORE', 'NOTES']);
+        return $this->hasMany('App\ExtracurricularReport');
     }
 }

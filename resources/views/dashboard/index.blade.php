@@ -28,6 +28,21 @@
 
         <section class="content">
             <div class="row">
+                @if(Auth::guard('web')->user()->staff->getDepartmentName() === "Departemen PENJASKES")
+                <div class="col-lg-3 col-xs-6">
+                  <div class="small-box bg-blue">
+                    <div class="inner">
+                      <h3>EKSKUL</h3>
+                      <p>INPUT</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa fa-list"></i>
+                    </div>
+                    <a href="{{route('extracurricular.index')}}" class="small-box-footer">Daftar Ekskul.. <i class="fa fa-arrow-circle-right"></i></a>
+                  </div>
+                </div>
+                @endif
+
                 @if(Auth::guard('web')->user()->ROLE === "STAFF")
                 <div class="col-lg-3 col-xs-6">
                   <div class="small-box bg-blue">

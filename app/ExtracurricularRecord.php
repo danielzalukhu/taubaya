@@ -9,9 +9,9 @@ class ExtracurricularRecord extends Model
     protected $table = 'extracurricular_records';
     protected $fillable = ['STUDENTS_ID', 'ACADEMIC_YEAR_ID'];
 
-    public function extracurricular()
+    public function extracurricularreport()
     {
-        return $this->belongsToMany('App\Extracurricular', 'extracurriculars_reports')->withPivot(['SCORE', 'NOTES']);
+        return $this->hasMany('App\ExtracurricularReport');
     }
 
     public function academicyear()

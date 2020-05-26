@@ -8,7 +8,10 @@ use App\ExtracurricularRecord;
 use App\ExtracurricularReport;
 use App\Staff;
 use App\Student;
+use App\Grade;
+use App\AcademicYear;
 use Auth;
+use DB;
 
 class ExtracurricularController extends Controller
 {
@@ -20,7 +23,7 @@ class ExtracurricularController extends Controller
     public function index()
     {
         $ekskul = Extracurricular::all();    
-
+        
         return view('extracurricular.index', compact('ekskul'));
 
     }
@@ -172,6 +175,32 @@ class ExtracurricularController extends Controller
         ExtracurricularRecord::where('id', $ekskul_report->EXTRACURRICULAR_RECORD_ID)->delete();
 
         return redirect(action('ExtracurricularController@ekskulAssesment'))->with('sukses', 'Data nilai ekskul berhasil dihaous');
+    }
+
+    public function ekskulguru(Request $request)
+    {
+        $tahun_ajaran = AcademicYear::all();
+
+        $max_academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+
+        if($request->has('academicYearId')){
+            $academic_year_id = $request->academicYearId;
+        }
+        else{
+            $academic_year_id = $max_academic_year_id;
+        }
+
+        $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
+                                    ->first()->id;
+        
+        $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
+                                    ->join('students', 'extracurricular_records.STUDENTS_ID', 'students.id')
+                                    ->select('extracurricular_records.*', 'extracurricular_reports.*')
+                                    ->where('students.GRADES_ID', $kelas_guru)
+                                    ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                    ->get();
+        
+        return view('extracurricular.ekskul-guru', compact('tahun_ajaran', 'ekskul', 'academic_year_id'));                            
     }
 }
 

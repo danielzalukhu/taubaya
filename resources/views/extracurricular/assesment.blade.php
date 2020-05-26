@@ -83,60 +83,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="panel-heading">
-                            <h3 class="box-title">DAFTAR NILAI EKSKUL</h3>            
-                        </div>
-                        <div class="box">
-                            <div class="box-body">
-                                <div class="table-responsive">
-                                    <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>NAMA SISWA</th>
-                                            <th>EKSKUL</th>
-                                            <th>TAHUN AJARAN</th>
-                                            <th>NILAI</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php $i=1 @endphp
-                                    @foreach($ekskul_report as $er)
-                                        <tr>
-                                            <td>{{$i++}}</td>
-                                            <td>{{ $er->extracurricularrecord->student->FNAME }}{{" "}}{{ $er->extracurricularrecord->student->LNAME }}</td>
-                                            <td>{{ $er->extracurricular->NAME }}</td>
-                                            <td>
-                                                {{ $er->extracurricularrecord->academicyear->TYPE }}
-                                                {{ " - " }}
-                                                {{ $er->extracurricularrecord->academicyear->NAME }}
-                                            </td>
-                                            <td>{{ $er->SCORE }}</td>
-                                            <td>
-                                                <a href="{{ route ('extracurricular.editAssesment', $er->id )}}" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <form action="{{ route ('extracurricular.destroyAssesment', $er->id )}}" method="get" class="inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>                                            
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>                
-                </div>              
+                </div>                
             </div>
         </div>
     </div>
