@@ -72,13 +72,13 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            @if(Auth::guard('web')->user()->staff->getDepartmentName() === "Departemen PENJASKES")
+            @if(Auth::guard('web')->user()->ROLE === "STAFF" && Auth::guard('web')->user()->staff->getDepartmentName() === "Departemen PENJASKES")
               <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
               <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>                          
-            @elseif(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
-              <li><a href="{{route('extracurricular.ekskulguru')}}"><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>            
+            @elseif(Auth::guard('web')->user()->ROLE === "STAFF")
+              <li><a href="{{route('extracurricular.ekskul')}}"><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>            
             @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
-              <li><a href="{{route('extracurricular.ekskulku')}}"><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>              
+              <li><a href="{{route('extracurricular.ekskul')}}"><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>              
             @endif
           </ul>
         </li>

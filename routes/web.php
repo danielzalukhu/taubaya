@@ -64,8 +64,7 @@ Route::post('extracurricular/assesment/input', 'ExtracurricularController@storeA
 Route::get('extracurricular/assesment/edit/{id}', 'ExtracurricularController@editAssesment')->middleware('auth')->name('extracurricular.editAssesment');
 Route::put('extracurricular/assesment/update/{id}', 'ExtracurricularController@updateAssesment')->middleware('auth')->name('extracurricular.updateAssesment');
 Route::get('extracurricular/delete/{id}', 'ExtracurricularController@destroyAssesment')->middleware('auth')->name('extracurricular.destroyAssesment');
-Route::get('extracurricular/ekskul', 'ExtracurricularController@ekskulguru')->middleware('auth')->name('extracurricular.ekskulguru');
-Route::get('extracurricular/ekskulku', 'ExtracurricularController@ekskulku')->middleware('auth')->name('extracurricular.ekskulku');
+Route::get('extracurricular/ekskul', 'ExtracurricularController@showEkskul')->middleware('auth')->name('extracurricular.ekskul');
 Route::resource('extracurricular', 'ExtracurricularController')->middleware('auth');
 
 // AUTH

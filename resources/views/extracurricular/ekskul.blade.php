@@ -99,7 +99,7 @@
 
     $('#dropdown-ekskul-academic-year').change(function(){
         var academicYearId = $(this).val()   
-        var route =  "{{ route('extracurricular.ekskulguru') }}"  
+        var route =  "{{ route('extracurricular.ekskul') }}"  
         window.location = route+"?academicYearId="+academicYearId;        
     })
 
