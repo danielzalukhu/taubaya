@@ -73,8 +73,8 @@
                                     @foreach($siswa as $s)
                                         <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td>{{ $s->NISN }}</a></td>
-                                            <td>{{ $s->FNAME }}{{" "}}{{ $s->LNAME }}</td>
+                                            <td>{{ $s->student->NISN }}</a></td>
+                                            <td>{{ $s->student->FNAME }}{{" "}}{{ $s->student->LNAME }}</td>
                                             <td>{{ $s->grade->NAME }}</td>
                                             <td>
                                                 <a href="{{ route('student.profile', ['id'=>$s->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">

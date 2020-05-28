@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Grade extends Model
 {
@@ -19,8 +20,8 @@ class Grade extends Model
         return $this->belongsTo('App\Staff', 'STAFFS_ID');
     }
 
-    public function student()
+    public function gradestudent()
     {
-        return $this->hasMany('App\Student');
+        return $this->hasMany('App\GradeStudent');
     }
 }

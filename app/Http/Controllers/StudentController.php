@@ -14,6 +14,7 @@ use App\DepartmentStaff;
 use App\Grade;
 use App\Achievement;
 use App\SubjectReport;
+use App\GradeStudent;
 use DB;
 use Auth;
 
@@ -40,12 +41,13 @@ class StudentController extends Controller
         if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){                    
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
                                     ->first()->id;
-            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();
+
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->get();
         }
         else{
-            $siswa = Student::where('GRADES_ID', $grade_id)->get();            
+            $siswa = GradeStudent::where('GRADES_ID', $grade_id)->get();
         }
-        // dd($kelas_guru);
+
         return view('student.index', compact('kelas', 'siswa', 'grade_id'));
     }
 
@@ -343,8 +345,9 @@ class StudentController extends Controller
 
         $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                 ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                 ->select(DB::raw('SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID) AS RATAKELAS'), 'subject_records.*')
-                                ->where('students.GRADES_ID', '=', $sub_query)
+                                ->where('grades_students.GRADES_ID', '=', $sub_query)
                                 ->where('subject_reports.SUBJECTS_ID', $mapel->id)
                                 ->groupBy('subject_records.ACADEMIC_YEAR_ID')
                                 ->get();             
@@ -359,8 +362,8 @@ class StudentController extends Controller
                                     ->where('subject_reports.SUBJECTS_ID', $mapel->id)
                                     ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                     ->where('subject_records.STUDENTS_ID', $siswa->id)
-                                    ->get();  
-                                    
+                                    ->get();                                            
+        // dd($detail_mapel_ku);
         $data_final_score = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                     ->select('subject_records.*', 'subject_reports.*')
                                     ->where('subject_reports.SUBJECTS_ID', $mapel->id)                                        

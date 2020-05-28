@@ -10,7 +10,7 @@ class Student extends Model
     protected $fillable = ['ATT_ID', 'CARD_NUM', 'NIS', 'PASSWORD', 'NISN', 'NIK', 'FNAME', 'LNAME', 'GENDER',
                            'BPLACE', 'BDATE', 'MAIL', 'PHONE', 'ADDRESS', 'RT', 'RW', 'DISTRICT', 'SUBDISTRICT',
                            'CITY', 'PROVINCE', 'GR_FROM', 'BANK_ACC', 'STATUS', 'NOTES', 'IMG_PATH', 'BANKS_ID',
-                           'RELIGIONS_ID', 'TOKENS_ID', 'USERS_EMAIL', 'GRADES_ID'];
+                           'RELIGIONS_ID', 'ACADEMICE_YEAR_ID', 'TOKENS_ID'];
 
     public function absent()
     {
@@ -27,9 +27,19 @@ class Student extends Model
         return $this->belongsTo('App\Religion', 'RELIGIONS_ID');
     }
 
-    public function grade()
+    public function gradestudent()
     {
-        return $this->belongsTo('App\Grade', 'GRADES_ID');
+        return $this->hasMany('App\GradeStudent');
+    }
+
+    public function getGradeName(){
+        $grade = Grade::select("grades.NAME")
+                        ->join('grades_students','grades.id','=','grades_students.GRADES_ID')                        
+                        ->join('students','grades_students.STUDENTS_ID','=','students.id') 
+                        ->WHERE("grades_students.STUDENTS_ID", $this->id)
+                        ->first();
+
+        return $grade->NAME;
     }
                            
     public function violationrecord()

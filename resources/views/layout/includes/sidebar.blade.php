@@ -75,10 +75,13 @@
             @if(Auth::guard('web')->user()->ROLE === "STAFF" && Auth::guard('web')->user()->staff->getDepartmentName() === "Departemen PENJASKES")
               <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
               <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>                          
+              <li><a href="{{route('extracurricular.ekskul')}}"><i class="fa fa-list"></i>DAFTAR NILAI EKSKUL </a></li>            
             @elseif(Auth::guard('web')->user()->ROLE === "STAFF")
-              <li><a href="{{route('extracurricular.ekskul')}}"><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>            
+              <li><a href="{{route('extracurricular.index')}}"><i class="fa fa-list-ol"></i>DAFTAR EKSTRAKURIKULER</a></li>
+              <li><a href="{{route('extracurricular.assesment')}}"><i class="fa fa-pencil"></i>INPUT NILAI EKSKUL</a></li>            
+              <li><a href="{{route('extracurricular.ekskul')}}"><i class="fa fa-list"></i>EKSKUL-SISWA</a></li>            
             @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
-              <li><a href="{{route('extracurricular.ekskul')}}"><i class="fa fa-pencil"></i>EKSKUL-KU</a></li>              
+              <li><a href="{{route('extracurricular.ekskul')}}"><i class="fa fa-list"></i>EKSKUL-KU</a></li>              
             @endif
           </ul>
         </li>

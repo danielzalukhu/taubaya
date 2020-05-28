@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\Hash;
 use App\Student;
 use App\User;
+use App\GradeStudent;
 use DB;
 
 class StudentImport implements ToCollection
@@ -48,16 +49,20 @@ class StudentImport implements ToCollection
                     $siswa->FNAME = $studentName[0];
                     $siswa->LNAME = $studentName[1];
                     $siswa->ACADEMIC_YEAR_ID = $this->request->session()->get("session_academic_year_id");
-                    $siswa->GRADES_ID = $id_kelas;
                     $siswa->save();
+
+                    $kelas_siswa = GradeStudent::create([
+                        'STUDENTS_ID' => $siswa->id,
+                        'GRADES_ID' => $id_kelas,
+                        'ACADEMIC_YEAR_ID' => $this->request->session()->get("session_academic_year_id")
+                    ]);
                     
                     $user = User::create([
                         'name' => $student_full_name,
                         'email' => $studentName[0] . "@student.ac.id",
                         'password' => Hash::make($studentName[0]),
                         'ROLE' => 'STUDENT',
-                        'STUDENTS_ID' => $siswa->id
-                                             
+                        'STUDENTS_ID' => $siswa->id                                             
                     ]);
                 }   
             }            

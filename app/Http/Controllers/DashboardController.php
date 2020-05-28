@@ -30,7 +30,7 @@ class DashboardController extends Controller
             $request->session()->put('session_user_id', Auth::user()->staff->id);
         }
         else{
-            $request->session()->put('session_student_class', Auth::user()->student->grade->NAME);
+            $request->session()->put('session_student_class', Auth::user()->student->getGradeName());
             $request->session()->put('session_student_id', Auth::user()->student->id);
         }        
         
@@ -58,7 +58,9 @@ class DashboardController extends Controller
         if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){  
             $kelas_guru = Grade::where('STAFFS_ID', $user_id)
                                     ->first()->id; 
-            $siswa = Student::select(DB::raw('COUNT(*) AS BANYAKSISWA'))->where('GRADES_ID', $kelas_guru)->first()->BANYAKSISWA;                
+            $siswa = Student::join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                        ->select(DB::raw('COUNT(*) AS BANYAKSISWA'))
+                        ->where('grades_students.GRADES_ID', $kelas_guru)->first()->BANYAKSISWA;                
         }
         elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER"){
             $siswa = Student::all()->count();               
@@ -77,8 +79,9 @@ class DashboardController extends Controller
                                     ->first()->id; 
 
             $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select(DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'))
-                                        ->where('students.GRADES_ID', $kelas_guru)
+                                        ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->first()->BANYAKPENGHARGAAN;
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
@@ -108,8 +111,9 @@ class DashboardController extends Controller
                                     ->first()->id; 
 
             $pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
-                                        ->where('students.GRADES_ID', $kelas_guru)
+                                        ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->first()->BANYAKPELANGGARAN;
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){

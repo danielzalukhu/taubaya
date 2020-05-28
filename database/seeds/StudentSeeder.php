@@ -47,7 +47,6 @@ class StudentSeeder extends Seeder
             'RELIGIONS_ID' => '3',
             'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '1',
-            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
@@ -80,7 +79,6 @@ class StudentSeeder extends Seeder
             'RELIGIONS_ID' => '1',
             'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '1',
-            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
@@ -113,7 +111,6 @@ class StudentSeeder extends Seeder
             'RELIGIONS_ID' => '5',
             'ACADEMIC_YEAR_ID' => '1',
             'TOKENS_ID' => '1',
-            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
@@ -146,7 +143,6 @@ class StudentSeeder extends Seeder
             'RELIGIONS_ID' => '2',
             'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '1',
-            'GRADES_ID' => '1'
         ]);
 
         DB::table('students')->insert([
@@ -179,7 +175,6 @@ class StudentSeeder extends Seeder
             'RELIGIONS_ID' => '1',
             'ACADEMIC_YEAR_ID' => '7',
             'TOKENS_ID' => '2',
-            'GRADES_ID' => '1'
         ]);
     }
 }

@@ -56,7 +56,7 @@
                                         <label>Nama Siswa</label>
                                         <select name="ar_student_name" class="form-control select2" style="width: 100%;">
                                             @foreach($siswa as $s)
-                                                <option value='{{ $s->id }}'>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>
+                                                <option value='{{ $s->id }}'>{{ $s->student->FNAME }}{{" "}}{{$s->student->LNAME}}</option>
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))

@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">STATISTIK NILAI: <B>{{ $mapel->DESCRIPTION }}</B> </h3> 
+                            <h3 class="box-title">STATISTIK NILAI: <B>{{ $mapel->DESCRIPTION }}</B> </h3>                             
                             <h4>NAMA SISWA: <b>{{ $siswa->FNAME }}{{" "}}{{ $siswa->LNAME }}</b></h4>           
                         </div>
                         <div class="box box-info">
@@ -175,17 +175,17 @@
 
     $('#dropdown-detail-subject-academic-year').change(function(){
         var academicYearId = $(this).val()   
-        var route =  "{{ route('subject.detail', ':id') }}"  
-        route = route.replace(':id', '{{ $mapel->id }}')
-        window.location = route+"?academicYearId="+academicYearId;        
+        var route =  "{{ route('subject.studentDetailSubject', [':id', ':idm']) }}"  
+        route1 = route.replace(':id', '{{ $siswa->id }}')
+        route2 = route1.replace(':idm', '{{ $mapel->id }}')
+        
+        window.location = route2+"?academicYearId="+academicYearId;        
     })
 
     var categories = {!! json_encode($tahun_ajaran) !!}    
     var kkm = {!! json_encode($kkm) !!}
     var finalScore = {!! json_encode($data_final_score) !!}
     var averageScorePerClass = {!! json_encode($rata_kelas) !!}
-    
-    console.log(categories)
 
     var category = []
     var series1 = []
@@ -219,8 +219,6 @@
             
         })
     })    
-
-    console.log(series3)
     
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {

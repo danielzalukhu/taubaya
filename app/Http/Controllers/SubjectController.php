@@ -334,8 +334,9 @@ class SubjectController extends Controller
 
         $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                 ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                 ->select(DB::raw('SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID) AS RATAKELAS'), 'subject_records.*')
-                                ->where('students.GRADES_ID', '=', $sub_query)
+                                ->where('grades_students.GRADES_ID', '=', $sub_query)
                                 ->where('subject_reports.SUBJECTS_ID', $mapel->id)
                                 ->groupBy('subject_records.ACADEMIC_YEAR_ID')
                                 ->get();             
@@ -343,7 +344,9 @@ class SubjectController extends Controller
         if(Auth::guard('web')->user()->ROLE === "STAFF"){
             $select_student_ay_in = Grade::select('id')->where('NAME', $y)->first()->id;
             
-            $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('GRADES_ID', $select_student_ay_in)->limit(1)->first()->AY_ID;
+            $selected_student_ay = Student::select('students.ACADEMIC_YEAR_ID AS AY_ID')
+                            ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                            ->where('grades_students.GRADES_ID', $select_student_ay_in)->limit(1)->first()->AY_ID;
             
             $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
             
@@ -357,8 +360,9 @@ class SubjectController extends Controller
             foreach($rata_kelas as $rk){
                 $siswa_dibawah_rata = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                         ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select('subject_records.*', DB::raw('COUNT(*) AS JUMLAH_SISWA_DIBAWAH_RATA'))
-                                        ->where('students.GRADES_ID', '=', $sub_query)
+                                        ->where('grades_students.GRADES_ID', '=', $sub_query)
                                         ->where('subject_reports.SUBJECTS_ID', $mapel->id)
                                         ->where('subject_reports.FINAL_SCORE', '<', $rk->RATAKELAS)
                                         ->groupBy('subject_records.ACADEMIC_YEAR_ID')

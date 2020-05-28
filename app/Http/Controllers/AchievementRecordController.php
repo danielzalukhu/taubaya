@@ -9,6 +9,7 @@ use App\Student;
 use App\Achievement;
 use App\AcademicYear;
 use App\Grade;
+use App\GradeStudent;
 use DB;
 use Auth;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class AchievementRecordController extends Controller
         }
 
         $catatan_penghargaan = $this->showAchievement($request->session()->get('session_user_id'), $academic_year_id);
-
+        
         $kelas = Grade::all();
 
         // UNTUK GRAFIK
@@ -54,14 +55,15 @@ class AchievementRecordController extends Controller
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
                                 ->first()->id; 
-
-            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();                            
+            
+            $siswa = GradeStudent::where('GRADES_ID', $request->gradeId)->get();                        
             
             $data = Achievement::join('achievement_records', 'achievements.id', 'achievement_records.ACHIEVEMENTS_ID')
                         ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                         ->select(DB::raw('GRADE AS TINGKAT'), DB::raw('MONTH(achievement_records.DATE) AS BULAN'), DB::raw('COUNT(*) AS JUMLAH'))
                         ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                        ->where('students.GRADES_ID', $kelas_guru)
+                        ->where('grades_students.GRADES_ID', $kelas_guru)
                         ->groupBy('TINGKAT', 'BULAN')
                         ->orderBy('BULAN', 'ASC')
                         ->get();                                         
@@ -103,8 +105,9 @@ class AchievementRecordController extends Controller
                                     ->first()->id; 
 
             $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select('achievement_records.*')
-                                        ->where('students.GRADES_ID', $kelas_guru)
+                                        ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
                                         ->get();
         }
@@ -114,7 +117,7 @@ class AchievementRecordController extends Controller
         else{
             $penghargaan = AchievementRecord::where('achievement_records.ACADEMIC_YEAR_ID', $ay)->get();
         }
-
+        
         return $penghargaan;
     }
 
@@ -124,17 +127,17 @@ class AchievementRecordController extends Controller
         $kelas = Grade::all();            
 
         if($request->has('gradeId')){
-            $default_student = Student::where('GRADES_ID', $request->gradeId)->get();
+            $default_student = GradeStudent::where('GRADES_ID', $request->gradeId)->get();
         }        
         else{
-            $default_student = Student::where('GRADES_ID', 1)->get();
+            $default_student = GradeStudent::where('GRADES_ID', 1)->get();
         }
         
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
                                 ->first()->id; 
 
-            $siswa = Student::where('GRADES_ID', $kelas_guru)->get();                                                                   
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->get();
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
             $siswa = Student::all();       
@@ -145,7 +148,7 @@ class AchievementRecordController extends Controller
         else{
             $siswa = $default_student;
         }
-        
+        // dd($siswa);
         return view('achievementrecord.create', compact('siswa', 'kelas', 'penghargaan'));
     }
 

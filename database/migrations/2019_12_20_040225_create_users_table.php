@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->foreign('STAFFS_ID')->references('id')->on('staffs')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('STUDENTS_ID')->nullable();
             $table->foreign('STUDENTS_ID')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedInteger('GUARDIANS_ID')->nullable();
+            $table->foreign('GUARDIANS_ID')->references('id')->on('guardians')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

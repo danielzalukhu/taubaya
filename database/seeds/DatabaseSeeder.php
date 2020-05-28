@@ -20,9 +20,10 @@ class DatabaseSeeder extends Seeder
         $this->call(DepartmentSeeder::class);
         $this->call(StaffSeeder::class);
         $this->call(AcademicYearSeeder::class);
-        $this->call(GradeSeeder::class);
+        $this->call(GradeSeeder::class);        
         $this->call(TokenSeeder::class);
         $this->call(StudentSeeder::class);
+        $this->call(GradeStudentSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ViolationSeeder::class);
         $this->call(AchievementSeeder::class);
