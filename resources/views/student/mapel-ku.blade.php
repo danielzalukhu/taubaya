@@ -20,6 +20,19 @@
                             <h3 class="box-title">MATA PELAJARAN-KU</h3>
                         </div>
                         <div class="box">
+                            <div class="box-header">
+                                <div class="right">
+                                    <h5 class="box-header-title"><b>RIWAYAT KELAS: </b>
+                                        <span>
+                                            <div class="btn-group">
+                                                <select type="button" id="dropdown-daftar-kelas" class="btn btn-default dropdown-toggle">
+                                                    
+                                                </select>
+                                            </div>
+                                        </span>        
+                                    </h5>                           
+                                </div>
+                            </div>
                             <div class="box-body">
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped">
