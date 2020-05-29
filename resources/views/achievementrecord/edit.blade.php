@@ -57,7 +57,7 @@
                                         <label>Nama Siswa</label>
                                         <select name="ar_student_name" class="form-control select2" style="width: 100%;">
                                             @foreach($siswa as $s)
-                                                <option value="{{ $s->id }}" @if($catatan_penghargaan->STUDENTS_ID == $s->id) selected @endif>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>                                                    
+                                                <option value="{{ $s->student->id }}" @if($catatan_penghargaan->STUDENTS_ID == $s->student->id) selected @endif>{{ $s->student->FNAME }}{{" "}}{{$s->student->LNAME}}</option>                                                    
                                             @endforeach                                                
                                         </select>
                                         @if($errors->has('ar_student_name'))

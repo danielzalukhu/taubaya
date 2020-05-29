@@ -56,7 +56,7 @@
                                         <label>Nama Siswa</label>
                                         <select name="vr_student_name" class="form-control select2" style="width: 100%;">
                                             @foreach($siswa as $s)
-                                                <option value='{{ $s->id }}'>{{ $s->student->FNAME }}{{" "}}{{$s->student->LNAME}}</option>
+                                                <option value='{{ $s->student->id }}'>{{ $s->student->FNAME }}{{" "}}{{$s->student->LNAME}}</option>
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
@@ -114,7 +114,7 @@
 
     $('#selected_grade').change(function(){
         var gradeId = $(this).val()   
-        var route =  "{{ route('achievementrecord.create') }}"  
+        var route =  "{{ route('violationrecord.create') }}"  
         window.location = route+"?gradeId="+gradeId;        
     })
 </script>

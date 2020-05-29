@@ -38,14 +38,20 @@ class StudentController extends Controller
             $grade_id = $min_grade_id;
         }
         
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
+
         if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){                    
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
-                                    ->first()->id;
-
-            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->get();
+                            ->first()->id;
+            
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)
+                                ->where('ACADEMIC_YEAR_ID', $selected_student)
+                                ->get();
         }
         else{
-            $siswa = GradeStudent::where('GRADES_ID', $grade_id)->get();
+            $siswa = GradeStudent::where('GRADES_ID', $grade_id)
+                            ->where('ACADEMIC_YEAR_ID', $selected_student)
+                            ->get();
         }
 
         return view('student.index', compact('kelas', 'siswa', 'grade_id'));
@@ -80,29 +86,23 @@ class StudentController extends Controller
                             ->groupBy('TYPE')
                             ->get();
 
-        $tahun_ajaran = AcademicYear::all();
+        $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $siswa->id) ->first()->AY_ID;                        
+
+        $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
                                            
         $catatan_pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
                             ->select('violation_records.*', 'violations.*')
                             ->where('STUDENTS_ID', '=', $id)
                             ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'));
 
-        $point = ViolationRecord::select(DB::raw('SUM(TOTAL) AS POINT'))                        
+        $violation_point = ViolationRecord::select(DB::raw('SUM(TOTAL) AS POINT'))                        
                             ->where('STUDENTS_ID', $id)
-                            ->get();
-        
-        foreach($point as $p){
-            $point_record = $p->POINT;
-        }
+                            ->first()->POINT;    
                 
         $achievement_point = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
                                         ->select(DB::raw('SUM(POINT) AS POINT'))
                                         ->where('achievement_records.STUDENTS_ID', $id)
-                                        ->get();    
-        
-        foreach($achievement_point as $ap){
-            $total_achievement_point = $ap->POINT;        
-        }
+                                        ->first()->POINT;            
         
         $catatan_penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                                        
                                             ->select('achievements.*', 'achievement_records.*')
@@ -173,14 +173,16 @@ class StudentController extends Controller
         // RETURN VIEW 
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
-            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
-                                                   'catatan_penghargaan', 'total_achievement_point',
+            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'tahun_ajaran',
+                                                   'catatan_pelanggaran', 'violation_point',
+                                                   'catatan_penghargaan', 'achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
                                                    'tipeAbsen', 'dataAbsen'));
         else                                               
-            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'catatan_pelanggaran', 'tahun_ajaran', 'point_record',
-                                                   'catatan_penghargaan', 'total_achievement_point',
+            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'tahun_ajaran',
+                                                   'catatan_pelanggaran', 'violation_point',
+                                                   'catatan_penghargaan', 'achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
                                                    'tipeAbsen', 'dataAbsen'));
@@ -363,7 +365,7 @@ class StudentController extends Controller
                                     ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                     ->where('subject_records.STUDENTS_ID', $siswa->id)
                                     ->get();                                            
-        // dd($detail_mapel_ku);
+        
         $data_final_score = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                     ->select('subject_records.*', 'subject_reports.*')
                                     ->where('subject_reports.SUBJECTS_ID', $mapel->id)                                        

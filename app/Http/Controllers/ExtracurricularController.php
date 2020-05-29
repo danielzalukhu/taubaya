@@ -10,6 +10,7 @@ use App\Staff;
 use App\Student;
 use App\Grade;
 use App\AcademicYear;
+use App\GradeStudent;
 use Auth;
 use DB;
 
@@ -99,14 +100,36 @@ class ExtracurricularController extends Controller
     }
 
     public function ekskulAssesment(Request $request)
-    {        
-        $siswa = Student::all();
+    {                
         $ekskul = Extracurricular::all();
         $ekskul_report = ExtracurricularReport::all();
         $ekskulku = ExtracurricularReport::join('extracurricular_records', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID', 'extracurricular_records.id')
                                     ->select('extracurricular_reports.*', 'extracurricular_records.*')
                                     ->where('extracurricular_records.STUDENTS_ID', $request->session()->get('session_student_id'))
                                     ->get();
+
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
+
+        if($request->has('gradeId')){
+            $default_student = GradeStudent::where('GRADES_ID', $request->gradeId)
+                                ->where('ACADEMIC_YEAR_ID', $selected_student)                            
+                                ->get();
+        }        
+        else{
+            $default_student = GradeStudent::where('GRADES_ID', 1)->where('ACADEMIC_YEAR_ID', $selected_student) ->get();
+        }
+
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
+
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
+        }        
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
+        }
+        else{
+            $siswa = $default_student;
+        }
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
             return view('extracurricular.assesment', compact('ekskul', 'siswa', 'ekskul_report'));
@@ -143,7 +166,29 @@ class ExtracurricularController extends Controller
     {
         $ekskul_report = ExtracurricularReport::find($id);        
         $ekskul = Extracurricular::all();
-        $siswa = Student::all();
+        
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
+
+        if($request->has('gradeId')){
+            $default_student = GradeStudent::where('GRADES_ID', $request->gradeId)
+                                ->where('ACADEMIC_YEAR_ID', $selected_student)                            
+                                ->get();
+        }        
+        else{
+            $default_student = GradeStudent::where('GRADES_ID', 1)->where('ACADEMIC_YEAR_ID', $selected_student) ->get();
+        }
+
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
+
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
+        }        
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
+        }
+        else{
+            $siswa = $default_student;
+        }
 
         return view('extracurricular.editAssesment', compact('ekskul_report', 'ekskul', 'siswa'));
     }
@@ -189,33 +234,36 @@ class ExtracurricularController extends Controller
         else{
             $academic_year_id = $max_academic_year_id;
         }
+        
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
 
         if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){
-            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
-                            ->first()->id;
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id;
 
             $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
-                        ->join('students', 'extracurricular_records.STUDENTS_ID', 'students.id')
-                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                        ->select('extracurricular_records.*', 'extracurricular_reports.*')
-                        ->where('grades_students.GRADES_ID', $kelas_guru)
-                        ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                        ->get();
+                                        ->join('students', 'extracurricular_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->select('extracurricular_records.*', 'extracurricular_reports.*')
+                                        ->where('grades_students.GRADES_ID', $kelas_guru)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->get();
         }
+        elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER") {
+            $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
+                                        ->join('students', 'extracurricular_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->select('extracurricular_records.*', 'extracurricular_reports.*')
+                                        ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->get();
+        }        
         elseif(Auth::guard('web')->user()->ROLE === "STUDENT"){
             $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
                                         ->select('extracurricular_records.*', 'extracurricular_reports.*')
                                         ->where('extracurricular_records.STUDENTS_ID', $request->session()->get('session_student_id'))
                                         ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                         ->get();    
-        }
-        elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER") {
-            $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
-                        ->join('students', 'extracurricular_records.STUDENTS_ID', 'students.id')
-                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                        ->select('extracurricular_records.*', 'extracurricular_reports.*')
-                        ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                        ->get();
         }
         
         return view('extracurricular.ekskul', compact('tahun_ajaran', 'ekskul', 'academic_year_id'));                            
