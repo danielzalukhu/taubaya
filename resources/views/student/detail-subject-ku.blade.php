@@ -184,8 +184,6 @@
     var finalScore = {!! json_encode($data_final_score) !!}
     var averageScorePerClass = {!! json_encode($rata_kelas) !!}
     
-    console.log(categories)
-
     var category = []
     var series1 = []
     var series2 = []
@@ -196,30 +194,31 @@
         category.push(catName)
         
         var values = 0;
-    
+        var tmp_rata = 0;
+
         finalScore.forEach(function(obj_score){
             if(obj_score.ACADEMIC_YEAR_ID == item.id){
-                values = obj_score.FINAL_SCORE                    
-            }
-        })
-    
-        series1.push(values);
+                values = obj_score.FINAL_SCORE  
+                                                  
+                averageScorePerClass.forEach(function(obj_rata){
+                    if(obj_rata.ACADEMIC_YEAR_ID == item.id){
+                        tmp_rata = obj_rata.RATAKELAS      
+                        series3.push(tmp_rata);    
+                        
+                        kkm.forEach(function(obj_kkm){
+                            var tmp_kkm = obj_kkm.MINIMALPOIN
+                            series2.push(tmp_kkm)
+                        })
+                    }              
+                })   
 
-        kkm.forEach(function(obj_kkm){
-            var tmp_kkm = obj_kkm.MINIMALPOIN
-            series2.push(tmp_kkm)
-        })       
-        
-        averageScorePerClass.forEach(function(obj_rata){
-            if(item.id == obj_rata.ACADEMIC_YEAR_ID){
-                var tmp_rata = obj_rata.RATAKELAS
-                series3.push(tmp_rata)
+                series1.push(values);                     
             }
-            
-        })
+        })    
     })    
-
-    console.log(series3)
+    
+    console.log(series1)
+    console.log(series3)    
     
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {

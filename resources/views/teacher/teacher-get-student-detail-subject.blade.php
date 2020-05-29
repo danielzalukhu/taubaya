@@ -197,27 +197,28 @@
         category.push(catName)
         
         var values = 0;
-    
+        var tmp_rata = 0;
+
         finalScore.forEach(function(obj_score){
             if(obj_score.ACADEMIC_YEAR_ID == item.id){
-                values = obj_score.FINAL_SCORE                    
-            }
-        })
-    
-        series1.push(values);
+                values = obj_score.FINAL_SCORE  
+                                                  
+                averageScorePerClass.forEach(function(obj_rata){
+                    if(obj_rata.ACADEMIC_YEAR_ID == item.id){
+                        tmp_rata = obj_rata.RATAKELAS      
+                        series3.push(tmp_rata);    
+                        
+                        kkm.forEach(function(obj_kkm){
+                            var tmp_kkm = obj_kkm.MINIMALPOIN
+                            series2.push(tmp_kkm)
+                        })
+                    }              
+                })   
 
-        kkm.forEach(function(obj_kkm){
-            var tmp_kkm = obj_kkm.MINIMALPOIN
-            series2.push(tmp_kkm)
-        })       
-        
-        averageScorePerClass.forEach(function(obj_rata){
-            if(item.id == obj_rata.ACADEMIC_YEAR_ID){
-                var tmp_rata = obj_rata.RATAKELAS
-                series3.push(tmp_rata)
+                series1.push(values);                     
             }
-            
-        })
+        })    
+
     })    
     
     Highcharts.chart('gradeOfSubjectChart', {
