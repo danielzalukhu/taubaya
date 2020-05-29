@@ -26,7 +26,7 @@
                                     <h5 class="box-header-title"><b>RIWAYAT KELAS: </b>
                                         <span>
                                             <div class="btn-group">
-                                                <select type="button" id="dropdown-daftar-kelas" class="btn btn-default dropdown-toggle">
+                                                <select type="button" id="dropdown-catatan-kelas" class="btn btn-default dropdown-toggle">
                                                     
                                                 </select>
                                             </div>
@@ -84,5 +84,10 @@
             'autoWidth'   : false
             })
         })
+      
+    $('#dropdown-catatan-kelas').change(function(){
+        var gradeName = $(this).val()               
+        window.location = "{{ route('student.mapelku') }}"+"?gradeName="+gradeName;         
+    })
 </script>
 @stop
