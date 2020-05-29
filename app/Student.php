@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Student extends Model
 {
@@ -33,10 +34,13 @@ class Student extends Model
     }
 
     public function getGradeName(){
-        $grade = Grade::select("grades.NAME")
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
+        
+        $grade = Grade::select('grades.NAME')
                         ->join('grades_students','grades.id','=','grades_students.GRADES_ID')                        
                         ->join('students','grades_students.STUDENTS_ID','=','students.id') 
-                        ->WHERE("grades_students.STUDENTS_ID", $this->id)
+                        ->where('grades_students.STUDENTS_ID', $this->id)
+                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                         ->first();
 
         return $grade->NAME;
