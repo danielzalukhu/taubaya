@@ -29,11 +29,11 @@
                     <ul class="list-group list-group-unbordered">
                       <li class="list-group-item">
                         <b>POIN PELANGGARAN</b> 
-                        <a class="pull-right">{{$point_record}}</a>
+                        <a class="pull-right">{{$violation_point}}</a>
                       </li>
                       <li class="list-group-item">
                         <b>POIN PENGHARGAAN</b> 
-                        <a class="pull-right">{{$total_achievement_point}}</a>
+                        <a class="pull-right">{{$achievement_point}}</a>
                       </li>
                       <li class="list-group-item">
                         <b>ABSENSI</b> 
