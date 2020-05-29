@@ -65,6 +65,7 @@
                                             <th>NISN</th>
                                             <th>NAMA SISWA</th>
                                             <th>KELAS</th>
+                                            <th>ANGKATAN</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -76,14 +77,15 @@
                                             <td>{{ $s->student->NISN }}</a></td>
                                             <td>{{ $s->student->FNAME }}{{" "}}{{ $s->student->LNAME }}</td>
                                             <td>{{ $s->grade->NAME }}</td>
+                                            <td>{{ $s->student->academicyear->NAME }}</td>
                                             <td>
-                                                <a href="{{ route('student.profile', ['id'=>$s->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
+                                                <a href="{{ route('student.profile', ['id'=>$s->student->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>  
-                                                <a href="{{ route('subject.studentSubject', [$s->id, $s->grade->NAME]) }}" title="Mata Pelajaran" class="btn btn-default btn-sm">
+                                                <a href="{{ route('subject.studentSubject', [$s->student->id, $s->grade->NAME]) }}" title="Mata Pelajaran" class="btn btn-default btn-sm">
                                                     <i class="fa fa-book"></i>
                                                 </a>                                            
-                                                <form action="{{ route ('student.destroy', $s->id )}}" method="POST" class="inline">
+                                                <form action="{{ route ('student.destroy', $s->student->id )}}" method="POST" class="inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button title="Hapus" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
