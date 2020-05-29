@@ -8,6 +8,7 @@ use App\Student;
 use App\AchievementRecord;
 use App\ViolationRecord;
 use App\Grade;
+use App\GradeStudent;
 use Session;
 use DB;
 
@@ -20,7 +21,7 @@ class DashboardController extends Controller
         $tahun_ajaran = DB::select('SELECT *
                                     FROM `academic_years`
                                     WHERE id = (SELECT MAX(id) as id 
-                                                FROM academic_years)');
+                                                FROM academic_years)');                                                   
 
         $request->session()->put('session_academic_year_id', $tahun_ajaran[0]->id);
         $request->session()->put('session_start_ay', $tahun_ajaran[0]->START_DATE);
@@ -58,9 +59,14 @@ class DashboardController extends Controller
         if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){  
             $kelas_guru = Grade::where('STAFFS_ID', $user_id)
                                     ->first()->id; 
+    
+            $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                                       
+    
             $siswa = Student::join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                         ->select(DB::raw('COUNT(*) AS BANYAKSISWA'))
-                        ->where('grades_students.GRADES_ID', $kelas_guru)->first()->BANYAKSISWA;                
+                        ->where('grades_students.GRADES_ID', $kelas_guru)
+                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                        ->first()->BANYAKSISWA;                
         }
         elseif(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER"){
             $siswa = Student::all()->count();               
@@ -78,10 +84,13 @@ class DashboardController extends Controller
             $kelas_guru = Grade::where('STAFFS_ID', $user_id)
                                     ->first()->id; 
 
+            $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;  
+
             $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select(DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'))
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->first()->BANYAKPENGHARGAAN;
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
@@ -110,10 +119,14 @@ class DashboardController extends Controller
             $kelas_guru = Grade::where('STAFFS_ID', $user_id)
                                     ->first()->id; 
 
+
+            $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
+
             $pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->first()->BANYAKPELANGGARAN;
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
