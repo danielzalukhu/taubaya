@@ -39,19 +39,12 @@
                                             <td>{{ $s->CODE }}</td>
                                             <td>{{ $s->DESCRIPTION }}</td>
                                             <td>
-                                                <a href="{{ route ('subject.detail', ['id' => $s->id] ) }}" class="btn btn-info btn-sm">
+                                                <a href="{{ route ('subject.detail', ['id' => $s->id] ) }}" title="Detail Mapel" class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-warning btn-sm">
+                                                <a href="{{ route('subject.assesment') }}" title="Input Nilai" class="btn btn-success btn-sm">
                                                     <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <form action="#" method="POST" class="inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>                                            
+                                                </a>                                      
                                             </td>
                                         </tr>
                                     @endforeach
