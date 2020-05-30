@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use App\Subject;
 use App\ViolationRecord;
 use App\Student;
@@ -329,8 +330,18 @@ class SubjectController extends Controller
         $x = explode("-", $mapel->CODE, 3);
         $y = $x[0] . "-" . $x[1];
         
-        $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+        $url = parse_url(url()->previous(), PHP_URL_QUERY);        
+        $get_url_param = explode("=", $url);
 
+        if(isset($url)){
+            $select_grade_id = Grade::select('id')->where('NAME', $get_url_param[1])->first()->id;
+        }
+        else
+            $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+        
+        // dd($select_grade_id);
+        // $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+        
         $selected_student_in_ay = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
         
         $siswa_dibawah_rata = [];                                
@@ -421,10 +432,10 @@ class SubjectController extends Controller
             return view('student.detail-subject-guru', 
                    compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id',
                            'kkm', 'rata_kelas', 'siswa_dibawah_rata'));
-        else
+        else            
             return view('student.detail-subject-ku', 
-                   compact('mapel', 'siswa', 'detail_mapel_ku', 'tahun_ajaran', 'academic_year_id',
-                           'kkm', 'data_final_score', 'rata_kelas'));
+                   compact('mapel', 'siswa', 'academic_year_id', 'tahun_ajaran', 'kkm',
+                           'detail_mapel_ku', 'data_final_score', 'rata_kelas'));                                
     }   
 }
  

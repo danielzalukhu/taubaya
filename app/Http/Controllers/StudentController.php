@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use App\Url;
 use App\Student;
 use App\Absent;
 use App\ViolationRecord;
@@ -267,16 +269,16 @@ class StudentController extends Controller
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
 
         if($request->has('gradeName')){
-            $grade_name = $request->gradeName;
+            $grade_name = $request->gradeName;            
         }
         else{
             $grade_name = $student_class;
         }
-
+        
         $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
                         ->where('CODE', 'LIKE', '%' . $grade_name . '%')
                         ->get();
-
+                
         return view('student.mapel-ku', compact('subject', 'grade_record', 'grade_name'));
     }
 

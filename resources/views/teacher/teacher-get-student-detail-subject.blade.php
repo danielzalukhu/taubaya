@@ -193,19 +193,15 @@
     var series3 = []
 
     categories.forEach(function(item){
-        var catName = item.TYPE + " " + item.NAME        
-        category.push(catName)
-        
-        var values = 0;
-        var tmp_rata = 0;
 
-        finalScore.forEach(function(obj_score){
+        finalScore.forEach(function(obj_score){            
             if(obj_score.ACADEMIC_YEAR_ID == item.id){
-                values = obj_score.FINAL_SCORE  
+                var catName = item.TYPE + " " + item.NAME        
+                category.push(catName)
                                                   
                 averageScorePerClass.forEach(function(obj_rata){
                     if(obj_rata.ACADEMIC_YEAR_ID == item.id){
-                        tmp_rata = obj_rata.RATAKELAS      
+                        var tmp_rata = obj_rata.RATAKELAS      
                         series3.push(tmp_rata);    
                         
                         kkm.forEach(function(obj_kkm){
@@ -215,6 +211,7 @@
                     }              
                 })   
 
+                var values = obj_score.FINAL_SCORE  
                 series1.push(values);                     
             }
         })    
