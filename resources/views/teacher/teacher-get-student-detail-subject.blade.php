@@ -218,8 +218,11 @@
                 series1.push(values);                     
             }
         })    
-
     })    
+
+    console.log(series1)
+    console.log(series2)
+    console.log(series3)
     
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {

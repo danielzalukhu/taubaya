@@ -204,7 +204,7 @@
                     if(obj_rata.ACADEMIC_YEAR_ID == item.id){
                         tmp_rata = obj_rata.RATAKELAS      
                         series3.push(tmp_rata);    
-                        
+
                         kkm.forEach(function(obj_kkm){
                             var tmp_kkm = obj_kkm.MINIMALPOIN
                             series2.push(tmp_kkm)
@@ -216,9 +216,10 @@
             }
         })    
     })    
-    
+
     console.log(series1)
-    console.log(series3)    
+    console.log(series2)
+    console.log(series3)
     
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {

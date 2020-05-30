@@ -213,27 +213,32 @@
 
     categories.forEach(function(item){
         var catName = item.TYPE + " " + item.NAME
-        category.push(catName)    
+        category.push(catName)  
+
+        var tmp_jumlah = 0;
+        var tmp_rata = 0;  
        
         badStudent.forEach(function(obj_x){
-            if(item.id == obj_x.ACADEMIC_YEAR_ID){
+            if(obj_x.ACADEMIC_YEAR_ID == item.id){
                 var tmp_jumlah = obj_x.JUMLAH_SISWA_DIBAWAH_RATA
-                series1.push(tmp_jumlah)                
+                
+                averageScorePerClass.forEach(function(obj_rata){
+                    if(obj_rata.ACADEMIC_YEAR_ID == item.id){
+                        tmp_rata = obj_rata.RATAKELAS
+                        series3.push(tmp_rata)  
+
+                        kkm.forEach(function(obj_kkm){
+                            var tmp_kkm = obj_kkm.MINIMALPOIN
+                            series2.push(tmp_kkm)
+                        })                     
+                    }            
+                })   
+
+                series1.push(tmp_jumlah)          
             }  
-        })  
-
-        averageScorePerClass.forEach(function(obj_rata){
-            if(item.id == obj_rata.ACADEMIC_YEAR_ID){
-                var tmp_rata = obj_rata.RATAKELAS
-                series3.push(tmp_rata)
-
-                kkm.forEach(function(obj_kkm){
-                    var tmp_kkm = obj_kkm.MINIMALPOIN
-                    series2.push(tmp_kkm)
-                })
-            }            
-        })              
+        })                     
     })
+    console.log(series3)
 
     Highcharts.chart('gradeOfSubjectChart', {
         chart: {
