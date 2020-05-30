@@ -256,12 +256,28 @@ class StudentController extends Controller
     }
 
     public function mapelku(Request $request)
-    {        
-        $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
-                        ->where('CODE', 'LIKE', '%' . $request->session()->get('session_student_class') . '%')
-                        ->get();
+    {                        
+        $grade_record = GradeStudent::select('GRADES_ID')
+                                ->where('ACADEMIC_YEAR_ID', '<=', $request->session()->get('session_academic_year_id'))
+                                ->where('STUDENTS_ID', $request->session()->get('session_student_id'))
+                                ->get();                        
         
-        return view('student.mapel-ku', compact('subject'));
+        $student_class = $request->session()->get('session_student_class');
+        
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
+
+        if($request->has('gradeName')){
+            $grade_name = $request->gradeName;
+        }
+        else{
+            $grade_name = $student_class;
+        }
+
+        $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
+                        ->where('CODE', 'LIKE', '%' . $grade_name . '%')
+                        ->get();
+
+        return view('student.mapel-ku', compact('subject', 'grade_record', 'grade_name'));
     }
 
     public function mapelguru(Request $request)
@@ -347,30 +363,32 @@ class StudentController extends Controller
 
         $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                 ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                                 ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                                ->select(DB::raw('SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID) AS RATAKELAS'), 'subject_records.*')
+                                ->select(DB::raw('ROUND(SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID), 2) AS RATAKELAS'), 'subject_records.*')
                                 ->where('grades_students.GRADES_ID', '=', $sub_query)
-                                ->where('subject_reports.SUBJECTS_ID', $mapel->id)
+                                ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
                                 ->groupBy('subject_records.ACADEMIC_YEAR_ID')
-                                ->get();             
-
+                                ->get();      
+        
         $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $siswa->id) ->first()->AY_ID;                        
 
         $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
 
         $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                    ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
-                                    ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
-                                    ->where('subject_reports.SUBJECTS_ID', $mapel->id)
-                                    ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                                    ->where('subject_records.STUDENTS_ID', $siswa->id)
-                                    ->get();                                            
-        
+                                        ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                        ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
+                                        ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
+                                        ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('subject_records.STUDENTS_ID', $siswa->id)
+                                        ->get();  
+            
         $data_final_score = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-                                    ->select('subject_records.*', 'subject_reports.*')
-                                    ->where('subject_reports.SUBJECTS_ID', $mapel->id)                                        
-                                    ->where('subject_records.STUDENTS_ID', $siswa->id)
-                                    ->get();   
+                                        ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                        ->select('subject_records.*', 'subject_reports.*')
+                                        ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)                                        
+                                        ->where('subject_records.STUDENTS_ID', $siswa->id)                                        
+                                        ->get();   
                                       
         return view('teacher.teacher-get-student-detail-subject',
                compact('siswa', 'mapel', 'academic_year_id', 'kkm', 'detail_mapel_ku', 'tahun_ajaran', 

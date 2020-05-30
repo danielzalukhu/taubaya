@@ -211,14 +211,17 @@
     var series2 = []
     var series3 = []
 
-    categories.forEach(function(item){
-        var catName = item.TYPE + " " + item.NAME
-        category.push(catName)  
-
-        var tmp_jumlah = 0;
-        var tmp_rata = 0;  
+    categories.forEach(function(item){        
        
         badStudent.forEach(function(obj_x){
+            if(obj_x.ACADEMIC_YEAR_ID == item.id){
+                var catName = item.TYPE + " " + item.NAME
+                category.push(catName)  
+
+                var tmp_jumlah = 0;
+                var tmp_rata = 0;  
+            }
+            
             if(obj_x.ACADEMIC_YEAR_ID == item.id){
                 var tmp_jumlah = obj_x.JUMLAH_SISWA_DIBAWAH_RATA
                 
