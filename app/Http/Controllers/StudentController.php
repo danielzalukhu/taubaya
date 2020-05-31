@@ -374,17 +374,17 @@ class StudentController extends Controller
         $x = explode("-", $mapel->CODE, 3);
         $y = $x[0] . "-" . $x[1];
                 
-        $sub_query = Grade::select('id')->where('NAME', 'LIKE', '%'.$y.'%')->get()[0]->id;
-
+        $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+        
         $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                 ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
                                 ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                                 ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                 ->select(DB::raw('ROUND(SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID), 2) AS RATAKELAS'), 'subject_records.*')
-                                ->where('grades_students.GRADES_ID', '=', $sub_query)
+                                ->where('grades_students.GRADES_ID', '=', $select_grade_id)
                                 ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
                                 ->groupBy('subject_records.ACADEMIC_YEAR_ID')
-                                ->get();      
+                                ->get();                                                                                                              
         
         $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $siswa->id) ->first()->AY_ID;                        
 
