@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\Subject;
 use App\ViolationRecord;
 use App\Student;
@@ -323,30 +322,23 @@ class SubjectController extends Controller
         }
         else{
             $academic_year_id = $max_academic_year_id;
-        }
+        }        
         
         $kkm = Subject::select('MINIMALPOIN')->where('id', $mapel->id)->get();
 
         $x = explode("-", $mapel->CODE, 3);
-        $y = $x[0] . "-" . $x[1];
+        $y = $x[0] . "-" . $x[1];                    
         
-        $url = parse_url(url()->previous(), PHP_URL_QUERY);        
+        $url = parse_url(url()->previous(), PHP_URL_QUERY);    
         $get_url_param = explode("=", $url);
-
-        if(isset($url)){
-            $select_grade_id = Grade::select('id')->where('NAME', $get_url_param[1])->first()->id;
-        }
-        else
-            $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
-        
-        // dd($select_grade_id);
-        // $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
-        
-        $selected_student_in_ay = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
         
         $siswa_dibawah_rata = [];                                
                                 
-        if(Auth::guard('web')->user()->ROLE === "STAFF"){            
+        if(Auth::guard('web')->user()->ROLE === "STAFF"){          
+            $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+        
+            $selected_student_in_ay = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
+
             $selected_student_ay = Student::select('students.ACADEMIC_YEAR_ID AS AY_ID')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->where('grades_students.GRADES_ID', $select_grade_id)->limit(1)->first()->AY_ID;
@@ -398,12 +390,12 @@ class SubjectController extends Controller
             $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $request->session()->get('session_student_id')) ->first()->AY_ID;                        
 
             $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
-        
+
             $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                         ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                                         ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
                                         ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
-                                        ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        // ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                         ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
                                         ->get();  
             
@@ -413,7 +405,18 @@ class SubjectController extends Controller
                                         ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)                                        
                                         ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))                                        
                                         ->get();
-        
+    
+            if(isset($url)){
+                $select_grade_id = Grade::select('id')->where('NAME', $get_url_param[1])->first()->id;
+                $selected_student_in_ay = GradeStudent::select('ACADEMIC_YEAR_ID')
+                                                    ->where('STUDENTS_ID', $request->session()->get('session_student_id'))
+                                                    ->where('GRADES_ID', $select_grade_id)->first()->ACADEMIC_YEAR_ID;
+            }
+            else{
+                $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+                $selected_student_in_ay = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
+            }
+                                        
             $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')                            
                                         ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                                         ->join('students', 'subject_records.STUDENTS_ID', 'students.id')

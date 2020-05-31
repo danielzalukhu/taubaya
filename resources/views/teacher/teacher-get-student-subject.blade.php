@@ -26,13 +26,17 @@
                                     <h5 class="box-header-title"><b>RIWAYAT KELAS: </b>
                                         <span>
                                             <div class="btn-group">
-                                                <select type="button" id="dropdown-catatan-kelas" class="btn btn-default dropdown-toggle">
-                                                    
+                                                <select type="button" id="dropdown-catatan-kelas" onChange=loadPage() class="btn btn-default dropdown-toggle">
+                                                    @foreach($grade_record as $gr)
+                                                        <option value='{{ $gr->grade->NAME }}'>
+                                                            {{ $gr->grade->NAME }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </span>        
                                     </h5>                           
-                                </div>
+                                </div
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">
@@ -53,7 +57,7 @@
                                             <td>{{ $s->CODE }}</td>
                                             <td>{{ $s->DESCRIPTION }}</td>
                                             <td>
-                                                <a href="{{route('subject.studentDetailSubject', [$siswa->id, $s->id])}}" class="btn btn-info btn-sm">
+                                                <a href="{{route('subject.studentDetailSubject', [$siswa->id, $s->id])}}"  class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>                                         
                                             </td>
@@ -84,10 +88,21 @@
             'autoWidth'   : false
             })
         })
-      
+
+    var code = '{{$s->CODE}}'
+    var code1 = code.split("-")
+    var res_code = code1[0] + "-" + code1[1] 
+    
+    $('#dropdown-catatan-kelas').val("{{$grade_name}}")
+
     $('#dropdown-catatan-kelas').change(function(){
-        var gradeName = $(this).val()               
-        window.location = "{{ route('student.mapelku') }}"+"?gradeName="+gradeName;         
+        var gradeName = $(this).val();            
+        var route =  "{{ route('subject.studentSubject', [':id', ':idm']) }}"
+        var route1 = route.replace(':id', '{{$siswa->id}}')
+        var route2 = route1.replace(':idm', res_code)
+        // history.pushState({}, "", route2)        
+        // console.log(route2)
+        window.location = route2+"?filterGrade="+gradeName;     
     })
 </script>
 @stop

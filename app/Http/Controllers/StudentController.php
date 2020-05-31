@@ -330,15 +330,28 @@ class StudentController extends Controller
         return view('student.mapel-guru', compact('subject', 'kelas', 'grade_name', 'gid'));
     }
 
-    public function teacherGetStudentSubject($idsiswa, $kodelkelas)
+    public function teacherGetStudentSubject(Request $request, $idsiswa, $kodelkelas)
     {
         $siswa = Student::find($idsiswa);
-
-        $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
-                        ->where('CODE', 'LIKE', '%' . $kodelkelas . '%')
-                        ->get();
-                                
-        return view('teacher.teacher-get-student-subject', compact('siswa', 'subject'));
+        
+        $grade_record = GradeStudent::select('GRADES_ID')
+                                    ->where('ACADEMIC_YEAR_ID', '<=', $request->session()->get('session_academic_year_id'))
+                                    ->where('STUDENTS_ID',$siswa->id)
+                                    ->get();                        
+        
+        $student_class = $request->session()->get('session_student_class');    
+        foreach($grade_record as $gr){
+            if($request->has('filterGrade')){
+                $grade_name = $request->filterGrade;            
+                $subject = Subject::select('id', 'CODE', 'DESCRIPTION')->where('CODE', 'LIKE', '%' . $grade_name . '%')->get();
+            }
+            else{
+                $grade_name = $gr->grade->NAME;
+                $subject = Subject::select('id', 'CODE', 'DESCRIPTION')->where('CODE', 'LIKE', '%' . $kodelkelas . '%')->get();
+            }  
+        }
+                          
+        return view('teacher.teacher-get-student-subject', compact('siswa', 'subject', 'grade_record', 'grade_name'));
     }    
 
     public function getStudentSubjectDetail(Request $request, $idsiswa, $idmapel)
@@ -381,7 +394,7 @@ class StudentController extends Controller
                                         ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                                         ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
                                         ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
-                                        ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        // ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                         ->where('subject_records.STUDENTS_ID', $siswa->id)
                                         ->get();  
             

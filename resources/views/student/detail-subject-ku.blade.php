@@ -43,9 +43,9 @@
                         </div>
                         <div class="box">
                             <div class="box-header">                                
-                                <h5 class="box-header-title"><b>TAHUN AJARAN:</b>
+                                <!-- <h5 class="box-header-title"><b>TAHUN AJARAN:</b> -->
                                     <span>
-                                        <div class="btn-group">
+                                        <!-- <div class="btn-group">
                                             <select type="button" id="dropdown-detail-subject-academic-year" class="btn btn-default dropdown-toggle">
                                                 @foreach($tahun_ajaran as $ta)
                                                     <option value='{{ $ta->id }}' class="dropdown-academic-year" academic-year-id="{{$ta->id}}">
@@ -53,7 +53,7 @@
                                                     </option>                                                                        
                                                 @endforeach
                                             </select>                                            
-                                        </div>
+                                        </div> -->
                                         <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
                                         <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
                                         <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
@@ -66,10 +66,11 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>TAHUN AJARAN</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
-                                            <th>UJIAN TENGAH SEMESTER</th>
-                                            <th>UJIAN AKHIR SEMESTER</th>
+                                            <th style="width:10%">UJIAN TENGAH SEMESTER</th>
+                                            <th style="width:10%">UJIAN AKHIR SEMESTER</th>
                                             <th>NILAI AKHIR</th>                                            
                                         </tr>
                                     </thead>
@@ -79,6 +80,11 @@
                                             @if($dm->IS_VERIFIED == 1) 
                                                 <tr>
                                                     <td>{{ $i++ }}</td>
+                                                    <td>
+                                                        {{ $dm->subjectrecord->academicyear->TYPE }}
+                                                        {{ "-" }}
+                                                        {{ $dm->subjectrecord->academicyear->NAME }}
+                                                    </td>
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php

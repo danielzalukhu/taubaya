@@ -67,10 +67,11 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>TAHUN AJARAN</th>
                                             <th>TUGAS</th>
                                             <th>ULANGAN HARIAN</th>
-                                            <th>UJIAN TENGAH SEMESTER</th>
-                                            <th>UJIAN AKHIR SEMESTER</th>
+                                            <th style="width:10%">UJIAN TENGAH SEMESTER</th>
+                                            <th style="width:10%">UJIAN AKHIR SEMESTER</th>
                                             <th>NILAI AKHIR</th>                                            
                                         </tr>
                                     </thead>
@@ -80,6 +81,11 @@
                                             @if($dm->IS_VERIFIED == 1) 
                                                 <tr>
                                                     <td>{{ $i++ }}</td>
+                                                    <td>
+                                                        {{ $dm->subjectrecord->academicyear->TYPE }}
+                                                        {{ "-" }}
+                                                        {{ $dm->subjectrecord->academicyear->NAME }}
+                                                    </td>
                                                     <td>
                                                         <table class="table table-hover">
                                                             @php
@@ -254,7 +260,7 @@
             name: 'KKM',
             data: series2
         },{
-            name: 'Nilai Rata-Rata Kelas',
+            name: 'Nilai rata-rata kelas',
             data: series3
         }]
     });

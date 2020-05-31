@@ -97,8 +97,8 @@
                                                     <i class="fa fa-eye"></i>
                                                 </a>  
                                                 <a href="{{ route('subject.studentSubject', [$s->student->id, $s->grade->NAME]) }}" title="Mata Pelajaran" class="btn btn-default btn-sm">
-                                                    <i class="fa fa-book"></i>
-                                                </a>                                            
+                                                    <i class="fa fa-book"></i>                                                    
+                                                </a>    
                                                 <form action="{{ route ('student.destroy', $s->student->id )}}" method="POST" class="inline">
                                                     @method('delete')
                                                     @csrf

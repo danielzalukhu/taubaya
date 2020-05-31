@@ -74,13 +74,11 @@
             })
         })
 
-    // $('#dropdown-daftar-kelas').val({{ $gid }})
+    $('#dropdown-catatan-kelas').val("{{$grade_name}}")
 
-    $('#dropdown-daftar-kelas').change(function(){
-        var gradeName = $(this).val();
-        // console.log(gradeName)
-        var route =  "{{ route('student.mapelguru') }}"  
-        window.location = route+"?gradeName="+gradeName;        
-    })  
+    $('#dropdown-catatan-kelas').change(function(){
+        var gradeName = $(this).val()               
+        window.location = "{{ route('student.mapelku') }}"+"?gradeName="+gradeName;         
+    })
 </script>
 @stop
