@@ -18,17 +18,4 @@ class Extracurricular extends Model
     {
         return $this->hasMany('App\ExtracurricularReport');
     }
-
-    public function getEkskulName(){
-        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
-        
-        $ekskul = Grade::select('extracurriculars.NAME')
-                        ->join('extracurricular_reports','extracurriculars.id','=','extracurricular_reports.EXTRACURRICULARS_ID')                        
-                        ->join('extracurricular_records','extracurricular_reports.EXTRACURRICULAR_RECORD_ID','=','extracurricular_records.id') 
-                        ->where('extracurricular_reports.EXTRACURRICULARS_ID', $this->id)
-                        ->where('extracurricular_records.ACADEMIC_YEAR_ID', $selected_student)
-                        ->first();                     
-
-        return $ekskul->NAME;
-    }
 }

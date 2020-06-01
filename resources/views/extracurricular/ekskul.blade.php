@@ -54,7 +54,7 @@
                                         <tr>
                                             <td>{{$i++}}</td>
                                             <td>{{ $e->student->FNAME }}{{" "}}{{ $e->student->LNAME }}</td>
-                                            <td>{{ $e->EXTRACURRICULARS_ID }}</td>
+                                            <td>{{ $e->getEkskulName() }}</td>
                                             <td>
                                                 {{ $e->academicyear->TYPE }}
                                                 {{ "-" }}

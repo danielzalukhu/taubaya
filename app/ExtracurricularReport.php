@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class ExtracurricularReport extends Model
 {
@@ -17,5 +18,5 @@ class ExtracurricularReport extends Model
     public function extracurricularrecord()
     {
         return $this->belongsTo('App\ExtracurricularRecord' ,'EXTRACURRICULAR_RECORD_ID');
-    }
+    }    
 }
