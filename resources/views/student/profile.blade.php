@@ -251,6 +251,21 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="panel-heading">                                
+                            <h5 class="panel-title"><b>TAHUN AJARAN:</b>
+                                <span>
+                                    <div class="btn-group">
+                                        <select type="button" id="select-dropdown-academicyear-graph-absent" class="btn btn-default dropdown-toggle">
+                                            @foreach($tahun_ajaran as $ta)
+                                                <option value='{{ $ta->id }}' class="dropdown-absent-year-graphic" absent-academic-year-id-graphic="{{$ta->id}}">
+                                                    {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
+                                                </option>                                                                        
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </span>        
+                            </h5>
+                        </div>                        
                         <div class="panel-body">
                             <div id="chartAbsent">
 
@@ -258,12 +273,12 @@
                         </div>
                     </div>
 
-                    <!-- Modal Absent Detail-->
+                    <!-- Modal Detail Absen-->
                     <div class="modal fade" id="modalAbsentDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="exampleModalLabel">ABSENT DETAILS</h1>
+                                    <h1 class="modal-title" id="exampleModalLabel">DETAIL ABSEN: <b>{{$siswa->FNAME}}{{" "}}{{$siswa->LNAME}}</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -627,55 +642,100 @@
 
     // TAB ABSENT GRAFIK
 
-    var types = {!!json_encode($tipeAbsen)!!}
-    var dataGraph = {!!json_encode($dataAbsen)!!}
+    $('#select-dropdown-academicyear-graph-absent').val({{$academic_year_id}})
 
-    var dataSeries = []
+    $('#select-dropdown-academicyear-graph-absent').change(function(){
+        var academicYearId = $(this).val();
+        $.ajax({
+            url: '{{ route("student.absentChart") }}',
+            type: 'get',
+            data: {academicYearId: academicYearId, studentId: studentId},
 
-    types.forEach(function(item){   
-        dataGraph.forEach(function(obj){
-            if(obj.TIPE == item.TIPE){
-                dataSeries.push({
-                    name: item.TIPE,
-                    y: obj.JUMLAH
-                })
+            success: function(result){
+            //    console.log(result)
+               chartAbsent(result['type'], result['dataAbsent'], result['count_total_day_each_ay'])
+            },
+            error: function(err){
+                console.log(err)
             }
         })
     })
+    
+    var types = {!!json_encode($tipeAbsen)!!}
+    var dataGraph = {!!json_encode($dataAbsen)!!}
+    var totalDayEachAcademicYear = {!! json_encode($count_total_day_each_ay) !!}
 
-    // Highcharts.chart('chartAbsent', {
-    //     chart: {
-    //         plotBackgroundColor: null,
-    //         plotBorderWidth: null,
-    //         plotShadow: false,
-    //         type: 'pie'
-    //     },
-    //     credits: {
-    //         enabled: false
-    //     },
-    //     title: {
-    //         text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
-    //     },
-    //     tooltip: {
-    //         pointFormat: '{series.name}: <b>{point.percentage}%</b>'
-    //     },
-    //     plotOptions: {
-    //         pie: {
-    //             allowPointSelect: true,
-    //             cursor: 'pointer',
-    //             dataLabels: {
-    //                 enabled: true,
-    //                 format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-    //             },
-    //             showInLegend: true
-    //         }
-    //     },
-    //     series: [{
-    //         name: 'TYPE',
-    //         colorByPoint: true,
-    //         data: dataSeries
-    //     }]
-    // });
+    chartAbsent(types, dataGraph, totalDayEachAcademicYear)
+
+    function chartAbsent(types, dataGraph, totalDayEachAcademicYear){
+        $('#chartAbsent').empty()
+
+        var totalAmountExceptPresent = 0
+        var present_percentage = 0
+
+        var dataSeries = []
+        var obj_present = {}
+
+        types.forEach(function(item){   
+            dataGraph.forEach(function(obj){
+                if(obj.TIPE == item.TIPE){
+                    dataSeries.push({
+                        name: item.TIPE,
+                        y: obj.JUMLAH
+                    })
+
+                    totalAmountExceptPresent = totalAmountExceptPresent + obj.JUMLAH
+                    present_percentage = totalDayEachAcademicYear - totalAmountExceptPresent
+                }
+            })
+        })
+    
+        obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
+        dataSeries.push(obj_present)      
+    
+        Highcharts.setOptions({
+            colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
+        });
+
+        Highcharts.chart('chartAbsent', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'JENIS ABSEN',
+                colorByPoint: true,
+                data: dataSeries
+            }]
+        });
+    }
+    
 </script>
 @Stop
 

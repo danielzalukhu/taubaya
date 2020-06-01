@@ -43,17 +43,12 @@ class StudentController extends Controller
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
 
         if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){                    
-            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
-                            ->first()->id;
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id;
             
-            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)
-                                ->where('ACADEMIC_YEAR_ID', $selected_student)
-                                ->get();
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
         }
         else{
-            $siswa = GradeStudent::where('GRADES_ID', $grade_id)
-                            ->where('ACADEMIC_YEAR_ID', $selected_student)
-                            ->get();
+            $siswa = GradeStudent::where('GRADES_ID', $grade_id)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
         }
 
         return view('student.index', compact('kelas', 'siswa', 'grade_id'));
@@ -165,12 +160,14 @@ class StudentController extends Controller
                         ->groupBy('TIPE')
                         ->get();
                         
-        $dataAbsen = Absent::select(DB::raw('TYPE AS TIPE'), 
-                                    DB::raw('START_DATE AS TAHUN'),
-                                    DB::raw('COUNT(*) AS JUMLAH'))
+        $dataAbsen = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))
+                        ->where('ACADEMIC_YEAR_ID', $academic_year_id)
                         ->where('STUDENTS_ID', $id)                                    
-                        ->groupBy('TIPE', 'TAHUN')
-                        ->get();
+                        ->groupBy('TIPE', 'TAHUNAJARAN')
+                        ->get();                      
+
+        $count_total_day_each_ay = AcademicYear::select(DB::raw('DATEDIFF(END_DATE, START_DATE) AS TOTALHARI'))
+                                            ->where('id', $academic_year_id)->first()->TOTALHARI;                          
 
         // RETURN VIEW 
 
@@ -180,14 +177,14 @@ class StudentController extends Controller
                                                    'catatan_penghargaan', 'achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
-                                                   'tipeAbsen', 'dataAbsen'));
+                                                   'tipeAbsen', 'dataAbsen', 'count_total_day_each_ay'));
         else                                               
             return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'tahun_ajaran',
                                                    'catatan_pelanggaran', 'violation_point',
                                                    'catatan_penghargaan', 'achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
-                                                   'tipeAbsen', 'dataAbsen'));
+                                                   'tipeAbsen', 'dataAbsen', 'count_total_day_each_ay'));
 
     }
 
@@ -236,9 +233,9 @@ class StudentController extends Controller
 
     public function returnDataAchievementChart(Request $request)
     {        
-        $type = DB::select("SELECT a.GRADE as TINGKAT
-                                FROM achievements a
-                                GROUP BY TINGKAT");
+        $type = Achievement::select(DB::raw('GRADE AS TINGKAT'))
+                        ->groupBy('TINGKAT')
+                        ->get();
         
         $dataAchievement = DB::select("SELECT a.GRADE AS TINGKAT, MONTH(ass.DATE) AS BULAN , COUNT(*) AS JUMLAH 
                                        FROM achievements a INNER JOIN achievement_records ass ON a.id = ass.ACHIEVEMENTS_ID
@@ -255,6 +252,28 @@ class StudentController extends Controller
         $data['selected_tahun_ajaran'] = $selected_tahun_ajaran;
 
         return $data;                   
+    }
+
+    public function returnDataAbsentChart(Request $request)
+    {
+        $tipeAbsen = Absent::select(DB::raw('TYPE AS TIPE'))
+                        ->groupBy('TIPE')
+                        ->get();
+                        
+        $dataAbsen = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))
+                        ->where('ACADEMIC_YEAR_ID', $request->academicYearId)
+                        ->where('STUDENTS_ID', $request->studentId)                                    
+                        ->groupBy('TIPE', 'TAHUNAJARAN')
+                        ->get();  
+
+        $count_total_day_each_ay = AcademicYear::select(DB::raw('DATEDIFF(END_DATE, START_DATE) AS TOTALHARI'))
+                                            ->where('id', $request->academicYearId)->first()->TOTALHARI;
+
+        $data['type'] = $tipeAbsen;
+        $data['dataAbsent'] = $dataAbsen;
+        $data['count_total_day_each_ay'] = $count_total_day_each_ay;
+
+        return $data;
     }
 
     public function mapelku(Request $request)

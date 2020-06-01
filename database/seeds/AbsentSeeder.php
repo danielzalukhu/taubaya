@@ -11,345 +11,320 @@ class AbsentSeeder extends Seeder
      */
     public function run()
     {
+        // TAHUN AJARAN 7 - 2018/2019 - KELAS 12 MM
+
         DB::table('absents')->insert([
-            'START_DATE' => '2016-08-13',
-            'END_DATE' => '2016-08-13',
+            'START_DATE' => '2019-08-05',
+            'END_DATE' => '2019-08-05',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa alasan',
             'RECEIPT_IMG' => 'receipt1.jpg',
             'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-08-13',
-            'END_DATE' => '2016-08-13',
-            'TYPE' => 'LEAVE',
-            'DESCRIPTION' => 'Acara keluarga di bandung',
-            'RECEIPT_IMG' => 'receipt2.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-11-10',
-            'END_DATE' => '2016-11-10',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt3.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-11-11',
-            'END_DATE' => '2016-11-11',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt3.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-09-09',
-            'END_DATE' => '2016-09-14',
-            'TYPE' => 'SICK',
-            'DESCRIPTION' => 'Tipes dan harus di rawat inap',
-            'RECEIPT_IMG' => 'receipt4.jpg',
-            'STUDENTS_ID' => '2',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '2'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-12-01',
-            'END_DATE' => '2016-12-01',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt35.jpg',
-            'STUDENTS_ID' => '2',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-08-12',
-            'END_DATE' => '2016-08-12',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt33.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '3'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-08-23',
-            'END_DATE' => '2016-08-23',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt34.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '3'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-11-11',
-            'END_DATE' => '2016-11-11',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt5.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '1',
+            'ACADEMIC_YEAR_ID' => '7',
             'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2016-11-12',
-            'END_DATE' => '2016-11-12',
+            'START_DATE' => '2019-08-05',
+            'END_DATE' => '2019-08-05',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
+            'RECEIPT_IMG' => 'receipt10.jpg',
+            'STUDENTS_ID' => '3',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-08-07',
+            'END_DATE' => '2019-08-07',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir main ke warnet',
+            'RECEIPT_IMG' => 'receipt2.jpg',
+            'STUDENTS_ID' => '5',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-08-07',
+            'END_DATE' => '2019-08-11',
+            'TYPE' => 'LEAVE',
+            'DESCRIPTION' => 'Opung dari pihak ibu siswa meninggal',
+            'RECEIPT_IMG' => 'receipt3.jpg',
+            'STUDENTS_ID' => '6',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-08-12',
+            'END_DATE' => '2019-08-12',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
+            'RECEIPT_IMG' => 'receipt4.jpg',
+            'STUDENTS_ID' => '10',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-09-05',
+            'END_DATE' => '2019-09-05',
+            'TYPE' => 'SICK',
+            'DESCRIPTION' => 'Diare buang-buang air besar',
+            'RECEIPT_IMG' => 'receipt5.jpg',
+            'STUDENTS_ID' => '3',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-09-05',
+            'END_DATE' => '2019-09-05',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa alasan',
             'RECEIPT_IMG' => 'receipt6.jpg',
             'STUDENTS_ID' => '5',
-            'ACADEMIC_YEAR_ID' => '1',
+            'ACADEMIC_YEAR_ID' => '7',
             'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2016-11-13',
-            'END_DATE' => '2016-11-13',
+            'START_DATE' => '2019-09-05',
+            'END_DATE' => '2019-09-05',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt1.jpg',
-            'STUDENTS_ID' => '5',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2016-12-01',
-            'END_DATE' => '2016-12-01',
-            'TYPE' => 'LEAVE',
-            'DESCRIPTION' => 'Menghadiri pernihakan saudara sehingga izin untuk tidak hadir sekolah',
-            'RECEIPT_IMG' => 'receipt12.jpg',
-            'STUDENTS_ID' => '5',
-            'ACADEMIC_YEAR_ID' => '1',
-            'STAFFS_ID' => '3'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-02-07',
-            'END_DATE' => '2017-02-09',
-            'TYPE' => 'LEAVE',
-            'DESCRIPTION' => 'Masih berada diluar negri untuk berlibur',
-            'RECEIPT_IMG' => 'receipt12.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-02-20',
-            'END_DATE' => '2017-02-20',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt12.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-02-21',
-            'END_DATE' => '2017-02-21',
-            'TYPE' => 'LEAVE',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt12.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-03-01',
-            'END_DATE' => '2017-03-02',
-            'TYPE' => 'SICK',
-            'DESCRIPTION' => 'Diare atau buang-buang air sehingga harus istirahat dirumah',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '2'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-04-11',
-            'END_DATE' => '2017-04-11',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt14.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '3'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-05-14',
-            'END_DATE' => '2017-05-14',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '1',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '2'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-03-11',
-            'END_DATE' => '2017-03-11',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '2',
-            'ACADEMIC_YEAR_ID' => '2',
+            'RECEIPT_IMG' => 'receipt7.jpg',
+            'STUDENTS_ID' => '6',
+            'ACADEMIC_YEAR_ID' => '7',
             'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-03-12',
-            'END_DATE' => '2017-03-12',
+            'START_DATE' => '2019-09-05',
+            'END_DATE' => '2019-09-05',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '2',
-            'ACADEMIC_YEAR_ID' => '2',
+            'RECEIPT_IMG' => 'receipt6.jpg',
+            'STUDENTS_ID' => '15',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        // TAHUN AJARAN 7 - 2018/2019 - KELAS 12 TPM
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-08-07',
+            'END_DATE' => '2019-08-07',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
+            'RECEIPT_IMG' => 'xxx.jpg',
+            'STUDENTS_ID' => '77',
+            'ACADEMIC_YEAR_ID' => '7',
             'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-03-13',
-            'END_DATE' => '2017-03-13',
+            'START_DATE' => '2019-08-07',
+            'END_DATE' => '2019-08-07',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa alasan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '2',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
+            'RECEIPT_IMG' => 'absds.jpg',
+            'STUDENTS_ID' => '82',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-04-20',
-            'END_DATE' => '2017-04-22',
+            'START_DATE' => '2019-08-20',
+            'END_DATE' => '2019-08-28',
             'TYPE' => 'SICK',
-            'DESCRIPTION' => 'Terkena penyakit demam berdarah',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '2',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '3'
+            'DESCRIPTION' => 'Sakit tipes harus rawat inap',
+            'RECEIPT_IMG' => 'abxs.jpg',
+            'STUDENTS_ID' => '80',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-02-08',
-            'END_DATE' => '2017-02-08',
+            'START_DATE' => '2019-08-21',
+            'END_DATE' => '2019-08-21',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
+            'RECEIPT_IMG' => 'opeas.jpg',
+            'STUDENTS_ID' => '79',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-08-22',
+            'END_DATE' => '2019-08-22',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
+            'RECEIPT_IMG' => 'iwef.jpg',
+            'STUDENTS_ID' => '79',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-08-22',
+            'END_DATE' => '2019-08-22',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
+            'RECEIPT_IMG' => 'iwef.jpg',
+            'STUDENTS_ID' => '79',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-09-09',
+            'END_DATE' => '2019-09-09',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
+            'RECEIPT_IMG' => 'asdasdk.jpg',
+            'STUDENTS_ID' => '94',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2019-09-21',
+            'END_DATE' => '2019-09-21',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
+            'RECEIPT_IMG' => 'asdasdk.jpg',
+            'STUDENTS_ID' => '90',
+            'ACADEMIC_YEAR_ID' => '7',
+            'STAFFS_ID' => '4'
+        ]);
+
+        // TAHUN AJARAN 8 - 2018/2019 - KELAS 12 MM
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2020-02-13',
+            'END_DATE' => '2020-02-13',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
+            'RECEIPT_IMG' => 'receipt6.jpg',
+            'STUDENTS_ID' => '10',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2020-02-13',
+            'END_DATE' => '2020-02-13',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
+            'RECEIPT_IMG' => 'receipt6.jpg',
+            'STUDENTS_ID' => '19',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2020-02-20',
+            'END_DATE' => '2020-02-20',
+            'TYPE' => 'SICK',
+            'DESCRIPTION' => 'Badan panas tinggi',
+            'RECEIPT_IMG' => 'receipt12.jpg',
+            'STUDENTS_ID' => '7',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2020-02-20',
+            'END_DATE' => '2020-02-20',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
+            'RECEIPT_IMG' => 'receipt12.jpg',
+            'STUDENTS_ID' => '8',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2020-03-20',
+            'END_DATE' => '2020-03-20',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
+            'RECEIPT_IMG' => 'receipt12.jpg',
+            'STUDENTS_ID' => '2',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2020-04-07',
+            'END_DATE' => '2019-04-08',
             'TYPE' => 'LEAVE',
-            'DESCRIPTION' => 'Izin tidak masuk karena periksa mata ke dokter',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
+            'DESCRIPTION' => 'Mengikuti lomba nasional ke Jakarta',
+            'RECEIPT_IMG' => 'receipt12.jpg',
+            'STUDENTS_ID' => '17',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);        
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-02-15',
-            'END_DATE' => '2017-02-15',
-            'TYPE' => 'SICK',
-            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt200.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
+            'START_DATE' => '2020-04-11',
+            'END_DATE' => '2019-04-11',
+            'TYPE' => 'ABSENT',
+            'DESCRIPTION' => 'Tidak hadir tanpa alasan',
+            'RECEIPT_IMG' => 'receipt12.jpg',
+            'STUDENTS_ID' => '13',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);        
+
+         // TAHUN AJARAN 8 - 2018/2019 - KELAS 12 TPM
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-04-04',
-            'END_DATE' => '2017-04-04',
+            'START_DATE' => '2020-02-21',
+            'END_DATE' => '2020-02-21',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-05-09',
-            'END_DATE' => '2017-05-09',
-            'TYPE' => 'ABSENT',
-            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '2',
+            'RECEIPT_IMG' => 'bkadsf.jpg',
+            'STUDENTS_ID' => '87',
+            'ACADEMIC_YEAR_ID' => '8',
             'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-05-10',
-            'END_DATE' => '2017-05-10',
-            'TYPE' => 'SICK',
-            'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt14.jpg',
-            'STUDENTS_ID' => '4',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '2'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-02-07',
-            'END_DATE' => '2017-02-07',
+            'START_DATE' => '2020-04-03',
+            'END_DATE' => '2020-04-03',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '5',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
+            'RECEIPT_IMG' => 'bkadsf.jpg',
+            'STUDENTS_ID' => '88',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
         ]);
 
         DB::table('absents')->insert([
-            'START_DATE' => '2017-02-26',
-            'END_DATE' => '2017-02-26',
-            'TYPE' => 'SICK',
-            'DESCRIPTION' => 'Muntah-muntah karena salah makan',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '5',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-03-09',
-            'END_DATE' => '2017-03-10',
-            'TYPE' => 'SICK',
-            'DESCRIPTION' => 'Diare dan muntaber',
-            'RECEIPT_IMG' => 'receipt13.jpg',
-            'STUDENTS_ID' => '5',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '1'
-        ]);
-
-        DB::table('absents')->insert([
-            'START_DATE' => '2017-02-07',
-            'END_DATE' => '2017-04-07',
+            'START_DATE' => '2020-04-10',
+            'END_DATE' => '2020-04-10',
             'TYPE' => 'ABSENT',
             'DESCRIPTION' => 'Tidak hadir tanpa keterangan',
-            'RECEIPT_IMG' => 'receipt25.jpg',
-            'STUDENTS_ID' => '5',
-            'ACADEMIC_YEAR_ID' => '2',
-            'STAFFS_ID' => '2'
+            'RECEIPT_IMG' => 'aaa.jpg',
+            'STUDENTS_ID' => '81',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
+        ]);
+
+        DB::table('absents')->insert([
+            'START_DATE' => '2020-04-19',
+            'END_DATE' => '2020-04-19',
+            'TYPE' => 'LEAVE',
+            'DESCRIPTION' => 'Izin menghadiri acara keluarga di bojonegoro',
+            'RECEIPT_IMG' => 'aaa.jpg',
+            'STUDENTS_ID' => '81',
+            'ACADEMIC_YEAR_ID' => '8',
+            'STAFFS_ID' => '4'
         ]);
     }
 }

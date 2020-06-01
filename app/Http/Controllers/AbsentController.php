@@ -7,6 +7,9 @@ use App\Absent;
 use App\Student;
 use App\Staff;
 use App\AcademicYear;
+use App\GradeStudent;
+use App\Grade;
+use Auth;
 use DB;
 
 class AbsentController extends Controller
@@ -17,33 +20,58 @@ class AbsentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {         
-        $absen = Absent::all();  
-        
-        $karyawan = Staff::all();
+    {                     
         $siswa = Student::all();
         $tahun_ajaran = AcademicYear::all();
         
         $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         if($request->has('academicYearId')){
-            $academic_year_id = $request->academicYearId;
+            $academic_year_id = $request->academicYearId;            
         }
         else{
             $academic_year_id = $maxId;
         }
+        
+        $type = Absent::select(DB::raw('TYPE AS TIPE'))->groupBy('TYPE')->get();
+        
+        $count_total_day_each_ay = AcademicYear::select(DB::raw('DATEDIFF(END_DATE, START_DATE) AS TOTALHARI'))
+                                            ->where('id', $academic_year_id)->first()->TOTALHARI;  
+
+        if(Auth::guard('web')->user()->staff->ROLE === "TEACHER"){                    
+            $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
+
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id;
             
-        $type = Absent::select(DB::raw('TYPE AS TIPE'))                            
-                        ->groupBy('TYPE')
-                        ->get();
-             
-        $datas = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))                                    
+            $siswa = GradeStudent::join('students', 'grades_students.STUDENTS_ID', 'students.id')
+                                ->select('students.id')
+                                ->where('grades_students.GRADES_ID', $kelas_guru)
+                                ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)->get();
+                    
+            $arr_siswa = [];                                
+            foreach($siswa as $s){
+                array_push($arr_siswa, $s->id);
+            }
+        
+            $data = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))                                    
+                            ->where('ACADEMIC_YEAR_ID', $academic_year_id)
+                            ->whereIn('STUDENTS_ID', $arr_siswa)
+                            ->groupBy('TIPE', 'TAHUNAJARAN')
+                            ->get();                  
+
+            $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->get();
+            
+        }
+        else{
+            $data = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))                                    
                              ->where('ACADEMIC_YEAR_ID', $academic_year_id)
                              ->groupBy('TIPE', 'TAHUNAJARAN')
                              ->get();     
-                                                          
-        // dd($datas);
-        return view('absent.index', compact('absen', 'karyawan', 'siswa', 'tahun_ajaran', 'type', 'datas', 'academic_year_id'));
+
+            $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->get();   
+        }
+                               
+        return view('absent.index', compact('absen', 'tahun_ajaran', 'academic_year_id', 'type', 'data', 'count_total_day_each_ay'));
     }
 
     /**
