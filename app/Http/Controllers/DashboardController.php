@@ -158,8 +158,77 @@ class DashboardController extends Controller
                             ->groupBy('students.id')
                             ->having('TOTALPOIN', ">=", 50 )
                             ->get();                             
-
+        
         return $siswa;
+    }
+
+    public function showStudentIncompletenessSubjectValue()
+    {
+        // asumsikan:
+        // role teacher -> tampilin siswa siapa aja (yg dikelasnya) ada catatan daftar ketidaktuntasan 
+        // role headmaster -> tampilin jumlah kelas mana yang paling banyak daftar ketidaktuntasannya 
+        // role student -> tampilin daftar ketidaktuntasannya
+
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
+
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+
+        }
+        elseif(Auth::guard('web')->user()->ROLE == "STUDENT"){
+
+        }
+
+    }
+    
+    public function listOutstandingStudents()
+    {
+        // asumsikan:
+        // role headmaster -> tampilin yang sering dapet penghargaan prestasi dan nilai nya selalu tertinggi dikelas
+        // role teacher -> tampilin siswa dikelasnya yang berprestasi dari nilai tertinggi dan dapet penghargaan 
+        // role student -> tampilin daftar penghargaannya dia sendiri
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
+
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+
+        }
+        elseif(Auth::guard('web')->user()->ROLE == "STUDENT"){
+
+        }
+    }
+
+    public function violationListOftenOccur()
+    {
+        // asumsikan
+        // role heademaster -> pelanggaran apa yang paling sering siswa lakuin filter tahun ajaran
+        // role teacher -> pelanggaran apa yang paling sering siswa dikelasnya lakuin filter tahun ajaran
+        // role student -> tampilin daftar pelanggaran yang dia miliki
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
+
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+
+        }
+        elseif(Auth::guard('web')->user()->ROLE == "STUDENT"){
+
+        }
+    }
+
+    public function showAbsent()
+    {
+        // asumsikan:
+        // role student -> beri peringatan jika KEHADIRANNYA hampir atau sudah kurang dari 90% dan grafiknya
+        // role teacher -> samain aja kyk halaman absent index role teacher
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
+
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+
+        }
+        elseif(Auth::guard('web')->user()->ROLE == "STUDENT"){
+
+        }
     }
 }
 

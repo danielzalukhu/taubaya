@@ -44,22 +44,9 @@
                         </div>
                         <div class="box">
                             <div class="box-header">                                
-                                <h5 class="box-header-title"><b>TAHUN AJARAN:</b>
-                                    <span>
-                                        <div class="btn-group">
-                                            <select type="button" id="dropdown-detail-subject-academic-year" class="btn btn-default dropdown-toggle">
-                                                @foreach($tahun_ajaran as $ta)
-                                                    <option value='{{ $ta->id }}' class="dropdown-academic-year" academic-year-id="{{$ta->id}}">
-                                                        {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
-                                                    </option>                                                                        
-                                                @endforeach
-                                            </select>                                            
-                                        </div>
-                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
-                                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
-                                        <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
-                                    </span>        
-                                </h5>
+                                <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
+                                <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
+                                <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">

@@ -395,15 +395,30 @@ class StudentController extends Controller
                 
         $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
         
+        $url = parse_url(url()->previous(), PHP_URL_QUERY);    
+        $get_url_param = explode("=", $url);
+        
+        if(isset($url)){
+            $select_grade_id = Grade::select('id')->where('NAME', $get_url_param[1])->first()->id;
+            $selected_student_in_ay = GradeStudent::select('ACADEMIC_YEAR_ID')
+                                                ->where('STUDENTS_ID', $siswa->id)
+                                                ->where('GRADES_ID', $select_grade_id)->first()->ACADEMIC_YEAR_ID;                                                      
+        }
+        else{
+            $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+            $selected_student_in_ay = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
+        }
+
         $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                 ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
                                 ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                                 ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                 ->select(DB::raw('ROUND(SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID), 2) AS RATAKELAS'), 'subject_records.*')
-                                ->where('grades_students.GRADES_ID', '=', $select_grade_id)
                                 ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
+                                ->where('grades_students.GRADES_ID', '=', $select_grade_id)
+                                ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student_in_ay)
                                 ->groupBy('subject_records.ACADEMIC_YEAR_ID')
-                                ->get();                                                                                                              
+                                ->get();                                                                                                    
         
         $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $siswa->id) ->first()->AY_ID;                        
 

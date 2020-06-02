@@ -88,7 +88,13 @@
                                         <th>NAMA PELANGGARAN</th>
                                         <th>HUKUMAN</th>
                                         <th>POIN</th>
-                                        <th></th>
+                                        @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
+                                            <th></th>   
+                                        @elseif(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")                                                
+                                            <th></th>       
+                                        @elseif(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                                
+                                            <th></th>                                                                                          
+                                        @endif
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -106,6 +112,7 @@
                                             <td>{{$cp->violation->DESCRIPTION}}</td>
                                             <td>{{$cp->PUNISHMENT}}</td>
                                             <td>{{$cp->TOTAL}}</td>
+                                            @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
                                             <td>
                                                 <a href="{{ route ('violationrecord.edit', $cp->id )}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pencil"></i>
@@ -118,6 +125,7 @@
                                                     </button>
                                                 </form>                                            
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                     </tbody>
