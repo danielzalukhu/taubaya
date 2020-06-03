@@ -1,7 +1,8 @@
 @extends('layout.master')
 
 @section('header')
-<link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/bower_components/select2/dist/css/select2.min.css')}}">
 @stop
 
 @section('content')
@@ -94,11 +95,25 @@
                             @endif
                         </div>
 
+                        @if(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")
+                        <div class="form-group">
+                            <label>Kelas</label>                
+                            <select id="selected_grade" class="form-control select2" style="width: 100%;">
+                                @foreach($kelas as $k)
+                                    <option value='{{ $k->id }}'>{{ $k->NAME }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('a_type'))
+                                <span class="help-block"></span>
+                            @endif
+                        </div>
+                        @endif
+
                         <div class="form-group{{ $errors->has('vr_student_name') ? 'has-error' : '' }} ">
                             <label>Nama Siswa</label>
-                            <select name="vr_student_name" class="form-control" id="inputGroupSelect01">
+                            <select name="vr_student_name" class="form-control select2" style="width: 100%;">
                                 @foreach($siswa as $s)
-                                    <option value='{{ $s->id }}'>{{ $s->FNAME }}{{" "}}{{$s->LNAME}}</option>
+                                    <option value='{{ $s->student->id }}'>{{ $s->student->FNAME }}{{" "}}{{$s->student->LNAME}}</option>
                                 @endforeach
                             </select>
                             @if($errors->has('a_type'))
@@ -138,6 +153,8 @@
 @stop
 
 @section('footer')
+<script src="{{asset('adminlte/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+
 <script>    
     $(function () {
         $('#example1').DataTable()
@@ -150,5 +167,16 @@
             'autoWidth'   : false
             })
         })
+        
+    $(function () {    
+        $('.select2').select2()
+    })
+
+    $('#selected_grade').change(function(){
+        var gradeId = $(this).val()   
+        var route =  "{{ route('subject.incomplete') }}"  
+        window.location = route+"?gradeId="+gradeId;        
+    })
+
 </script>
 @stop

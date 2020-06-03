@@ -273,7 +273,6 @@ class ViolationRecordController extends Controller
         else{
             $siswa = $default_student;
         }
-
         
         return view('violationrecord.edit', compact('catatan_pelanggaran', 'kelas', 'siswa', 'pelanggaran'));
     }

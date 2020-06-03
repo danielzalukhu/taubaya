@@ -98,19 +98,43 @@ class SubjectController extends Controller
         return redirect(action('SubjectController@index'))->with('sukses', 'Subject has been deleted');
     }
 
-    public function incomplete()
+    public function incomplete(Request $request)
     {
         $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
                             ->select('violation_records.*')
                             ->where('violations.NAME','TTS')
                             ->get();
-
-        $siswa = Student::all();
-        $pelanggaran = Violation::all();
-        $karyawan = Staff::all();
+        
         $tahun_ajaran = AcademicYear::all();
+        $pelanggaran = Violation::all();        
+        $kelas = Grade::all();
 
-        return view('subject.incomplete', compact('ketidaktuntasan', 'siswa', 'pelanggaran', 'karyawan', 'tahun_ajaran'));
+        // CREATE
+
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
+
+        if($request->has('gradeId')){
+            $default_student = GradeStudent::where('GRADES_ID', $request->gradeId)
+                                        ->where('ACADEMIC_YEAR_ID', $selected_student)                            
+                                        ->get();
+        }        
+        else{
+            $default_student = GradeStudent::where('GRADES_ID', 1)->where('ACADEMIC_YEAR_ID', $selected_student) ->get();
+        }
+        
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
+
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
+        }  
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
+        }
+        else{
+            $siswa = $default_student;
+        }
+
+        return view('subject.incomplete', compact('ketidaktuntasan', 'siswa', 'kelas', 'pelanggaran', 'tahun_ajaran'));
     }
 
     public function storeIncomplete(Request $request)

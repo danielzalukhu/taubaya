@@ -39,7 +39,7 @@
                                     </div>
 
                                     @if(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")
-                                    <div class="form-group{{ $errors->has('ar_student_name') ? 'has-error' : '' }} ">
+                                    <div class="form-group">
                                         <label>Kelas</label>                
                                         <select id="selected_grade" class="form-control select2" style="width: 100%;">
                                             @foreach($kelas as $k)
@@ -47,7 +47,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
-                                            <span class="help-block">{{$errors->first('ar_student_name')}}</span>
+                                            <span class="help-block"></span>
                                         @endif
                                     </div>
                                     @endif
