@@ -372,11 +372,12 @@
                 $('#tbody-achievement-academic-year').empty()
 
                 result.forEach(function(obj){
+                    console.log(result)
                     $('#tbody-achievement-academic-year').append(
                         `
                         <tr>
                             <td>${obj.DATE}</td>
-                            <td>${obj.TYPE}</td>
+                            <td>${obj.GRADE}</td>
                             <td>${obj.DESCRIPTION}</td>
                             <td>${obj.POINT}</td>
                         </tr>
@@ -675,9 +676,9 @@
 
         var dataSeries = []
         var obj_present = {}
-
+        
         types.forEach(function(item){   
-            dataGraph.forEach(function(obj){
+            dataGraph.forEach(function(obj){        
                 if(obj.TIPE == item.TIPE){
                     dataSeries.push({
                         name: item.TIPE,
@@ -685,14 +686,20 @@
                     })
 
                     totalAmountExceptPresent = totalAmountExceptPresent + obj.JUMLAH
-                    present_percentage = totalDayEachAcademicYear - totalAmountExceptPresent
-                }
-            })
+                    present_percentage = totalDayEachAcademicYear - totalAmountExceptPresent                   
+                } 
+            })            
         })
-    
-        obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
-        dataSeries.push(obj_present)      
-    
+
+        if(Array.isArray(dataGraph) == dataGraph.length){
+            obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
+            dataSeries.push(obj_present)           
+        }
+        else {
+            obj_present = {name: 'PRESENT', y: totalDayEachAcademicYear, sliced: true, selected: true}        
+            dataSeries.push(obj_present)                 
+        }
+
         Highcharts.setOptions({
             colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
         });

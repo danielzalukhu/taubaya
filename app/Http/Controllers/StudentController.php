@@ -90,7 +90,8 @@ class StudentController extends Controller
         $catatan_pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
                             ->select('violation_records.*', 'violations.*')
                             ->where('STUDENTS_ID', '=', $id)
-                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'));
+                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'))
+                            ->get();
 
         $violation_point = ViolationRecord::select(DB::raw('SUM(TOTAL) AS POINT'))                        
                             ->where('STUDENTS_ID', $id)
@@ -104,9 +105,9 @@ class StudentController extends Controller
         $catatan_penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                                        
                                             ->select('achievements.*', 'achievement_records.*')
                                             ->where('STUDENTS_ID', '=', $id)
-                                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'));
-
-    
+                                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'))
+                                            ->get();
+            
         $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         if($request->has('academicYearId')){
@@ -159,13 +160,13 @@ class StudentController extends Controller
         $tipeAbsen = Absent::select(DB::raw('TYPE AS TIPE'))
                         ->groupBy('TIPE')
                         ->get();
-                        
+        
         $dataAbsen = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))
                         ->where('ACADEMIC_YEAR_ID', $academic_year_id)
                         ->where('STUDENTS_ID', $id)                                    
                         ->groupBy('TIPE', 'TAHUNAJARAN')
                         ->get();                      
-
+        
         $count_total_day_each_ay = AcademicYear::select(DB::raw('DATEDIFF(END_DATE, START_DATE) AS TOTALHARI'))
                                             ->where('id', $academic_year_id)->first()->TOTALHARI;                          
 

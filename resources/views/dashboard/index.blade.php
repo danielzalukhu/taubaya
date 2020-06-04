@@ -95,7 +95,7 @@
                         <p>PELANGGARAN</p>
                       </div>
                       <div class="icon">
-                        <i class="ion ion-person-add"></i>
+                        <i class="fa fa-exclamation-triangle"></i>
                       </div>
                       <a href="{{route('violationrecord.index')}}" class="small-box-footer">Daftar Pelanggaran.. <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
@@ -208,7 +208,11 @@
               <div class="col-lg-6">
                 <div class="box box-default">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Daftar Ketidaktuntasan</h3>
+                    @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                      <h3 class="box-title">Daftar Laporan Ketidaktuntasan</h3>
+                    @else
+                      <h3 class="box-title">Laporan Ketidaktuntasan</h3>
+                    @endif
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse">
                           <i class="fa fa-minus"></i>
@@ -223,25 +227,43 @@
                       <table class="table no-margin">
                         <thead>
                           <tr>
+                            <th>#</th>
+                            <th>TANGGAL</th>
                             <th>NISN</th>
                             <th>NAMA SISWA</th>
-                            <th>TANGGAL</th>
                             <th>KETERANGAN</th>                            
                           </tr>
                         </thead>
                         <tbody>
-                          
+                        @php $i=1 @endphp
+                        @forelse($daftar_ketidaktuntasan as $dk)
+                          <tr>
+                            <td>{{ $i++ }}</td>
+                            <td><b>{{date('d-m-Y', strtotime($dk->DATE))}}</b></td>
+                            <td>{{ $dk->student->NISN }}</td>
+                            <td>{{ $dk->student->FNAME }}{{" "}}{{ $dk->student->LNAME }}</td>
+                            <td>{{ $dk->DESCRIPTION }}</td>
+                          </tr>
+                        @empty
+                          <tr>
+                              <td colspan="12" class="text-center p-5">Belum ada daftar Ketidaktuntasan</td>
+                          </tr>
+                        @endforelse
                         </tbody>
                       </table>
                     </div>
-                  </div>    
+                  </div> 
+                  <div class="box-footer clearfix">
+                    <a href="{{route('subject.incomplete')}}" class="btn btn-sm btn-info btn-flat pull-left">Buat Laporan Ketidaktuntasan</a>
+                    <a href="{{route('subject.incomplete')}}" class="btn btn-sm btn-default btn-flat pull-right">Lihat Daftar Ketidaktuntasan</a>
+                  </div>   
                 </div>
               </div>
 
               <div class="col-lg-6">
                 <div class="box box-success">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Daftar Siswa Berprestasi</h3>
+                    <h3 class="box-title">Daftar Prestasi Siswa</h3>
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse">
                           <i class="fa fa-minus"></i>
@@ -256,18 +278,39 @@
                       <table class="table no-margin">
                         <thead>
                           <tr>
-                            <th>NISN</th>
+                            <th>#</th>
                             <th>NAMA SISWA</th>
-                            <th>TANGGAL</th>
-                            <th>KETERANGAN</th>                            
+                            <th>JUMLAH PENGHARGAAN</th>
+                            <th>POIN PENGHARGAAN</th>      
+                            <th></th>                      
                           </tr>
                         </thead>
                         <tbody>
-                          
+                        @php $i=1 @endphp
+                        @forelse($daftar_penghargaan_siswa as $dps)
+                          <tr>
+                            <td>{{ $i++ }}</td>
+                            <td>{{ $dps->student->FNAME }}{{" "}}{{ $dk->student->LNAME }}</td>
+                            <td>{{ $dps->BANYAKPENGHARGAAN }}</td>
+                            <td>{{ $dps->POINPENGHARGAAN }}</td>
+                            <td>
+                              <a href="{{ route('student.profile', ['id'=>$dps->student->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
+                                <i class="fa fa-eye"></i>
+                              </a> 
+                            </td>
+                          </tr>
+                        @empty
+                          <tr>
+                              <td colspan="12" class="text-center p-5">Belum ada daftar Ketidaktuntasan</td>
+                          </tr>
+                        @endforelse
                         </tbody>
                       </table>
                     </div>
-                  </div>    
+                  </div>   
+                  <div class="box-footer clearfix">
+                    <a href="{{route('achievementrecord.index')}}" class="btn btn-sm btn-default btn-flat pull-right">Lihat Daftar Ketidaktuntasan</a>
+                  </div>  
                 </div>
               </div>
 
@@ -296,7 +339,7 @@
               <div class="col-lg-6">
                 <div class="box box-info">
                   <div class="box-header with-border">
-                      <h3 class="box-title">Absensi Kelas</h3>
+                      <h3 class="box-title">Absensi Kelas<h3>
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
                             <i class="fa fa-minus"></i>
@@ -389,6 +432,40 @@
         }]
     });
 
+    
+    var datas = {!! json_encode($grafik_absen_data) !!}    
+
+    var types = datas.type
+    var dataGraph = datas.data
+    var totalDayEachAcademicYear = datas.count_total_day_each_ay
+  
+    var totalAmountExceptPresent = 0
+    var present_percentage = 0
+
+    var dataSeries = []
+    var obj_present = {}
+
+    types.forEach(function(item){   
+        dataGraph.forEach(function(obj){
+            if(obj.TIPE == item.TIPE){
+                dataSeries.push({
+                    name: item.TIPE,
+                    y: obj.JUMLAH
+                })
+
+                totalAmountExceptPresent = totalAmountExceptPresent + obj.JUMLAH
+                present_percentage = totalDayEachAcademicYear - totalAmountExceptPresent
+            }
+        })
+    })
+
+    obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
+    dataSeries.push(obj_present)      
+
+    Highcharts.setOptions({
+        colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
+    });
+
     Highcharts.chart('dashboardAbsentChart', {
         chart: {
             plotBackgroundColor: null,
@@ -396,14 +473,14 @@
             plotShadow: false,
             type: 'pie'
         },
+        credits: {
+            enabled: false
+        },
         title: {
             text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        credits: {
-            enabled: false
         },
         accessibility: {
             point: {
@@ -421,31 +498,12 @@
             }
         },
         series: [{
-            name: 'Brands',
+            name: 'JENIS ABSEN',
             colorByPoint: true,
-            data: [{
-                name: 'Chrome',
-                y: 61.41,
-                sliced: true,
-                selected: true
-            }, {
-                name: 'Internet Explorer',
-                y: 11.84
-            }, {
-                name: 'Firefox',
-                y: 10.85
-            }, {
-                name: 'Edge',
-                y: 4.67
-            }, {
-                name: 'Safari',
-                y: 4.18
-            }, {
-                name: 'Other',
-                y: 7.05
-            }]
+            data: dataSeries
         }]
     });
+    
 </script>
 @stop 
 

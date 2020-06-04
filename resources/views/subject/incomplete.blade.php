@@ -34,8 +34,8 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>NAMA SISWA</th>
                                         <th>TANGGAL</th>
+                                        <th>NAMA SISWA</th>                                        
                                         <th colspan="2">KODE - DEKSRIPSI</th>
                                         <th></th>
                                     </tr>
@@ -45,8 +45,8 @@
                                     @foreach($ketidaktuntasan as $tts)
                                     <tr>
                                         <td>{{ $i++ }}</td>
+                                        <td><b>{{date('d-m-Y', strtotime($tts->DATE))}}</b></td>
                                         <td>{{$tts->student->FNAME}}{{" "}}{{$tts->student->LNAME}}</td>
-                                        <td>{{date('d-m-Y', strtotime($tts->DATE))}}</td>
                                         <td>{{$tts->violation->NAME}}</td>
                                         <td>{{$tts->DESCRIPTION}}</td>
                                         <td>

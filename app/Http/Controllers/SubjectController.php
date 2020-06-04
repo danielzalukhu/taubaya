@@ -99,17 +99,12 @@ class SubjectController extends Controller
     }
 
     public function incomplete(Request $request)
-    {
-        $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
-                            ->select('violation_records.*')
-                            ->where('violations.NAME','TTS')
-                            ->get();
-        
+    {               
         $tahun_ajaran = AcademicYear::all();
         $pelanggaran = Violation::all();        
         $kelas = Grade::all();
 
-        // CREATE
+        // INDEX & CREATE 
 
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
 
@@ -123,15 +118,37 @@ class SubjectController extends Controller
         }
         
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
-            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
-
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id;            
+            
             $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
+        
+            $arr_siswa = [];                                
+            foreach($siswa as $s){
+                array_push($arr_siswa, $s->STUDENTS_ID);
+            }
+            
+            $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
+                            ->select('violation_records.*')
+                            ->where('violations.NAME','TTS')
+                            ->whereIn('violation_records.STUDENTS_ID', $arr_siswa)
+                            ->get();
+            
         }  
         elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
             $siswa = $default_student;
+
+            $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
+                            ->select('violation_records.*')
+                            ->where('violations.NAME','TTS')
+                            ->get();
         }
         else{
             $siswa = $default_student;
+
+            $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
+                            ->select('violation_records.*')
+                            ->where('violations.NAME','TTS')
+                            ->get();
         }
 
         return view('subject.incomplete', compact('ketidaktuntasan', 'siswa', 'kelas', 'pelanggaran', 'tahun_ajaran'));

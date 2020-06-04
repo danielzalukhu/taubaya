@@ -145,8 +145,14 @@
         })          
     })   
 
-    obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
-    dataSeries.push(obj_present)      
+    if(Array.isArray(dataGraph) == dataGraph.length){
+        obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
+        dataSeries.push(obj_present)           
+    }
+    else {
+        obj_present = {name: 'PRESENT', y: totalDayEachAcademicYear, sliced: true, selected: true}        
+        dataSeries.push(obj_present)      
+    }  
     
     console.log(totalDayEachAcademicYear)
     console.log(totalAmountExceptPresent)

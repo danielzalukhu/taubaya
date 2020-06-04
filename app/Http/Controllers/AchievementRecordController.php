@@ -289,7 +289,7 @@ class AchievementRecordController extends Controller
 
     public function ajaxChangeAchievementRecord(Request $request)
     {
-        $ajaxPenghargaan = DB::select('SELECT ass.DATE, a.TYPE, ass.DESCRIPTION, a.POINT
+        $ajaxPenghargaan = DB::select('SELECT ass.DATE, a.GRADE, ass.DESCRIPTION, a.POINT
                                        FROM achievement_records ass INNER JOIN achievements a ON ass.ACHIEVEMENTS_ID = a.id
                                        WHERE ass.ACADEMIC_YEAR_ID = ' . $request->academicYearId . ' AND  ass.STUDENTS_ID = "' . $request->studentId .'"');    
 
