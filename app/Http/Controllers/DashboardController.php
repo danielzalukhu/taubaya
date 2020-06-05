@@ -38,30 +38,43 @@ class DashboardController extends Controller
         }        
         
         //END GLOBAL SESSION 
-                                
-        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
+        
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;      
 
         if(Auth::guard('web')->user()->ROLE === "STAFF"){            
             $jumlah_siswa = $this->countStudent($request->session()->get('session_user_id'));
+
             $jumlah_penghargaan = $this->countAchievement($request->session()->get('session_user_id'));
+
             $jumlah_pelanggaran = $this->countViolation($request->session()->get('session_user_id'));
-            $siswa_bermasalah = $this->getTroubleStudent($request->session()->get('session_user_id'), $selected_student);
-            $daftar_ketidaktuntasan = $this->showStudentIncompletenessSubjectValue($request->session()->get('session_user_id'), $selected_student);
+
+            $siswa_bermasalah = $this->getTroubleStudent($request->session()->get('session_user_id'), $selected_student);                                
+
+            $daftar_ketidaktuntasan = $this->showStudentIncompleteness($request->session()->get('session_user_id'), $selected_student);
+            
             $grafik_absen_data = $this->showAbsent($request->session()->get('session_user_id'));
-            $daftar_penghargaan_siswa = $this->listOutstandingStudents($request->session()->get('session_user_id'));            
+
+            $daftar_penghargaan_siswa = $this->studentAchievements($request->session()->get('session_user_id'));            
+            
+            $daftar_pelanggaran_sering_terjadi = $this->violationListOftenOccur($request->session()->get('session_user_id'));
 
             return view('dashboard.index', compact('tahun_ajaran', 'jumlah_siswa', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah',
                                                    'daftar_ketidaktuntasan', 'grafik_absen_data',
                                                    'daftar_penghargaan_siswa'));
         }
-        elseif(Auth::guard('web')->user()->ROLE === "STUDENT"){
+        else{
             $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_student_id'));
+
             $jumlah_pelanggaran = $this->countViolationKu($request->session()->get('session_student_id'));
-            $daftar_ketidaktuntasan = $this->showMyIncompleteness($request->session()->get('session_student_id'));
+
+            $daftar_ketidaktuntasan = $this->myIncompleteness($request->session()->get('session_student_id'));
+            
             $grafik_absen_data = $this->showAbsentKu($request->session()->get('session_student_id'));
 
-            return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'siswa_bermasalah', 'daftar_ketidaktuntasan',
-                                                   'grafik_absen_data'));
+            $daftar_penghargaan_siswa = $this->myAchievement($request->session()->get('session_student_id'));            
+            
+            return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'daftar_ketidaktuntasan',
+                                                   'grafik_absen_data', 'daftar_penghargaan_siswa'));
         }            
     }
 
@@ -181,14 +194,14 @@ class DashboardController extends Controller
                                 ->having('TOTALPOIN', ">=", 50 )
                                 ->get();                             
         }
-        elseif(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
 
         }
         
         return $siswa;
     }
 
-    public function showStudentIncompletenessSubjectValue($iduser, $selected_student)
+    public function showStudentIncompleteness($iduser, $selected_student)
     {
         // asumsikan:
         // role teacher -> tampilin siswa siapa aja (yg dikelasnya) ada catatan daftar ketidaktuntasan 
@@ -221,19 +234,22 @@ class DashboardController extends Controller
         return $ketidaktuntasan;
     }
 
-    public function showMyIncompleteness($idsiswa)
+    public function myIncompleteness($idsiswa)
     {
+        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+
         $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
                                                 ->select('violation_records.*')
                                                 ->where('violations.NAME','TTS')
                                                 ->where('violation_records.STUDENTS_ID', $idsiswa)
+                                                ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                                 ->orderBy('violation_records.id', 'DESC')->take(5)
                                                 ->get();
 
         return $ketidaktuntasan;                            
     }
     
-    public function listOutstandingStudents($iduser)
+    public function studentAchievements($iduser)
     {
         // asumsikan:
         // role headmaster -> tampilin yang sering dapet penghargaan prestasi dan nilai nya selalu tertinggi dikelas
@@ -262,11 +278,24 @@ class DashboardController extends Controller
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
 
         }
-        elseif(Auth::guard('web')->user()->ROLE == "STUDENT"){
-
-        }
 
         return $penghargaan_siswa;
+    }
+
+    public function myAchievement($idsiswa)
+    {
+        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+        
+        $penghargaan_siswa = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
+                                            ->select('achievement_records.*', DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'),
+                                                    DB::raw('SUM(POINT) AS POINPENGHARGAAN'))
+                                            ->where('achievement_records.STUDENTS_ID', $idsiswa)
+                                            ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                            ->groupBy('achievement_records.STUDENTS_ID')
+                                            ->orderBy('achievement_records.id', 'DESC')->take(5)
+                                            ->get();        
+
+        return $penghargaan_siswa;                                        
     }
 
     public function violationListOftenOccur($iduser)
@@ -275,15 +304,51 @@ class DashboardController extends Controller
         // role heademaster -> pelanggaran apa yang paling sering siswa lakuin filter tahun ajaran
         // role teacher -> pelanggaran apa yang paling sering siswa dikelasnya lakuin filter tahun ajaran
         // role student -> tampilin daftar pelanggaran yang dia miliki
+        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+
+        $kategori = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                        END) AS KATEGORI
+                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
+                        GROUP BY KATEGORI ");
+
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
+            $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
+
+            $kelas_guru = Grade::where('STAFFS_ID', $iduser)->first()->id;
             
+            $siswa = GradeStudent::join('students', 'grades_students.STUDENTS_ID', 'students.id')
+                                ->select('students.id')
+                                ->where('grades_students.GRADES_ID', $kelas_guru)
+                                ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)->get();
+                    
+            $arr_siswa = [];                                
+            foreach($siswa as $s){
+                array_push($arr_siswa, $s->id);
+            }    
+            
+            $data = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                                ->select(DB::raw('(CASE
+                                            WHEN violations.NAME LIKE "R%" THEN "RINGAN"
+                                            WHEN violations.NAME LIKE "B%" THEN "BERAT" 
+                                            WHEN violations.NAME LIKE "SB%" THEN "SANGATBERAT"
+                                            WHEN violations.NAME LIKE "TTS%" THEN "KETIDAKTUNTASAN"
+                                            END) AS KATEGORI'),
+                                        DB::raw('MONTH(violation_records.DATE) AS BULAN'),
+                                        DB::raw('COUNT(*) AS JUMLAH'))
+                                ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->whereIn('violation_records.STUDENTS_ID', $arr_siswa)
+                                ->groupBy('KATEGORI')->groupBy('BULAN')
+                                ->orderBy('BULAN', 'ASC')->get();
+
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
 
         }
-        elseif(Auth::guard('web')->user()->ROLE == "STUDENT"){
 
-        }
+        // dd($data);
     }
 
     public function showAbsent($iduser)

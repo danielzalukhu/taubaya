@@ -17,7 +17,11 @@
         <section class="content-header">
           <h1>SISTEM MONITORING PRESTASI SISWA
               <small>
-              {{$tahun_ajaran[0]->TYPE}}{{" - "}}{{$tahun_ajaran[0]->NAME}}
+              @if($tahun_ajaran[0]->TYPE == "EVEN")
+                GENAP - {{$tahun_ajaran[0]->NAME}}
+              @else
+                GANJIL - {{$tahun_ajaran[0]->NAME}}
+              @endif
               </small>
           </h1>
           <ol class="breadcrumb">
@@ -50,9 +54,9 @@
                       <p>KU</p>
                     </div>
                     <div class="icon">
-                      <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">
-                        <i class="fa fa-users"></i>
-                      </a>
+                      <a href="{{route('student.profile', ['id'=>request()->session()->get('session_student_id')])}}" class="small-box-footer">                        
+                        <i class="fa fa-users"></i>                                                                      
+                      </a>                      
                     </div>                    
                   </div>         
                 </div>       
@@ -290,7 +294,7 @@
                         @forelse($daftar_penghargaan_siswa as $dps)
                           <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $dps->student->FNAME }}{{" "}}{{ $dk->student->LNAME }}</td>
+                            <td>{{ $dps->student->FNAME }}{{" "}}{{ $dps->student->LNAME }}</td>
                             <td>{{ $dps->BANYAKPENGHARGAAN }}</td>
                             <td>{{ $dps->POINPENGHARGAAN }}</td>
                             <td>
@@ -301,7 +305,7 @@
                           </tr>
                         @empty
                           <tr>
-                              <td colspan="12" class="text-center p-5">Belum ada daftar Ketidaktuntasan</td>
+                              <td colspan="12" class="text-center p-5">Belum ada daftar penghargaan</td>
                           </tr>
                         @endforelse
                         </tbody>
@@ -339,7 +343,7 @@
               <div class="col-lg-6">
                 <div class="box box-info">
                   <div class="box-header with-border">
-                      <h3 class="box-title">Absensi Kelas<h3>
+                      <h3 class="box-title">Absensi Kelas</h3>
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
                             <i class="fa fa-minus"></i>

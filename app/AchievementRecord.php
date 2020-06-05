@@ -23,7 +23,7 @@ class AchievementRecord extends Model
     {
         return $this->belongsTo('App\Student', 'STUDENTS_ID');
     }
-
+    
     public function achievement()
     {
         return $this->belongsTo('App\Achievement', 'ACHIEVEMENTS_ID');

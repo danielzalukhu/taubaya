@@ -132,15 +132,19 @@ class StudentController extends Controller
                                 FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
                                 GROUP BY KATEGORI ");
 
-        $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
-                                    WHEN v.NAME LIKE 'B%' THEN 'BERAT'
-                                    WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
-                                    WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
-                            END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
-                            FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
-                            WHERE ACADEMIC_YEAR_ID = " . $academic_year_id . " AND STUDENTS_ID = " . $id . "
-                            GROUP BY KATEGORI, BULAN
-                            ORDER BY BULAN ASC");                                                                            
+        $data = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                            ->select(DB::raw('(CASE
+                                        WHEN violations.NAME LIKE "R%" THEN "RINGAN"
+                                        WHEN violations.NAME LIKE "B%" THEN "BERAT" 
+                                        WHEN violations.NAME LIKE "SB%" THEN "SANGATBERAT"
+                                        WHEN violations.NAME LIKE "TTS%" THEN "KETIDAKTUNTASAN"
+                                        END) AS KATEGORI'),
+                                    DB::raw('MONTH(violation_records.DATE) AS BULAN'),
+                                    DB::raw('COUNT(*) AS JUMLAH'))
+                            ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                            ->where('violation_records.STUDENTS_ID', $id)
+                            ->groupBy('KATEGORI')->groupBy('BULAN')
+                            ->orderBy('BULAN', 'ASC')->get();                                                                                                   
 
         // GRAFIK TAB ACHIEVEMENT
 
