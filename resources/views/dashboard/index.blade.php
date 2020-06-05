@@ -258,8 +258,12 @@
                     </div>
                   </div> 
                   <div class="box-footer clearfix">
+                    @if(Auth::guard('web')->user()->ROLE === "STAFF")
                     <a href="{{route('subject.incomplete')}}" class="btn btn-sm btn-info btn-flat pull-left">Buat Laporan Ketidaktuntasan</a>
                     <a href="{{route('subject.incomplete')}}" class="btn btn-sm btn-default btn-flat pull-right">Lihat Daftar Ketidaktuntasan</a>
+                    @else
+                    <a href="{{route('subject.incompleteku')}}" class="btn btn-sm btn-default btn-flat pull-right">Lihat Daftar Ketidaktuntasan</a>
+                    @endif
                   </div>   
                 </div>
               </div>

@@ -54,6 +54,8 @@ Route::resource('absent', 'AbsentController')->middleware('auth');
 
 // SUBJECT (INCOMPLETE, ASSESMENT)
 Route::get('incomplete', 'SubjectController@incomplete')->middleware('auth')->name('subject.incomplete');
+Route::get('incompleteku', 'SubjectController@incompleteku')->middleware('auth')->name('subject.incompleteku');
+Route::get('incomplete/create', 'SubjectController@createIncomplete')->middleware('auth')->name('subject.createIncomplete');
 Route::post('incomplete', 'SubjectController@storeIncomplete')->name('subject.storeIncomplete');
 Route::get('incomplete/{id}/edit', 'SubjectController@editIncomplete')->name('subject.editIncomplete');
 Route::post('incomplete/{id}/update', 'SubjectController@updateIncomplete')->name('subject.updateIncomplete');
