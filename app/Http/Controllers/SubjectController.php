@@ -247,7 +247,7 @@ class SubjectController extends Controller
 
         $ketidaktuntasan->save();
 
-        return redirect(action('SubjectController@incomplete', $ketidaktuntasan->id))->with('sukses', 'Laporan ketidaktuntasan berhasil dibuat');
+        return redirect(action('SubjectController@incomplete', $ketidaktuntasan->id))->with('sukses', 'Laporan ketidaktuntasan berhasil diubah');
     }
 
     public function destroyIncomplete($id)
