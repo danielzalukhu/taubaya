@@ -258,15 +258,30 @@ class ExtracurricularController extends Controller
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->get();
         }        
-        elseif(Auth::guard('web')->user()->ROLE === "STUDENT"){
-            $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
-                                        ->select('extracurricular_records.*', 'extracurricular_reports.*')
-                                        ->where('extracurricular_records.STUDENTS_ID', $request->session()->get('session_student_id'))
-                                        ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                                        ->get();    
-        }
-        
+
         return view('extracurricular.ekskul', compact('tahun_ajaran', 'ekskul', 'academic_year_id'));                            
+    }
+
+    public function showEkskulKu(Request $request)
+    {
+        $tahun_ajaran = AcademicYear::all();
+
+        $max_academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+
+        if($request->has('academicYearId')){
+            $academic_year_id = $request->academicYearId;
+        }
+        else{
+            $academic_year_id = $max_academic_year_id;
+        }
+
+        $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
+                                    ->select('extracurricular_records.*', 'extracurricular_reports.*')
+                                    ->where('extracurricular_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                    ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                    ->get();   
+
+        return view('extracurricular.ekskul', compact('tahun_ajaran', 'ekskul', 'academic_year_id'));                                                                
     }
 }
 

@@ -19,7 +19,8 @@
                             <h3 class="box-title">DAFTAR EKSKUL</h3>            
                         </div>
                         <div class="box">
-                            <div class="box-header">                                
+                            <div class="box-header">             
+                                @if(Auth::guard('web')->user()->ROLE === "STAFF")                   
                                 <h5 class="box-header-title"><b>TAHUN AJARAN:</b>
                                     <span>
                                         <div class="btn-group">
@@ -35,6 +36,7 @@
                                         <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
                                     </span>        
                                 </h5>
+                                @endif
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">
