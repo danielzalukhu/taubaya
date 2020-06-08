@@ -53,7 +53,7 @@ class DashboardController extends Controller
             $daftar_ketidaktuntasan = $this->showStudentIncompleteness($request->session()->get('session_user_id'), $selected_student);
             
             $grafik_absen_data = $this->showAbsent($request->session()->get('session_user_id'));
-
+            
             $daftar_penghargaan_siswa = $this->studentAchievements($request->session()->get('session_user_id'));            
             
             $daftar_pelanggaran_sering_terjadi = $this->violationListOftenOccur($request->session()->get('session_user_id'));
@@ -385,16 +385,23 @@ class DashboardController extends Controller
                             ->groupBy('TIPE', 'TAHUNAJARAN')
                             ->get();                  
 
+            $ketidakhadiran = Absent::select(DB::raw('SUM(TYPE) AS JUMLAHKETIDAKHADIRAN'))
+                                ->where('ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->whereIn('STUDENTS_ID', $arr_siswa)
+                                ->first()->JUMLAHKETIDAKHADIRAN;
+        
+            $kehadiran = (($count_total_day_each_ay - $ketidakhadiran) / $count_total_day_each_ay) * 100; 
+            
             $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->get();
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
 
         }       
         
-        $value["count_total_day_each_ay"] = $count_total_day_each_ay;
-        $value["type"] = $type;
-        $value["data"] = $data;
-
+        // $value["count_total_day_each_ay"] = $count_total_day_each_ay;
+        // $value["type"] = $type;
+        $value["data"] = $data;        
+        
         return $value;
     }
 
@@ -415,9 +422,18 @@ class DashboardController extends Controller
                             ->groupBy('TIPE', 'TAHUNAJARAN')
                             ->get();   
         
-        $value["count_total_day_each_ay"] = $count_total_day_each_ay;
-        $value["type"] = $type;
-        $value["data"] = $data;      
+        $ketidakhadiran = Absent::select(DB::raw('SUM(TYPE) AS JUMLAHKETIDAKHADIRAN'))
+                                ->where('ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->where('STUDENTS_ID', $idsiswa)
+                                ->first()->JUMLAHKETIDAKHADIRAN;
+        
+        $kehadiran = (($count_total_day_each_ay - $ketidakhadiran) / $count_total_day_each_ay) * 100; 
+        
+        // $value["count_total_day_each_ay"] = $count_total_day_each_ay;
+        // $value["type"] = $type;        
+            
+        $value["data"] = $data;
+        $value["kehadiran"] = $kehadiran;
         
         return $value;
     }

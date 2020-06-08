@@ -271,7 +271,11 @@
               <div class="col-lg-6">
                 <div class="box box-success">
                   <div class="box-header with-border">
-                    <h3 class="box-title">Daftar Prestasi Siswa</h3>
+                    @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                      <h3 class="box-title">Daftar Prestasi Siswa</h3>
+                    @else
+                      <h3 class="box-title">Prestasi-Ku</h3>
+                    @endif
                     <div class="box-tools pull-right">
                       <button type="button" class="btn btn-box-tool" data-widget="collapse">
                           <i class="fa fa-minus"></i>
@@ -295,14 +299,14 @@
                         </thead>
                         <tbody>
                         @php $i=1 @endphp
-                        @forelse($daftar_penghargaan_siswa as $dps)
+                        @forelse($daftar_penghargaan_siswa as $gad)
                           <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $dps->student->FNAME }}{{" "}}{{ $dps->student->LNAME }}</td>
-                            <td>{{ $dps->BANYAKPENGHARGAAN }}</td>
-                            <td>{{ $dps->POINPENGHARGAAN }}</td>
+                            <td>{{ $gad->student->FNAME }}{{" "}}{{ $gad->student->LNAME }}</td>
+                            <td>{{ $gad->BANYAKPENGHARGAAN }}</td>
+                            <td>{{ $gad->POINPENGHARGAAN }}</td>
                             <td>
-                              <a href="{{ route('student.profile', ['id'=>$dps->student->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
+                              <a href="{{ route('student.profile', ['id'=>$gad->student->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
                                 <i class="fa fa-eye"></i>
                               </a> 
                             </td>
@@ -347,7 +351,11 @@
               <div class="col-lg-6">
                 <div class="box box-info">
                   <div class="box-header with-border">
+                    @if(Auth::guard('web')->user()->ROLE === "STAFF")
                       <h3 class="box-title">Absensi Kelas</h3>
+                    @else
+                      <h3 class="box-title">Absen-Ku</h3>
+                    @endif
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
                             <i class="fa fa-minus"></i>
@@ -358,7 +366,44 @@
                       </div>
                   </div>
                   <div class="box-body">
-                      <div id="dashboardAbsentChart"></div>
+                      <!-- <div id="dashboardAbsentChart"></div> -->
+                      <div class="table-responsive">
+                        <table class="table no-margin">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>TIPE ABSESNI</th>
+                              <th>JUMLAH</th>
+                              <th></th>                      
+                            </tr>
+                          </thead>
+                          <tbody>
+                          @php $i=1 @endphp
+                          @forelse($grafik_absen_data["data"] as $gad)
+                            <tr>
+                              <td>{{ $i++ }}</td>
+                              <td>{{ $gad->TIPE }}</td>
+                              <td>{{ $gad->JUMLAH }}</td>
+                              <td>
+                                <a href="{{ route('absent.index') }}" title="Daftar Absen" class="btn btn-info btn-sm">
+                                  <i class="fa fa-eye"></i>
+                                </a> 
+                              </td>
+                            </tr>                            
+                            @empty
+                            <tr>
+                                <td colspan="12" class="text-center p-5">Belum ada daftar penghargaan</td>
+                            </tr>
+                          @endforelse
+                          </tbody>
+                          @if(Auth::guard('web')->user()->ROLE === "STUDENT")
+                          <tfoot>
+                            <td colspan="2"> KEHADIRAN &nbsp <b>{{ $grafik_absen_data["kehadiran"] }} % </b></td>
+                            <td colspan="2">KETIDAKHADIRAN &nbsp <b>{{ 100 - $grafik_absen_data["kehadiran"] }} % </b></td>
+                          </tfoot>                          
+                          @endif
+                        </table>
+                      </div>                      
                   </div>
                 </div>
               </div>
@@ -446,7 +491,7 @@
     var types = datas.type
     var dataGraph = datas.data
     var totalDayEachAcademicYear = datas.count_total_day_each_ay
-  
+    
     var totalAmountExceptPresent = 0
     var present_percentage = 0
 

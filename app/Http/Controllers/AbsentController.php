@@ -59,7 +59,7 @@ class AbsentController extends Controller
                             ->groupBy('TIPE', 'TAHUNAJARAN')
                             ->get();                  
 
-            $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->get();
+            $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->orderBy('id', 'DESC')->get();
             
         }
         else{
