@@ -19,19 +19,37 @@
                         <strong>{{ $error }}</strong>
                     </div> 
                 @endif
+                
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">DAFTAR LAPORAN KETIDAKTUNTASAN SISWA</h3>            
-                        </div>
-                        <div class="box">
-                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
-                            <div class="box-header">
-                                <div class="right">
-                                    <a href="{{ route('subject.createIncomplete') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR KETIDAKTUNTASAN</a>
-                                </div>
+                            <h3 class="box-title">DAFTAR LAPORAN KETIDAKTUNTASAN SISWA</h3>        
+                        </div>                                                 
+                        <div class="box">                                                      
+                            <div class="box-header">                             
+                                @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                                    <div class="row">
+                                        <a href="{{ route('subject.createIncomplete') }}" type="button" class="btn btn-primary btn-sm pull-right"  style="margin-right: 15px;">BUAT DAFTAR KETIDAKTUNTASAN</a>
+                                    </div>                                            
+                                @endif    
+                                <h5 class="box-header-title"><b>TAHUN AJARAN:</b>                                      
+                                    <span>
+                                        <div class="btn-group">
+                                            <select type="button" id="dropdown-incomplete-academic-year" class="btn btn-default dropdown-toggle">
+                                                @foreach($tahun_ajaran as $ta)
+                                                    <option value='{{ $ta->id }}' class="dropdown-academic-year" academic-year-id="{{$ta->id}}">
+                                                        {{ $ta->TYPE}}{{" - "}}{{ $ta->NAME }}
+                                                    </option>                                                                        
+                                                @endforeach
+                                            </select>                                            
+                                        </div>                                        
+                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
+                                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
+                                        <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
+                                    </span>       
+                                </h5>
                             </div>
-                            @endif
+                            
                             <div class="box-body">
                                 <table id="example1" class="table table-bordered table-striped">
                                 <thead>
@@ -79,6 +97,21 @@
 
 @section('footer')
 <script>    
+    $('#dropdown-incomplete-academic-year').val({{$academic_year_id}})
+
+    $('#dropdown-incomplete-academic-year').change(function(){
+        var academicYearId = $(this).val()        
+        
+        var $role_staff = "{{ Auth::guard('web')->user()->ROLE === "STAFF" }}"
+        var $role_student = "{{ Auth::guard('web')->user()->ROLE === "STUDENT" }}"
+        
+        if($role_staff){
+            window.location = "{{ route('subject.incomplete') }}"+"?academicYearId="+academicYearId;
+        } else if ($role_student){
+            window.location = "{{ route('subject.incompleteku') }}"+"?academicYearId="+academicYearId;
+        }
+    })
+
     $(function () {
         $('#example1').DataTable()
             $('#example2').DataTable({

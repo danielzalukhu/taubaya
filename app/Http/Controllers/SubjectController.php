@@ -122,6 +122,17 @@ class SubjectController extends Controller
     {                         
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
 
+        $tahun_ajaran = AcademicYear::all();
+
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+
+        if($request->has('academicYearId')){
+            $academic_year_id = $request->academicYearId;
+        }
+        else{
+            $academic_year_id = $maxId;
+        }
+
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id;            
             
@@ -133,10 +144,12 @@ class SubjectController extends Controller
             }
             
             $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
-                            ->select('violation_records.*')
-                            ->where('violations.NAME','TTS')
-                            ->whereIn('violation_records.STUDENTS_ID', $arr_siswa)
-                            ->get();
+                                            ->select('violation_records.*')
+                                            ->where('violations.NAME','TTS')
+                                            ->whereIn('violation_records.STUDENTS_ID', $arr_siswa)
+                                            ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                            ->orderBy('violation_records.id', 'DESC')
+                                            ->get();
             
         }  
         elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
@@ -148,18 +161,32 @@ class SubjectController extends Controller
                             ->get();
         }        
         
-        return view('subject.incomplete', compact('ketidaktuntasan'));
+        return view('subject.incomplete', compact('ketidaktuntasan', 'tahun_ajaran', 'academic_year_id'));
     }    
 
     public function incompleteku(Request $request)
     {
+        $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $request->session()->get('session_student_id')) ->first()->AY_ID;                        
+
+        $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
+
+        $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
+
+        if($request->has('academicYearId')){
+            $academic_year_id = $request->academicYearId;
+        }
+        else{
+            $academic_year_id = $maxId;
+        }
+
         $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
                                             ->select('violation_records.*')
                                             ->where('violations.NAME','TTS')
                                             ->where('violation_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                            ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                             ->get();
         
-        return view('subject.incomplete', compact('ketidaktuntasan'));                                            
+        return view('subject.incomplete', compact('ketidaktuntasan', 'tahun_ajaran', 'academic_year_id'));                                            
     }
 
     public function storeIncomplete(Request $request)
