@@ -83,6 +83,9 @@ class StudentController extends Controller
                             ->groupBy('TYPE')
                             ->get();
 
+        $x = new DashboardController();
+        $kehadiran =  $x->showAbsentKu($siswa->id);        
+
         $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $siswa->id) ->first()->AY_ID;                        
 
         $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
@@ -178,14 +181,14 @@ class StudentController extends Controller
         // RETURN VIEW 
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
-            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'tahun_ajaran',
+            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'kehadiran', 'tahun_ajaran',
                                                    'catatan_pelanggaran', 'violation_point',
                                                    'catatan_penghargaan', 'achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
                                                    'tipeAbsen', 'dataAbsen', 'count_total_day_each_ay'));
         else                                               
-            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'tahun_ajaran',
+            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'kehadiran', 'tahun_ajaran',
                                                    'catatan_pelanggaran', 'violation_point',
                                                    'catatan_penghargaan', 'achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',

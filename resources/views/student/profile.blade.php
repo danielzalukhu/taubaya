@@ -28,16 +28,16 @@
 
                     <ul class="list-group list-group-unbordered">
                       <li class="list-group-item">
-                        <b>POIN PELANGGARAN</b> 
+                        POIN PELANGGARAN
                         <a class="pull-right">{{$violation_point}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>POIN PENGHARGAAN</b> 
-                        <a class="pull-right">{{$achievement_point}}</a>
+                        POIN PENGHARGAAN 
+                        <p class="pull-right">{{$achievement_point}}</p>
                       </li>
                       <li class="list-group-item">
-                        <b>ABSENSI</b> 
-                        <a class="pull-right">%</a>
+                        ABSENSI
+                        <p class="pull-right"><b>{{ $kehadiran["kehadiran"] }} %</b></p>
                       </li>
                     </ul>
                   </div>

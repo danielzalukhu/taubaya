@@ -388,13 +388,6 @@ class DashboardController extends Controller
                             ->whereIn('STUDENTS_ID', $arr_siswa)
                             ->groupBy('TIPE', 'TAHUNAJARAN')
                             ->get();                  
-
-            $ketidakhadiran = Absent::select(DB::raw('SUM(TYPE) AS JUMLAHKETIDAKHADIRAN'))
-                                ->where('ACADEMIC_YEAR_ID', $academic_year_id)
-                                ->whereIn('STUDENTS_ID', $arr_siswa)
-                                ->first()->JUMLAHKETIDAKHADIRAN;
-        
-            $kehadiran = (($count_total_day_each_ay - $ketidakhadiran) / $count_total_day_each_ay) * 100; 
             
             $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->get();
         }
