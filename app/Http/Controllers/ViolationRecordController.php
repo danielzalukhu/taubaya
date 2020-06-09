@@ -107,7 +107,7 @@ class ViolationRecordController extends Controller
                         INNER JOIN grades_students gs ON gs.STUDENTS_ID = s.id                                          
                         WHERE vr.ACADEMIC_YEAR_ID = " . $academic_year_id . "  AND v.NAME NOT LIKE 'TTS%' AND gs.ACADEMIC_YEAR_ID = ". $selected_student ."                     
                         GROUP BY KATEGORI, BULAN
-                        ORDER BY BULAN ASC");
+                        ORDER BY BULAN ASC");            
         }
                 
         return view('violationrecord.index', compact('catatan_pelanggaran', 'tahun_ajaran', 'pelanggaran', 'academic_year_id', 'kategori', 'data', 'selected_tahun_ajaran'));
@@ -129,7 +129,7 @@ class ViolationRecordController extends Controller
                                         ->where('violation_records.ACADEMIC_YEAR_ID', $ay)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->orderBy('violation_records.id', 'DESC')
-                                        ->get();
+                                        ->get();                                                             
                                     
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
@@ -287,6 +287,10 @@ class ViolationRecordController extends Controller
     public function update(Request $request, $id)
     {
         $catatan_pelanggaran = ViolationRecord::find($id);
+
+        $pelanggaran = Violation::all();
+        
+        $v_id = $request->get('vr_violation_name');
         
         $date = $request->get('vr_date');
         $request_date = Carbon::parse($date);
@@ -299,22 +303,39 @@ class ViolationRecordController extends Controller
 
         $check = $request_date->between($start_ay,$end_ay);
         
-        if($check == false)
+        foreach($pelanggaran as $p)
         {
-            return redirect(action('ViolationRecordController@edit', $catatan_pelanggaran->id))->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+            $point = 0;
+            $total = 0;
+            $total_point = 0;
+
+            $id_p = $p->id;
+
+            if($v_id == $p->id)
+            {
+                $point = $p->POINT;
+                $total_point = $total + $point;
+
+                if($check == false)
+                {
+                    return redirect(action('ViolationRecordController@edit', $catatan_pelanggaran->id))->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+                }
+                else
+                {
+                    $catatan_pelanggaran->DATE = $request->get('vr_date');
+                    $catatan_pelanggaran->TOTAL = $total_point;
+                    $catatan_pelanggaran->DESCRIPTION = $request->get('vr_desc');
+                    $catatan_pelanggaran->PUNISHMENT = $request->get('vr_punishment');
+                    $catatan_pelanggaran->STUDENTS_ID = $request->get('vr_student_name');
+                    $catatan_pelanggaran->VIOLATIONS_ID = $request->get('vr_violation_name');
+                    $catatan_pelanggaran->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
+                    $catatan_pelanggaran->STAFFS_ID = $request->session()->get('session_user_id');
+                }
+
+                $catatan_pelanggaran->save();
+                return redirect(action('ViolationRecordController@index', $catatan_pelanggaran->id))->with('sukses', 'Catatan pelanggaran berhasil diubah');
+            }
         }
-        else
-        {
-            $catatan_pelanggaran->DATE = $request->get('vr_date');
-            $catatan_pelanggaran->DESCRIPTION = $request->get('vr_desc');
-            $catatan_pelanggaran->PUNISHMENT = $request->get('vr_punishment');
-            $catatan_pelanggaran->STUDENTS_ID = $request->get('vr_student_name');
-            $catatan_pelanggaran->VIOLATIONS_ID = $request->get('vr_violation_name');
-            $catatan_pelanggaran->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');
-            $catatan_pelanggaran->STAFFS_ID = $request->session()->get('session_user_id');
-        }
-        $catatan_pelanggaran->save();
-        return redirect(action('ViolationRecordController@index', $catatan_pelanggaran->id))->with('sukses', 'Catatan pelanggaran berhasil diubah');
     }
 
     /**

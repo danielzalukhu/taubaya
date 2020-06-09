@@ -114,6 +114,7 @@ class AchievementRecordController extends Controller
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->orderBy('achievement_records.id', 'DESC')
                                         ->get();
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
