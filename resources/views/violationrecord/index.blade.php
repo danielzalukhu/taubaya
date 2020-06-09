@@ -191,7 +191,7 @@
         })
     })
 
-    console.log(dataCategory)
+    console.log(categories)
     
     Highcharts.setOptions({
         colors: ['#F21402', '#028CF2 ', '#E4F202 ', '028CF2']

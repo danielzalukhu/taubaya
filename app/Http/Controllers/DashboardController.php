@@ -145,11 +145,13 @@ class DashboardController extends Controller
 
             $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
 
-            $pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')
+            $pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                                        ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->where('violations.NAME', 'NOT LIKE', 'TTS%')
                                         ->first()->BANYAKPELANGGARAN;
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
@@ -164,10 +166,12 @@ class DashboardController extends Controller
 
     public function countViolationKu($student_id)
     {
-        $pelanggaran = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')
-                                        ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
-                                        ->where('students.id', $student_id)
-                                        ->first()->BANYAKPELANGGARAN;
+        $pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                                    ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                    ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
+                                    ->where('students.id', $student_id)
+                                    ->where('violations.NAME', 'NOT LIKE', 'TTS%')
+                                    ->first()->BANYAKPELANGGARAN;
 
         return $pelanggaran;                                            
     }

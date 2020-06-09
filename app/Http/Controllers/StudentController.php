@@ -88,10 +88,11 @@ class StudentController extends Controller
         $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
                                            
         $catatan_pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
-                            ->select('violation_records.*', 'violations.*')
-                            ->where('STUDENTS_ID', '=', $id)
-                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'))
-                            ->get();
+                                            ->select('violation_records.*', 'violations.*')
+                                            ->where('STUDENTS_ID', '=', $id)
+                                            ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'))
+                                            ->where('violations.NAME', 'NOT LIKE', 'TTS%')
+                                            ->get();
 
         $violation_point = ViolationRecord::select(DB::raw('SUM(TOTAL) AS POINT'))                        
                             ->where('STUDENTS_ID', $id)
@@ -127,9 +128,9 @@ class StudentController extends Controller
         $kategori = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
                                         WHEN v.NAME LIKE 'B%' THEN 'BERAT'
                                         WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
-                                        WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
                                 END) AS KATEGORI
                                 FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id
+                                WHERE v.NAME NOT LIKE 'TTS%'
                                 GROUP BY KATEGORI ");
 
         $data = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
@@ -137,14 +138,14 @@ class StudentController extends Controller
                                         WHEN violations.NAME LIKE "R%" THEN "RINGAN"
                                         WHEN violations.NAME LIKE "B%" THEN "BERAT" 
                                         WHEN violations.NAME LIKE "SB%" THEN "SANGATBERAT"
-                                        WHEN violations.NAME LIKE "TTS%" THEN "KETIDAKTUNTASAN"
                                         END) AS KATEGORI'),
                                     DB::raw('MONTH(violation_records.DATE) AS BULAN'),
                                     DB::raw('COUNT(*) AS JUMLAH'))
                             ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
                             ->where('violation_records.STUDENTS_ID', $id)
+                            ->where('violations.NAME', 'NOT LIKE', 'TTS%')
                             ->groupBy('KATEGORI')->groupBy('BULAN')
-                            ->orderBy('BULAN', 'ASC')->get();                                                                                                   
+                            ->orderBy('violation_records.id', 'DESC')->get();                                                                                                   
 
         // GRAFIK TAB ACHIEVEMENT
 
