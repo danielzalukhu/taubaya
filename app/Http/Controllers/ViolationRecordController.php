@@ -129,8 +129,21 @@ class ViolationRecordController extends Controller
                                         ->where('violation_records.ACADEMIC_YEAR_ID', $ay)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->orderBy('violation_records.id', 'DESC')
-                                        ->get();                                                             
-                                    
+                                        ->get();                  
+                                         
+            $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
+                                WHEN v.NAME LIKE 'B%' THEN 'BERAT'
+                                WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
+                                WHEN v.NAME LIKE 'TTS%' THEN 'KETIDAKTUNTASAN'
+                        END) AS KATEGORI, MONTH(vr.DATE) AS BULAN , COUNT(*) AS JUMLAH 
+                        FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
+                        INNER JOIN students s ON vr.STUDENTS_ID = s.id  
+                        INNER JOIN grades_students gs ON gs.STUDENTS_ID = s.id                                          
+                        WHERE vr.ACADEMIC_YEAR_ID = " . $ay . "  AND v.NAME NOT LIKE 'TTS%' AND gs.GRADES_ID = " . $kelas_guru . "  AND gs.ACADEMIC_YEAR_ID = ". $selected_student ." 
+                        GROUP BY KATEGORI, BULAN
+                        ORDER BY BULAN ASC");                                                       
+                
+
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
             $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $ay)->orderBy('violation_records.id', 'DESC')->get();
@@ -139,7 +152,9 @@ class ViolationRecordController extends Controller
             $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $ay)->orderBy('violation_records.id', 'DESC')->get();
         }
         
-        return $pelanggaran;
+        $value["pelanggaran"] = $pelanggaran;
+        $value["data"] = $data;
+        return $value;
     }
 
     public function create(Request $request)

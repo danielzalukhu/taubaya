@@ -52,11 +52,111 @@
 
                                 </div>
                             </div>
-
-                            
-
                         </div>
                     </div>
+
+                    <div class="col-xs-4">
+                        <div class="panel-heading">
+                            <h3 class="box-title">PERSENTASE PELANGGARAN</h3>            
+                        </div>
+                        <div class="box">
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>KATEGORI</th>
+                                                <th>JUMLAH</th>
+                                                <th>PERSENTASE (%)</th>           
+                                                <th></th>                                     
+                                            </tr>
+                                        </thead>
+                                    <tbody id="tbody-persentase-pelanggaran">
+                                        @php $i=1 @endphp
+                                        @foreach($catatan_pelanggaran["data"] as $cp)
+                                            <tr>
+                                                <td>{{$i++}}</td>
+                                                <td>{{ $cp->KATEGORI }}</td>
+                                                <td>{{ $cp->JUMLAH }}</td>
+                                                <td>%</td>
+                                                <td>
+                                                    <button type="button" 
+                                                            class="btn btn-primary btn-sm button-detail-persentase" 
+                                                            data-toggle="modal" 
+                                                            data-target="#violationRecordList" 
+                                                            violation-category="{{$cp->KATEGORI}}">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach                                        
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-8" id="detail-pelanggaran-berdasarkan-kategori">
+                        <div class="panel-heading">
+                            <h3 class="box-title">DETAIL PELANGGARAN BERDASARKAN KATEGORI</h3>            
+                        </div>
+                        <div class="box">
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>KODE PELANGGARAN</th>
+                                                <th>NAMA PELANGGARAN</th>   
+                                                <th></th>                                             
+                                            </tr>
+                                        </thead>
+                                    <tbody id="tbody-detail-pelanggaran-berdasarkan-kategori">
+                                       
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Modal Detail Daftar Pelanggaran Tercatat-->
+                     <div class="modal fade" id="modalViolationRecordDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" id="exampleModalLabel">DAFTAR PELANGGARAN TERCATAT</b></h1>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="table-responsive">
+                                        <table id="table-violation-record-detail" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>NAMA SISWA</th>
+                                                <th>TANGGAL</th>
+                                                <th>TAHUN AJARAN</th>
+                                                <th>HUKUMAN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-violation-record">
+                                            <tr>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                            </tr>
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
 
                     <div class="col-xs-12">
                         <div class="panel-heading">
@@ -99,7 +199,7 @@
                                     </thead>
                                     <tbody>
                                     @php $i=1 @endphp
-                                    @foreach($catatan_pelanggaran as $cp)
+                                    @foreach($catatan_pelanggaran["pelanggaran"] as $cp)
                                         <tr>
                                             <td>{{$i++}}</td>
                                             <td><a href="{{ route('student.profile', ['id'=>$cp->student->id]) }}">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
@@ -156,13 +256,84 @@
             })
         })
      
+    $('#detail-pelanggaran-berdasarkan-kategori').hide();
+    
+    $('#tbody-persentase-pelanggaran').on('click', '.button-detail-persentase', (function(){
+        var x = $(this).attr('violation-category')
+        var res = x.split("")
+        var violationName = res[0]
+        
+        $('#detail-pelanggaran-berdasarkan-kategori').show();
+        
+        $.ajax({
+            url: '{{route("violationrecord.violationItem")}}', 
+            type: 'get', 
+            data: {violationName: violationName},
+
+            success: function(result){
+                $('#tbody-detail-pelanggaran-berdasarkan-kategori').empty()
+                
+                result.forEach(function(obj){
+                    $('#tbody-detail-pelanggaran-berdasarkan-kategori').append(
+                        `
+                        <tr>                            
+                            <td>${obj.NAME}</td>
+                            <td>${obj.DESCRIPTION}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm button-detail" data-toggle="modal" data-target="#violationRecordList" violation-id=${obj.id}><i class="fa fa-eye"></i></button>
+                            </td>
+                        </tr>
+
+                        `
+                    )
+                })
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+
+    }))
+
+    $('#tbody-detail-pelanggaran-berdasarkan-kategori').on('click', '.button-detail', (function(){
+        var violationId = $(this).attr('violation-id')
+
+        $.ajax({
+            url: '{{route("violationrecord.showViolationRecord")}}', 
+            type: 'get', 
+            data: {violationId: violationId},
+
+            success: function(result){
+                $('#tbody-violation-record').empty()
+                
+                result.forEach(function(obj){
+                    $('#tbody-violation-record').append(
+                        `
+                        <tr>
+                            <td>${obj.STUDENTS_ID}</td>
+                            <td>${obj.DATE}</td>
+                            <td>${obj.ACADEMIC_YEAR_ID}</td>
+                            <td>${obj.PUNISHMENT}</td>
+                        </tr>
+
+                        `
+                    )
+                })
+                $('#modalViolationRecordDetail').modal('show')
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+    }))
+
     $('#selector-dropdown-violationrecord-year').change(function(){
         var academicYearId = $(this).val()        
         window.location = "{{ route('violationrecord.index') }}"+"?academicYearId="+academicYearId;
     })
     
     $('#selector-dropdown-violationrecord-year').val({{$academic_year_id}})
-    
+
     var categories = {!!json_encode($kategori)!!}
     var dataGraph = {!!json_encode($data)!!}
     var selectedTahunAjaran = {!!json_encode($selected_tahun_ajaran)!!}
@@ -190,8 +361,6 @@
             data: values
         })
     })
-
-    console.log(categories)
     
     Highcharts.setOptions({
         colors: ['#F21402', '#028CF2 ', '#E4F202 ', '028CF2']

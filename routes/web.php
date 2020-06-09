@@ -15,6 +15,10 @@
 // DASHBOARD
 Route::get('/', 'DashboardController@index')->middleware('auth')->name('dashboard.index');
 
+// AJAX
+Route::get('vr/violation-item-by-category', 'AjaxController@showViolationItemByCategory')->middleware('auth')->name('violationrecord.violationItem');
+Route::get('vr/show-violation-record', 'AjaxController@getViolationRecord')->middleware('auth')->name('violationrecord.showViolationRecord');
+
 // STUDENT
 Route::get('achievement/chart', 'StudentController@returnDataAchievementChart')->middleware('auth')->name('student.achievementChart');
 Route::get('violation/chart', 'StudentController@returnDataViolationChart')->middleware('auth')->name('student.violationChart');
