@@ -36,7 +36,7 @@
                                             </div>
                                         </span>        
                                     </h5>                           
-                                </div
+                                </div>
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">
