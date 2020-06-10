@@ -184,7 +184,7 @@ class ViolationRecordController extends Controller
                            INNER JOIN grades_students gs ON gs.STUDENTS_ID = s.id                                          
                            WHERE vr.ACADEMIC_YEAR_ID = " . $ay . "  AND v.NAME NOT LIKE 'TTS%' AND gs.ACADEMIC_YEAR_ID = ". $selected_student ." 
                            GROUP BY KATEGORI
-                           ORDER BY KATEGORI DESC");                                               
+                           ORDER BY KATEGORI DESC");                
         }
         else{
             $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $ay)->orderBy('violation_records.id', 'DESC')->get();

@@ -96,7 +96,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="5"><i>*Keterangan: Persentase pelanggaran adalah berdasarkan jumlah pelanggaran 
-                                                terjadi dibagi dengan jumlah pelanggaran perkategori</i></td>
+                                                tercatat untuk setiap kategorinya yang dibagi dengan jumlah daftar pelanggaran perkategori</i></td>                                                
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -107,7 +107,7 @@
 
                     <div class="col-xs-6" id="detail-pelanggaran-berdasarkan-kategori">
                         <div class="panel-heading">
-                            <h3 class="box-title">DETAIL PELANGGARAN BERDASARKAN KATEGORI</h3>            
+                            <h3 class="box-title">PELANGGARAN BERDASARKAN KATEGORI</h3>            
                         </div>
                         <div class="box box-info">
                             <div class="box-tools pull-right">
@@ -137,11 +137,11 @@
                     </div>
 
                      <!-- Modal Detail Daftar Pelanggaran Tercatat-->
-                     <div class="modal fade" id="modalViolationRecordDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                     <div class="modal fade bd-example-modal-lg" id="modalViolationRecordDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="exampleModalLabel">DAFTAR PELANGGARAN TERCATAT</b></h1>
+                                    <h1 class="modal-title" id="modalTitle">DAFTAR PELANGGARAN TERCATAT</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -151,18 +151,22 @@
                                         <table id="table-violation-record-detail" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>NAMA SISWA</th>
                                                 <th>TANGGAL</th>
                                                 <th>TAHUN AJARAN</th>
                                                 <th>HUKUMAN</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-violation-record">
                                             <tr>
-                                                <td>X</td>
-                                                <td>X</td>
-                                                <td>X</td>
-                                                <td>X</td>
+                                                <td>I</td>
+                                                <td style="width: 90px">X</td>
+                                                <td style="width: 20px">X</td>
+                                                <td style="width: 60px">X</td>
+                                                <td style="width: 110px">X</td>
+                                                <td></td>
                                             </tr>
                                         </tbody>
                                         </table>
@@ -172,7 +176,7 @@
                         </div>
                     </div> 
 
-                    <div class="col-xs-12">
+                    <div class="col-xs-12" id="daftar-catatan-pelanggaran-siswa">
                         <div class="panel-heading">
                             <h3 class="box-title">DAFTAR CATATAN PELANGGARAN SISWA</h3>            
                         </div>
@@ -283,13 +287,14 @@
         })
      
     $('#detail-pelanggaran-berdasarkan-kategori').hide();
-    
+    $('#daftar-catatan-pelanggaran-siswa').hide();
+
     $('#tbody-persentase-pelanggaran').on('click', '.button-detail-persentase', (function(){
         var x = $(this).attr('violation-category')
         var res = x.split("")
         var violationName = res[0]
         
-        $('#detail-pelanggaran-berdasarkan-kategori').show();
+        $('#detail-pelanggaran-berdasarkan-kategori').show();        
         
         $.ajax({
             url: '{{route("violationrecord.violationItem")}}', 
@@ -324,7 +329,8 @@
 
     $('#tbody-detail-pelanggaran-berdasarkan-kategori').on('click', '.button-detail', (function(){
         var violationId = $(this).attr('violation-id')
-
+        $('#daftar-catatan-pelanggaran-siswa').show();
+    
         $.ajax({
             url: '{{route("violationrecord.showViolationRecord")}}', 
             type: 'get', 
@@ -333,14 +339,28 @@
             success: function(result){
                 $('#tbody-violation-record').empty()
                 
-                result.forEach(function(obj){                    
-                    $('#tbody-violation-record').append(
+                result.forEach(function(obj){                      
+                    var i = 1
+                    $('#tbody-violation-record').append(                        
                         `
                         <tr>
-                            <td>${obj.STUDENTS_ID}</td>
-                            <td>${obj.DATE}</td>
-                            <td>${obj.ACADEMIC_YEAR_ID}</td>
-                            <td>${obj.PUNISHMENT}</td>
+                            <td style="width: 20px">${+i}</td>
+                            <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
+                            <td style="width: 20px">${obj.DATE}</td>
+                            <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
+                            <td style="width: 110px">${obj.PUNISHMENT}</td>
+                            <td style="width: 50px">
+                                <a href="{{ route ('violationrecord.edit', $cp->id )}}" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form action="{{ route ('violationrecord.destroy', $cp->id )}}" method="POST" class="inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form> 
+                            </td>
                         </tr>
 
                         `

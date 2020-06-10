@@ -58,9 +58,10 @@ class AjaxController extends Controller
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
             
             $catatan_pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                                        ->join('academic_years', 'violation_records.ACADEMIC_YEAR_ID', 'academic_years.id')
                                         ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                                        ->select('violation_records.*')
+                                        ->select('violation_records.*', 'students.FNAME', 'students.LNAME', 'academic_years.*')
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)

@@ -81,8 +81,9 @@
                                         <thead>
                                             <tr>
                                                 <th>TANGGAL</th>
-                                                <th>KODE PELANGGARAN</th>
+                                                <th>KODE</th>
                                                 <th>DESKRIPSI</th>
+                                                <th>HUKUMAN</th>
                                                 <th>POIN</th>
                                             </tr>
                                         </thead>
@@ -92,6 +93,7 @@
                                                     <td>{{ date('d-m-Y', strtotime($cp->DATE)) }}</td>
                                                     <td>{{ $cp->NAME }}</td>
                                                     <td>{{ $cp->DESCRIPTION }}</td>
+                                                    <td>{{ $cp->PUNISHMENT }}</td>
                                                     <td>{{ $cp->TOTAL }}</td>
                                                 </tr>
                                             @empty
@@ -337,9 +339,9 @@
 
             success: function(result){
                 $('#tbody-violation-academic-year').empty()
-
+                
                 result.forEach(function(obj){
-                    $('#tbody-violation-academic-year').append(
+                    $('#tbody-violation-academic-year').append(                        
                         `
                         <tr>
                             <td>${obj.DATE}</td>
@@ -618,7 +620,6 @@
             yAxis: {
                 min: 0,
                 allowDecimals: false,
-                tickInterval: 5,
                 title: {
                     text: 'JUMLAH PENGHARGAAN TERCATAT'
                 }
