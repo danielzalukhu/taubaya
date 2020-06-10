@@ -16,7 +16,7 @@ class ViolationController extends Controller
      */
     public function index()
     {
-        $pelanggaran = Violation::all();
+        $pelanggaran = Violation::where('NAME', 'NOT LIKE', 'TTS%')->get();
         return view('violation.index', compact('pelanggaran'));        
     }
 

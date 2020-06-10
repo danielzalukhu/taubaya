@@ -199,7 +199,14 @@ class DashboardController extends Controller
                                 ->get();                             
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
-
+            $siswa = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')                           
+                                ->select('students.*', 
+                                        DB::raw('COUNT(*) as BANYAKPELANGGARAN'), 
+                                        DB::raw('SUM(violation_records.TOTAL) as TOTALPOIN'))
+                                ->groupBy('students.id')
+                                ->orderBy('violation_records.id', 'DESC')->take(5)
+                                ->having('TOTALPOIN', ">=", 50 )
+                                ->get();
         }
         
         return $siswa;
@@ -280,7 +287,12 @@ class DashboardController extends Controller
                                                 ->get();
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
-
+            $penghargaan_siswa = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
+                                                ->select('achievement_records.*', DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'),
+                                                         DB::raw('SUM(POINT) AS POINPENGHARGAAN'))
+                                                ->groupBy('achievement_records.STUDENTS_ID')
+                                                ->orderBy('achievement_records.id', 'DESC')->take(5)
+                                                ->get();
         }
 
         return $penghargaan_siswa;
@@ -349,7 +361,18 @@ class DashboardController extends Controller
 
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
-
+            $data = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                                ->select(DB::raw('(CASE
+                                            WHEN violations.NAME LIKE "R%" THEN "RINGAN"
+                                            WHEN violations.NAME LIKE "B%" THEN "BERAT" 
+                                            WHEN violations.NAME LIKE "SB%" THEN "SANGATBERAT"
+                                            WHEN violations.NAME LIKE "TTS%" THEN "KETIDAKTUNTASAN"
+                                            END) AS KATEGORI'),
+                                        DB::raw('MONTH(violation_records.DATE) AS BULAN'),
+                                        DB::raw('COUNT(*) AS JUMLAH'))
+                                ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->groupBy('KATEGORI')->groupBy('BULAN')
+                                ->orderBy('BULAN', 'ASC')->get();
         }
 
         // dd($data);
@@ -392,7 +415,10 @@ class DashboardController extends Controller
             $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->get();
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
-
+            $data = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))                                    
+                            ->where('ACADEMIC_YEAR_ID', $academic_year_id)                            
+                            ->groupBy('TIPE', 'TAHUNAJARAN')
+                            ->get();  
         }       
         
         // $value["count_total_day_each_ay"] = $count_total_day_each_ay;

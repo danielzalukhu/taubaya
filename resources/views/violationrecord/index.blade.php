@@ -24,13 +24,11 @@
                             <h3 class="box-title"></h3>            
                         </div>
                         <div class="box box-info">
-
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
                                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
-
                             <div class="panel-heading">                                
                                 <h5 class="panel-title"><b>TAHUN AJARAN:</b>
                                     <span>
@@ -46,20 +44,23 @@
                                     </span>        
                                 </h5>
                             </div>
-
                             <div class="box-body">
-                                <div id="violationChartStatistic">
-
-                                </div>
+                                <div id="violationChartStatistic"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xs-4">
+                    <div class="col-xs-6">
                         <div class="panel-heading">
                             <h3 class="box-title">PERSENTASE PELANGGARAN</h3>            
                         </div>
-                        <div class="box">
+                        <div class="box box-info">
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                            <div class="panel-heading"></div>
                             <div class="box-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped">
@@ -67,55 +68,68 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>KATEGORI</th>
-                                                <th>JUMLAH</th>
-                                                <th>PERSENTASE (%)</th>           
+                                                <th>JUMLAH TERCATAT</th>
+                                                <th>PERSENTASE</th>           
                                                 <th></th>                                     
                                             </tr>
                                         </thead>
-                                    <tbody id="tbody-persentase-pelanggaran">
-                                        @php $i=1 @endphp
-                                        @foreach($catatan_pelanggaran["data"] as $cp)
+                                        <tbody id="tbody-persentase-pelanggaran">
+                                            @php $i=1 @endphp
+                                            @foreach($catatan_pelanggaran["data"] as $cp)
+                                                <tr>
+                                                    <td>{{$i++}}</td>
+                                                    <td>{{ $cp->KATEGORI }}</td>
+                                                    <td>{{ $cp->JUMLAH }}</td>
+                                                    <td>{{ $cp->PERSENTASE }} %</td>
+                                                    <td>
+                                                        <button type="button" 
+                                                                class="btn btn-primary btn-sm button-detail-persentase" 
+                                                                data-toggle="modal" 
+                                                                data-target="#violationRecordList" 
+                                                                violation-category="{{$cp->KATEGORI}}">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach                                        
+                                        </tbody>
+                                        <tfoot>
                                             <tr>
-                                                <td>{{$i++}}</td>
-                                                <td>{{ $cp->KATEGORI }}</td>
-                                                <td>{{ $cp->JUMLAH }}</td>
-                                                <td>%</td>
-                                                <td>
-                                                    <button type="button" 
-                                                            class="btn btn-primary btn-sm button-detail-persentase" 
-                                                            data-toggle="modal" 
-                                                            data-target="#violationRecordList" 
-                                                            violation-category="{{$cp->KATEGORI}}">
-                                                        <i class="fa fa-eye"></i>
-                                                    </button>
-                                                </td>
+                                                <td colspan="5"><i>*Keterangan: Persentase pelanggaran adalah berdasarkan jumlah pelanggaran 
+                                                terjadi dibagi dengan jumlah pelanggaran perkategori</i></td>
                                             </tr>
-                                        @endforeach                                        
-                                    </tbody>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xs-8" id="detail-pelanggaran-berdasarkan-kategori">
+                    <div class="col-xs-6" id="detail-pelanggaran-berdasarkan-kategori">
                         <div class="panel-heading">
                             <h3 class="box-title">DETAIL PELANGGARAN BERDASARKAN KATEGORI</h3>            
                         </div>
-                        <div class="box">
+                        <div class="box box-info">
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                            <div class="panel-heading"></div>
                             <div class="box-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-striped">
+                                    <table id="example0" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>KODE PELANGGARAN</th>
                                                 <th>NAMA PELANGGARAN</th>   
+                                                <th>JUMLAH TERJADI</th>
                                                 <th></th>                                             
                                             </tr>
                                         </thead>
-                                    <tbody id="tbody-detail-pelanggaran-berdasarkan-kategori">
-                                       
-                                    </tbody>
+                                        <tbody id="tbody-detail-pelanggaran-berdasarkan-kategori">
+                                        
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -182,11 +196,11 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>NAMA SISWA</th>
-                                        <th>TANGGAL</th>
-                                        <th>TAHUN AJARAN</th>
+                                        <th style="width: 80px">NAMA SISWA</th>
+                                        <th style="width: 70px">TANGGAL</th>
+                                        <th style="width: 100px">TAHUN AJARAN</th>
                                         <th>NAMA PELANGGARAN</th>
-                                        <th>HUKUMAN</th>
+                                        <th style="width: 225px">HUKUMAN</th>
                                         <th>POIN</th>
                                         @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
                                             <th></th>   
@@ -245,6 +259,18 @@
 
 <script>
     $(function () {
+        $('#example0').DataTable()
+            $('#example2').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+            })
+        })
+    
+    $(function () {
         $('#example1').DataTable()
             $('#example2').DataTable({
             'paging'      : true,
@@ -279,6 +305,7 @@
                         <tr>                            
                             <td>${obj.NAME}</td>
                             <td>${obj.DESCRIPTION}</td>
+                            <td>${obj.JUMLAHPERPELANGGARAN}</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm button-detail" data-toggle="modal" data-target="#violationRecordList" violation-id=${obj.id}><i class="fa fa-eye"></i></button>
                             </td>
@@ -306,7 +333,7 @@
             success: function(result){
                 $('#tbody-violation-record').empty()
                 
-                result.forEach(function(obj){
+                result.forEach(function(obj){                    
                     $('#tbody-violation-record').append(
                         `
                         <tr>

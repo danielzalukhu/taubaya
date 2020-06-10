@@ -153,12 +153,6 @@
         obj_present = {name: 'PRESENT', y: totalDayEachAcademicYear, sliced: true, selected: true}        
         dataSeries.push(obj_present)      
     }  
-    
-    console.log(totalDayEachAcademicYear)
-    console.log(totalAmountExceptPresent)
-    console.log(present_percentage)
-    console.log(dataSeries)
-    console.log(obj_present)
 
     Highcharts.setOptions({
         colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
