@@ -126,12 +126,15 @@ class ViolationRecordController extends Controller
             $pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
                                         ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                                        ->select('violation_records.*')
+                                        ->select('violation_records.*', 
+                                                DB::raw('COUNT(*) AS JUMLAHPELANGGARAN'), 
+                                                DB::raw('SUM(violation_records.TOTAL) AS POINPELANGGARAN'))
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('violation_records.ACADEMIC_YEAR_ID', $ay)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
-                                        ->orderBy('violation_records.id', 'DESC')
+                                        ->groupBy('violation_records.STUDENTS_ID')
+                                        ->orderBy('JUMLAHPELANGGARAN', 'DESC')
                                         ->get();    
 
             $count_r = $this->countViolationPerCategory($r, $ay, $kelas_guru, $selected_student)->first()->JMLH;
@@ -159,9 +162,15 @@ class ViolationRecordController extends Controller
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
             $pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
-                                        ->where('violation_records.ACADEMIC_YEAR_ID', $ay)
+                                        ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->select('violation_records.*', 
+                                                DB::raw('COUNT(*) AS JUMLAHPELANGGARAN'), 
+                                                DB::raw('SUM(violation_records.TOTAL) AS POINPELANGGARAN'))
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
-                                        ->orderBy('violation_records.id', 'DESC')->get();
+                                        ->where('violation_records.ACADEMIC_YEAR_ID', $ay)
+                                        ->groupBy('violation_records.STUDENTS_ID')
+                                        ->get();                                         
 
             $count_r = $this->countViolationPerCategoryKepsek($r, $ay, $selected_student)->first()->JMLH;
             $count_b = $this->countViolationPerCategoryKepsek($b, $ay, $selected_student)->first()->JMLH;
@@ -192,7 +201,8 @@ class ViolationRecordController extends Controller
         
         $value["pelanggaran"] = $pelanggaran;
         $value["data"] = $data;
-        return $value;        
+        return $value;  
+        // dd($value)  ;
     }
 
     public function countViolationPerCategory($array, $ay, $gsid, $gsay)

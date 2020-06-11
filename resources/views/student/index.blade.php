@@ -93,10 +93,10 @@
                                             <td>{{ $s->grade->NAME }}</td>
                                             <td>{{ $s->student->academicyear->NAME }}</td>
                                             <td>
-                                                <a href="{{ route('student.profile', ['id'=>$s->student->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
-                                                    <i class="fa fa-eye"></i>
+                                                <a href="{{ route('student.profile', ['id'=>$s->student->id]) }}" title="Profil Siswa" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-user"></i>
                                                 </a>  
-                                                <a href="{{ route('subject.studentSubject', [$s->student->id, $s->grade->NAME]) }}" title="Mata Pelajaran" class="btn btn-default btn-sm">
+                                                <a href="{{ route('subject.studentSubject', [$s->student->id, $s->grade->NAME]) }}" title="Mata Pelajaran" class="btn btn-info btn-sm">
                                                     <i class="fa fa-book"></i>                                                    
                                                 </a>    
                                                 <form action="{{ route ('student.destroy', $s->student->id )}}" method="POST" class="inline">

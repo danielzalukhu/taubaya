@@ -18,7 +18,6 @@
                     </div>                    
                 @endif
                 <div class="row">
-                    
                     <div class="col-xs-12">
                         <div class="panel-heading">
                             <h3 class="box-title"></h3>            
@@ -50,7 +49,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-6">
+                    <div class="col-xs-6" id="persentase-pelanggaran">
                         <div class="panel-heading">
                             <h3 class="box-title">PERSENTASE PELANGGARAN</h3>            
                         </div>
@@ -82,10 +81,7 @@
                                                     <td>{{ $cp->JUMLAH }}</td>
                                                     <td>{{ $cp->PERSENTASE }} %</td>
                                                     <td>
-                                                        <button type="button" 
-                                                                class="btn btn-primary btn-sm button-detail-persentase" 
-                                                                data-toggle="modal" 
-                                                                data-target="#violationRecordList" 
+                                                        <button type="button" class="btn btn-primary btn-sm button-detail-persentase" 
                                                                 violation-category="{{$cp->KATEGORI}}">
                                                             <i class="fa fa-eye"></i>
                                                         </button>
@@ -118,7 +114,7 @@
                             <div class="panel-heading"></div>
                             <div class="box-body">
                                 <div class="table-responsive">
-                                    <table id="example0" class="table table-bordered table-striped">
+                                    <table  class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>KODE PELANGGARAN</th>
@@ -156,7 +152,6 @@
                                                 <th>TANGGAL</th>
                                                 <th>TAHUN AJARAN</th>
                                                 <th>HUKUMAN</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-violation-record">
@@ -166,7 +161,6 @@
                                                 <td style="width: 20px">X</td>
                                                 <td style="width: 60px">X</td>
                                                 <td style="width: 110px">X</td>
-                                                <td></td>
                                             </tr>
                                         </tbody>
                                         </table>
@@ -181,18 +175,19 @@
                             <h3 class="box-title">DAFTAR CATATAN PELANGGARAN SISWA</h3>            
                         </div>
                         <div class="box">
-                            <div class="box-header">
-                                @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
-                                    <div class="right">
-                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PENGHARGAAN</a>
+                            <div class="box-header">                                
+                                <span>
+                                    <div class="btn-group">
+                                        <button class="btn btn-success btn-sm" id="button-persen-pelanggaran">
+                                            PERSENTASE PELANGGARAN
+                                        </button>
                                     </div>
-                                @elseif(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")                                    
-                                    <div class="right">
+                                    @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
                                         <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PENGHARGAAN</a>
-                                    </div>
-                                @else
-
-                                @endif
+                                    @elseif(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")                                    
+                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PENGHARGAAN</a>
+                                    @endif
+                                </span>        
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">
@@ -200,50 +195,40 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th style="width: 80px">NAMA SISWA</th>
-                                        <th style="width: 70px">TANGGAL</th>
-                                        <th style="width: 100px">TAHUN AJARAN</th>
-                                        <th>NAMA PELANGGARAN</th>
-                                        <th style="width: 225px">HUKUMAN</th>
-                                        <th>POIN</th>
-                                        @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
-                                            <th></th>   
-                                        @elseif(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")                                                
-                                            <th></th>       
-                                        @elseif(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                                
-                                            <th></th>                                                                                          
-                                        @endif
+                                        <th>NAMA SISWA</th>
+                                        <th>JUMLAH PELANGGARAN</th>
+                                        <th>POIN PELANGGARAN</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tbody-daftar-siswa-yang-ada-pelanggaran">
                                     @php $i=1 @endphp
                                     @foreach($catatan_pelanggaran["pelanggaran"] as $cp)
                                         <tr>
                                             <td>{{$i++}}</td>
-                                            <td><a href="{{ route('student.profile', ['id'=>$cp->student->id]) }}">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
-                                            <td>{{date('d-m-Y', strtotime($cp->DATE))}}</td>
+                                            <td style="width: 320px">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
+                                            <td>{{$cp->JUMLAHPELANGGARAN}}</td>
                                             <td>
-                                                {{$cp->academicyear->TYPE}}
-                                                {{ " - " }}
-                                                {{$cp->academicyear->NAME}}
+                                                @if($cp->POINPELANGGARAN < 50)
+                                                    <div class="btn btn-success btn-sm">{{ $cp->POINPELANGGARAN }}</div>
+                                                @elseif($cp->POINPELANGGARAN >= 50 && $cp->POINPELANGGARAN < 100)
+                                                    <div class="btn btn-warning btn-sm">{{ $cp->POINPELANGGARAN }}</div>
+                                                @elseif($cp->POINPELANGGARAN >= 100)
+                                                    <div class="btn btn-danger btn-sm">{{ $cp->POINPELANGGARAN }}</div>
+                                                @endif 
                                             </td>
-                                            <td>{{$cp->violation->DESCRIPTION}}</td>
-                                            <td>{{$cp->PUNISHMENT}}</td>
-                                            <td>{{$cp->TOTAL}}</td>
-                                            @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
                                             <td>
-                                                <a href="{{ route ('violationrecord.edit', $cp->id )}}" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <form action="{{ route ('violationrecord.destroy', $cp->id )}}" method="POST" class="inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>                                            
+                                                <button type="button" 
+                                                        class="btn btn-primary btn-sm button-detail-pelanggaran" 
+                                                        data-toggle="modal" 
+                                                        data-target="#detailViolationStudent" 
+                                                        student-id="{{$cp->student->id}}">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <a href="{{ route('student.profile', ['id'=>$cp->student->id]) }}" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-user"></i>
+                                                </a>                                         
                                             </td>
-                                            @endif
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -252,6 +237,49 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Modal Detail Pelanggaran Tiap Siswa-->
+                    <div class="modal fade bd-example-modal-lg" id="modalDetailViolationEachStudent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" id="modalTitle">PELANGGARAN YANG DILAKUKAN</b></h1>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="table-responsive">
+                                        <table id="table-violation-record-detail" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>NAMA SISWA</th>
+                                                <th>TANGGAL</th>
+                                                <th>TAHUN AJARAN</th>
+                                                <th>NAMA PELANGGARAN</th>
+                                                <th>HUKUMAN</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-student-violation-list">
+                                            <tr>
+                                                <td>I</td>
+                                                <td style="width: 90px">X</td>
+                                                <td style="width: 20px">X</td>
+                                                <td style="width: 40px">X</td>
+                                                <td style="width: 110px">X</td>
+                                                <td style="width: 110px">X</td>
+                                                <td>X</td>
+                                            </tr>
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
                 </div>
             </div>
         </div>
@@ -261,33 +289,13 @@
 @section('footer')
 <script src="https://code.highcharts.com/highcharts.js"></script>
 
-<script>
-    $(function () {
-        $('#example0').DataTable()
-            $('#example2').DataTable({
-            'paging'      : true,
-            'lengthChange': false,
-            'searching'   : false,
-            'ordering'    : true,
-            'info'        : true,
-            'autoWidth'   : false
-            })
-        })
-    
-    $(function () {
-        $('#example1').DataTable()
-            $('#example2').DataTable({
-            'paging'      : true,
-            'lengthChange': false,
-            'searching'   : false,
-            'ordering'    : true,
-            'info'        : true,
-            'autoWidth'   : false
-            })
-        })
-     
+<script>     
     $('#detail-pelanggaran-berdasarkan-kategori').hide();
-    $('#daftar-catatan-pelanggaran-siswa').hide();
+    $('#persentase-pelanggaran').hide();
+
+    $('#button-persen-pelanggaran').on('click', (function(){
+        $('#persentase-pelanggaran').show();
+    }))
 
     $('#tbody-persentase-pelanggaran').on('click', '.button-detail-persentase', (function(){
         var x = $(this).attr('violation-category')
@@ -312,7 +320,7 @@
                             <td>${obj.DESCRIPTION}</td>
                             <td>${obj.JUMLAHPERPELANGGARAN}</td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm button-detail" data-toggle="modal" data-target="#violationRecordList" violation-id=${obj.id}><i class="fa fa-eye"></i></button>
+                                <button type="button" class="btn btn-primary btn-sm button-detail" violation-id=${obj.id}><i class="fa fa-eye"></i></button>
                             </td>
                         </tr>
 
@@ -349,18 +357,6 @@
                             <td style="width: 20px">${obj.DATE}</td>
                             <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
                             <td style="width: 110px">${obj.PUNISHMENT}</td>
-                            <td style="width: 50px">
-                                <a href="{{ route ('violationrecord.edit', $cp->id )}}" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <form action="{{ route ('violationrecord.destroy', $cp->id )}}" method="POST" class="inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form> 
-                            </td>
                         </tr>
 
                         `
@@ -373,6 +369,58 @@
             }
         })
     }))
+
+    $('#tbody-daftar-siswa-yang-ada-pelanggaran').on('click', '.button-detail-pelanggaran', (function(){
+        var studentId = $(this).attr('student-id');
+        // console.log(studentId)
+        $.ajax({
+            url: '{{ route("violationrecord.studentDetailViolation") }}',
+            type: 'get',
+            data: {studentId: studentId},
+
+            success: function(result){
+                $('#tbody-student-violation-list').empty()         
+                                    
+                result.forEach(function(obj){        
+                    var route =  "{{ route('violationrecord.edit', ':id') }}"  
+                    route = route.replace(':id', `${obj.id}`)
+                    
+                    var route_del = "{{ route ('violationrecord.destroy', ':id' )}}"
+                    route_del = route_del.replace(':id', `${obj.id}`)
+
+                    $('#tbody-student-violation-list').append(                        
+                        `
+                        <tr>
+                            <td style="width: 20px">${obj.id}</td>
+                            <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
+                            <td style="width: 20px">${obj.DATE}</td>
+                            <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
+                            <td style="width: 110px">${obj.DESCRIPTION}</td>
+                            <td style="width: 110px">${obj.PUNISHMENT}</td>
+                            <td style="width: 20px">                            
+                                <a href=${route}  class="btn btn-warning btn-sm">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form action=${route_del} method="POST" class="inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        `
+                    )
+                })
+                $('#modalDetailViolationEachStudent').modal('show')
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+    }));
 
     $('#selector-dropdown-violationrecord-year').change(function(){
         var academicYearId = $(this).val()        
@@ -441,6 +489,18 @@
             }
         },
         series: dataSeries
-    });
+    }); 
+    
+    $(function () {
+        $('#example1').DataTable()
+            $('#example2').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+            })
+        })
 </script>
 @stop

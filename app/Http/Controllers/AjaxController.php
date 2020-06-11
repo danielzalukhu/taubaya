@@ -73,4 +73,17 @@ class AjaxController extends Controller
         
         return $catatan_pelanggaran;
     }
+
+    public function studentDetailViolation(Request $request)
+    {
+        $pelanggaran_tiap_siswa = Violationrecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                                            ->join('academic_years', 'violation_records.ACADEMIC_YEAR_ID', 'academic_years.id')
+                                            ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                            ->select('violation_records.id', 'violation_records.DATE' ,'violation_records.PUNISHMENT', 'violations.DESCRIPTION',
+                                                     'students.FNAME', 'students.LNAME', 
+                                                     'academic_years.TYPE', 'academic_years.NAME')
+                                            ->where('STUDENTS_ID', $request->studentId)->get();
+
+        return $pelanggaran_tiap_siswa;
+    }
 }
