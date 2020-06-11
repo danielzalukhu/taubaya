@@ -70,6 +70,8 @@ class StudentController extends Controller
     public function profile(Request $request, $id)
     {
         $siswa = Student::find($id);
+
+        $student_grade_name = $siswa->getGradeName();
         
         $siswaku = Student::where('STUDENTS_ID', $id);
 
@@ -181,7 +183,7 @@ class StudentController extends Controller
         // RETURN VIEW 
 
         if(Auth::guard('web')->user()->ROLE === "STAFF")
-            return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'kehadiran', 'tahun_ajaran',
+            return view('student.profile', compact('siswa', 'student_grade_name', 'absen', 'catatan_absen', 'kehadiran', 'tahun_ajaran',
                                                    'catatan_pelanggaran', 'violation_point',
                                                    'catatan_penghargaan', 'achievement_point',
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',

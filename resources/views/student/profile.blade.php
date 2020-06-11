@@ -24,7 +24,13 @@
                     <img class="profile-user-img img-responsive img-circle" src="{{$siswa->getPhoto()}}" alt="User profile picture">
 
                     <h3 class="profile-username text-center"><b>{{$siswa->FNAME}}{{" "}}{{$siswa->LNAME}}</b></h3>
-                    <h5 class="text-muted text-center"><b> {{ $siswa->NISN }} </b></h5>
+                    <h5 class="text-muted text-center">
+                        @if(Auth::guard('web')->user()->ROLE === "STUDENT")
+                            <b> {{ Auth::user()->student->getGradeName() }} - {{ $siswa->NISN }} </b>
+                        @else
+                            <b> {{ $student_grade_name }} - {{ $siswa->NISN }} </b>
+                        @endif
+                    </h5>                    
 
                     <ul class="list-group list-group-unbordered">
                       <li class="list-group-item">

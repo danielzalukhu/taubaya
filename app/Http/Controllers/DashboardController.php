@@ -221,7 +221,7 @@ class DashboardController extends Controller
             $kelas_guru = Grade::where('STAFFS_ID', $iduser)->first()->id;            
             
             $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
-                    
+            
             $arr_siswa = [];                                
             foreach($siswa as $s){
                 array_push($arr_siswa, $s->STUDENTS_ID);
