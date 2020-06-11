@@ -140,7 +140,9 @@ class ViolationRecordController extends Controller
             $count_r = $this->countViolationPerCategory($r, $ay, $kelas_guru, $selected_student)->first()->JMLH;
             $count_b = $this->countViolationPerCategory($b, $ay, $kelas_guru, $selected_student)->first()->JMLH;
             $count_sb = $this->countViolationPerCategory($sb, $ay, $kelas_guru, $selected_student)->first()->JMLH;
-                                
+            
+            $count_violation_list = Violation::select(DB::raw('COUNT(*) AS JUMLAH'))->where('NAME', 'NOT LIKE', 'TTS%')->first()->JUMLAH;
+            
             $data = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
                                              WHEN v.NAME LIKE 'B%' THEN 'BERAT'
                                              WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
@@ -148,9 +150,9 @@ class ViolationRecordController extends Controller
                                 COUNT(*) AS JUMLAH,
                                 (SELECT 
                                     (CASE 
-                                        WHEN KATEGORI = 'RINGAN' THEN ROUND( $count_r / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'R%') * 100) 
-                                        WHEN KATEGORI = 'BERAT' THEN ROUND( $count_b / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'B%') * 100) 
-                                        WHEN KATEGORI = 'SANGATBERAT' THEN ROUND( $count_sb / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'S%') * 100) 
+                                        WHEN KATEGORI = 'RINGAN' THEN ROUND( $count_r / $count_violation_list * 100) 
+                                        WHEN KATEGORI = 'BERAT' THEN ROUND( $count_b / $count_violation_list * 100) 
+                                        WHEN KATEGORI = 'SANGATBERAT' THEN ROUND( $count_sb / $count_violation_list * 100) 
                                     END)) 
                                 AS PERSENTASE
                                 FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 

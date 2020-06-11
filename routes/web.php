@@ -20,6 +20,10 @@ Route::get('vr/violation-item-by-category', 'AjaxController@showViolationItemByC
 Route::get('vr/show-violation-record', 'AjaxController@getViolationRecord')->middleware('auth')->name('violationrecord.showViolationRecord');
 Route::get('vr/show-student-violation-detail', 'AjaxController@studentDetailViolation')->middleware('auth')->name('violationrecord.studentDetailViolation');
 
+Route::get('ar/achievement-item-by-grade', 'AjaxController@showAchievementItemByGrade')->middleware('auth')->name('achievementrecord.achievementItem');
+Route::get('ar/show-achievement-record', 'AjaxController@getAchievementRecord')->middleware('auth')->name('achievementrecord.showAchievementRecord');
+Route::get('ar/show-student-achievement-detail', 'AjaxController@studentDetailAchievement')->middleware('auth')->name('achievementrecord.studentDetailAchievement');
+
 // STUDENT
 Route::get('achievement/chart', 'StudentController@returnDataAchievementChart')->middleware('auth')->name('student.achievementChart');
 Route::get('violation/chart', 'StudentController@returnDataViolationChart')->middleware('auth')->name('student.violationChart');

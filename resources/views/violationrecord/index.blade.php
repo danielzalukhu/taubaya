@@ -172,7 +172,7 @@
 
                     <div class="col-xs-12" id="daftar-catatan-pelanggaran-siswa">
                         <div class="panel-heading">
-                            <h3 class="box-title">DAFTAR CATATAN PELANGGARAN SISWA</h3>            
+                            <h3 class="box-title">DAFTAR PELANGGARAN SISWA</h3>            
                         </div>
                         <div class="box">
                             <div class="box-header">                                
@@ -183,9 +183,9 @@
                                         </button>
                                     </div>
                                     @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
-                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PENGHARGAAN</a>
+                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PELANGGARAN</a>
                                     @elseif(Auth::guard('web')->user()->staff->ROLE === "ADVISOR")                                    
-                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PENGHARGAAN</a>
+                                        <a href="{{ route('violationrecord.create') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR PELANGGARAN</a>
                                     @endif
                                 </span>        
                             </div>
@@ -339,7 +339,6 @@
 
     $('#tbody-detail-pelanggaran-berdasarkan-kategori').on('click', '.button-detail', (function(){
         var violationId = $(this).attr('violation-id')
-        $('#daftar-catatan-pelanggaran-siswa').show();
     
         $.ajax({
             url: '{{route("violationrecord.showViolationRecord")}}', 

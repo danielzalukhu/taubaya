@@ -105,26 +105,142 @@ class AchievementRecordController extends Controller
     {
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
         
+        $nasional = Achievement::select('id')->where('GRADE', 'Nasional')->get();
+        $propinsi = Achievement::select('id')->where('GRADE', 'Propinsi')->get();
+        $kota = Achievement::select('id')->where('GRADE', 'Kota')->get();
+        $sekolah = Achievement::select('id')->where('GRADE', 'Sekolah')->get();
+        
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
             $kelas_guru = Grade::where('STAFFS_ID', $user_id)->first()->id; 
 
-            $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+            $penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
+                                        ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                                        ->select('achievement_records.*')
+                                        ->select('achievement_records.*',
+                                                  DB::raw('COUNT(*) AS JUMLAHPENGHARGAAN'),
+                                                  DB::raw('SUM(achievements.POINT) AS POINPENGHARGAAN'))
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
-                                        ->orderBy('achievement_records.id', 'DESC')
+                                        ->groupBy('achievement_records.STUDENTS_ID')
                                         ->get();
+            
+            $count_nasional = $this->countAchievementPerGrade($nasional, $ay, $kelas_guru, $selected_student)->first()->JMLH;
+            $count_propinsi = $this->countAchievementPerGrade($propinsi, $ay, $kelas_guru, $selected_student)->first()->JMLH;
+            $count_kota = $this->countAchievementPerGrade($kota, $ay, $kelas_guru, $selected_student)->first()->JMLH;
+            $count_sekolah = $this->countAchievementPerGrade($sekolah, $ay, $kelas_guru, $selected_student)->first()->JMLH;
+            
+            $count_achievement_list = Achievement::select(DB::raw('COUNT(*) AS JUMLAH'))->first()->JUMLAH;
+            
+            $res_nasional = ROUND(($count_nasional / $count_achievement_list) * 100);
+            $res_propinsi = ROUND(($count_propinsi / $count_achievement_list) * 100);
+            $res_kota = ROUND(($count_kota / $count_achievement_list) * 100);
+            $res_sekolah = ROUND(($count_sekolah / $count_achievement_list) * 100);            
+
+            $data = DB::select("SELECT GRADE AS TINGKAT, COUNT(*) AS JUMLAH,
+                                (SELECT 
+                                    (CASE 
+                                        WHEN TINGKAT = 'Kota' THEN  $res_kota
+                                        WHEN TINGKAT = 'Nasional' THEN $res_nasional
+                                        WHEN TINGKAT = 'Propinsi' THEN $res_propinsi
+                                        WHEN TINGKAT = 'Sekolah' THEN $res_sekolah
+                                    END)) 
+                                AS PERSENTASE
+                                FROM achievement_records ar INNER JOIN achievements a ON ar.ACHIEVEMENTS_ID = a.id 
+                                INNER JOIN students s ON ar.STUDENTS_ID = s.id  
+                                INNER JOIN grades_students gs ON gs.STUDENTS_ID = s.id                                          
+                                WHERE ar.ACADEMIC_YEAR_ID = " . $ay . "  AND gs.GRADES_ID = " . $kelas_guru . " AND gs.ACADEMIC_YEAR_ID = ". $selected_student ." 
+                                GROUP BY TINGKAT
+                                ORDER BY TINGKAT DESC");                                                
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
-            $penghargaan = AchievementRecord::where('achievement_records.ACADEMIC_YEAR_ID', $ay)->get();
+            $penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
+                                        ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->select('achievement_records.*',
+                                                  DB::raw('COUNT(*) AS JUMLAHPENGHARGAAN'),
+                                                  DB::raw('SUM(achievements.POINT) AS POINPENGHARGAAN'))
+                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->groupBy('achievement_records.STUDENTS_ID')
+                                        ->get();   
+                                        
+            $count_nasional = $this->countAchievementPerGradeKepsek($nasional, $ay, $selected_student)->first()->JMLH;
+            $count_propinsi = $this->countAchievementPerGradeKepsek($propinsi, $ay, $selected_student)->first()->JMLH;
+            $count_kota = $this->countAchievementPerGradeKepsek($kota, $ay, $selected_student)->first()->JMLH;
+            $count_sekolah = $this->countAchievementPerGradeKepsek($sekolah, $ay, $selected_student)->first()->JMLH;
+            
+            $count_achievement_list = Achievement::select(DB::raw('COUNT(*) AS JUMLAH'))->first()->JUMLAH;
+            
+            $res_nasional = ROUND(($count_nasional / $count_achievement_list) * 100);
+            $res_propinsi = ROUND(($count_propinsi / $count_achievement_list) * 100);
+            $res_kota = ROUND(($count_kota / $count_achievement_list) * 100);
+            $res_sekolah = ROUND(($count_sekolah / $count_achievement_list) * 100);            
+
+            $data = DB::select("SELECT GRADE AS TINGKAT, COUNT(*) AS JUMLAH,
+                                (SELECT 
+                                    (CASE 
+                                        WHEN TINGKAT = 'Kota' THEN  $res_kota
+                                        WHEN TINGKAT = 'Nasional' THEN $res_nasional
+                                        WHEN TINGKAT = 'Propinsi' THEN $res_propinsi
+                                        WHEN TINGKAT = 'Sekolah' THEN $res_sekolah
+                                    END)) 
+                                AS PERSENTASE
+                                FROM achievement_records ar INNER JOIN achievements a ON ar.ACHIEVEMENTS_ID = a.id 
+                                INNER JOIN students s ON ar.STUDENTS_ID = s.id  
+                                INNER JOIN grades_students gs ON gs.STUDENTS_ID = s.id                                          
+                                WHERE ar.ACADEMIC_YEAR_ID = " . $ay . "  AND gs.ACADEMIC_YEAR_ID = ". $selected_student ." 
+                                GROUP BY TINGKAT
+                                ORDER BY TINGKAT DESC");                                                
+                                                                    
         }
         else{
-            $penghargaan = AchievementRecord::where('achievement_records.ACADEMIC_YEAR_ID', $ay)->get();
+            $penghargaan = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')
+                                        ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->select('achievement_records.*',
+                                                  DB::raw('COUNT(*) AS JUMLAHPENGHARGAAN'),
+                                                  DB::raw('SUM(achievements.POINT) AS POINPENGHARGAAN'))
+                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->groupBy('achievement_records.STUDENTS_ID')
+                                        ->get();             
         }
         
-        return $penghargaan;
+        $value["penghargaan"] = $penghargaan;
+        $value["data"] = $data;
+        return $value;  
+    }
+
+    public function countAchievementPerGrade($array, $ay, $gsid, $gsay)
+    {
+        $count = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                            
+                                ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                ->select(DB::raw('COUNT(*) AS JMLH'))
+                                ->whereIn('achievement_records.ACHIEVEMENTS_ID', $array)
+                                ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
+                                ->where('grades_students.GRADES_ID', $gsid)
+                                ->where('grades_students.ACADEMIC_YEAR_ID', $gsay)
+                                ->get();
+
+
+        return $count;
+    }
+
+    public function countAchievementPerGradeKepsek($array, $ay, $gsay)
+    {
+        $count = AchievementRecord::join('achievements', 'achievement_records.ACHIEVEMENTS_ID', 'achievements.id')                            
+                                ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
+                                ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                ->select(DB::raw('COUNT(*) AS JMLH'))
+                                ->whereIn('achievement_records.ACHIEVEMENTS_ID', $array)
+                                ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
+                                ->where('grades_students.ACADEMIC_YEAR_ID', $gsay)
+                                ->get();
+
+
+        return $count;
     }
 
     public function create(Request $request)
