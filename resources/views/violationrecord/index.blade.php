@@ -53,7 +53,7 @@
                         <div class="panel-heading">
                             <h3 class="box-title">PERSENTASE PELANGGARAN</h3>            
                         </div>
-                        <div class="box box-info">
+                        <div class="box box-warning">
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -92,7 +92,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="5"><i>*Keterangan: Persentase pelanggaran adalah berdasarkan jumlah pelanggaran 
-                                                tercatat untuk setiap kategorinya yang dibagi dengan jumlah daftar pelanggaran perkategori</i></td>                                                
+                                                tercatat untuk setiap kategorinya yang dibagi dengan jumlah daftar pelanggaran yang berlaku</i></td>                                                
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -105,7 +105,7 @@
                         <div class="panel-heading">
                             <h3 class="box-title">PELANGGARAN BERDASARKAN KATEGORI</h3>            
                         </div>
-                        <div class="box box-info">
+                        <div class="box box-warning">
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -261,7 +261,9 @@
                                                 <th>TAHUN AJARAN</th>
                                                 <th>NAMA PELANGGARAN</th>
                                                 <th>HUKUMAN</th>
-                                                <th></th>
+                                                @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
+                                                    <th></th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-student-violation-list">
@@ -389,31 +391,51 @@
                     var route_del = "{{ route ('violationrecord.destroy', ':id' )}}"
                     route_del = route_del.replace(':id', `${obj.id}`)
 
-                    $('#tbody-student-violation-list').append(                        
-                        `
-                        <tr>
-                            <td style="width: 20px">${obj.id}</td>
-                            <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
-                            <td style="width: 20px">${obj.DATE}</td>
-                            <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
-                            <td style="width: 110px">${obj.DESCRIPTION}</td>
-                            <td style="width: 110px">${obj.PUNISHMENT}</td>
-                            <td style="width: 80px">                            
-                                <a href=${route}  class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <form action=${route_del} method="POST" class="inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    var $role_teacher = "{{ Auth::guard('web')->user()->staff->ROLE === "TEACHER" }}"
+                    var $role_headmaster = "{{ Auth::guard('web')->user()->staff->ROLE === "HEADMASTER" }}"
+                    
+                    if($role_teacher) {
+                        $('#tbody-student-violation-list').append(                        
+                            `
+                            <tr>
+                                <td style="width: 20px">${obj.id}</td>
+                                <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
+                                <td style="width: 20px">${obj.DATE}</td>
+                                <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
+                                <td style="width: 110px">${obj.DESCRIPTION}</td>
+                                <td style="width: 110px">${obj.PUNISHMENT}</td>
+                                <td style="width: 80px">                            
+                                    <a href=${route}  class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <form action=${route_del} method="POST" class="inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
 
-                        `
-                    )
+                            `
+                        )
+                    } else if ($role_headmaster) {
+                        $('#tbody-student-violation-list').append(                        
+                            `
+                            <tr>
+                                <td style="width: 20px">${obj.id}</td>
+                                <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
+                                <td style="width: 20px">${obj.DATE}</td>
+                                <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
+                                <td style="width: 110px">${obj.DESCRIPTION}</td>
+                                <td style="width: 110px">${obj.PUNISHMENT}</td>                                
+                            </tr>
+
+                            `
+                        )
+                    }
+                    
                 })
                 $('#modalDetailViolationEachStudent').modal('show')
             },

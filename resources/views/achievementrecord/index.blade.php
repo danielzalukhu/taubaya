@@ -97,7 +97,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="5"><i>*Keterangan: Persentase penghagraan adalah berdasarkan jumlah penghargaan 
-                                                tercatat untuk setiap kategorinya yang dibagi dengan jumlah daftar penghargaan perkategori</i></td>                                                
+                                                tercatat untuk setiap tingkatnya yang dibagi dengan jumlah daftar penghargaan yang berlaku</i></td>                                                
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -110,7 +110,7 @@
                         <div class="panel-heading">
                             <h3 class="box-title">PENGHARGAAN BERDASARKAN TINGKAT</h3>            
                         </div>
-                        <div class="box box-info">
+                        <div class="box box-success">
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -265,7 +265,9 @@
                                                 <th>TINGKAT</th>
                                                 <th>NAMA PENGHARGAAN</th>
                                                 <th>DESKRIPSI</th>
-                                                <th></th>
+                                                @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
+                                                    <th></th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-student-achievement-list">
@@ -394,32 +396,50 @@
                     var route_del = "{{ route ('achievementrecord.destroy', ':id' )}}"
                     route_del = route_del.replace(':id', `${obj.id}`)
 
-                    $('#tbody-student-achievement-list').append(                        
-                        `
-                        <tr>
-                            <td style="width: 20px">${obj.id}</td>
-                            <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
-                            <td style="width: 20px">${obj.DATE}</td>
-                            <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
-                            <td style="width: 40px">${obj.GRADE}</td>
-                            <td style="width: 200px">${obj.DESKRIPSI2}</td>
-                            <td style="width: 200px">${obj.DESKRIPSI1}</td>
-                            <td style="width: 80px">                            
-                                <a href=${route}  class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <form action=${route_del} method="POST" class="inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    var $role_teacher = "{{ Auth::guard('web')->user()->staff->ROLE === "TEACHER" }}"
+                    var $role_headmaster = "{{ Auth::guard('web')->user()->staff->ROLE === "HEADMASTER" }}"
 
-                        `
-                    )
+                    if($role_teacher){
+                        $('#tbody-student-achievement-list').append(                        
+                            `
+                            <tr>
+                                <td style="width: 20px">${obj.id}</td>
+                                <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
+                                <td style="width: 20px">${obj.DATE}</td>
+                                <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
+                                <td style="width: 40px">${obj.GRADE}</td>
+                                <td style="width: 200px">${obj.DESKRIPSI2}</td>
+                                <td style="width: 200px">${obj.DESKRIPSI1}</td>
+                                <td style="width: 80px">                            
+                                    <a href=${route}  class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <form action=${route_del} method="POST" class="inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            `
+                        )
+                    } else if ($role_headmaster) {
+                        $('#tbody-student-achievement-list').append(                        
+                            `
+                            <tr>
+                                <td style="width: 20px">${obj.id}</td>
+                                <td style="width: 90px">${obj.FNAME} ${obj.LNAME}</td>
+                                <td style="width: 20px">${obj.DATE}</td>
+                                <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
+                                <td style="width: 40px">${obj.GRADE}</td>
+                                <td style="width: 200px">${obj.DESKRIPSI2}</td>
+                                <td style="width: 200px">${obj.DESKRIPSI1}</td>                                
+                            </tr>
+                            `
+                        )
+                    }
                 })
                 $('#modalDetailAchievementEachStudent').modal('show')
             },
