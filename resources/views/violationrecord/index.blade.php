@@ -196,17 +196,19 @@
                                     <tr>
                                         <th>#</th>
                                         <th>NAMA SISWA</th>
+                                        <th>KELAS SISWA</th>
                                         <th>JUMLAH PELANGGARAN</th>
                                         <th>POIN PELANGGARAN</th>
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody id="tbody-daftar-siswa-yang-ada-pelanggaran">
-                                    @php $i=1 @endphp
-                                    @foreach($catatan_pelanggaran["pelanggaran"] as $cp)
+                                    @php $i=1 @endphp                                    
+                                    @foreach($catatan_pelanggaran["pelanggaran"] as $cp)                                    
                                         <tr>
                                             <td>{{$i++}}</td>
-                                            <td style="width: 320px">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
+                                            <td style="width: 300px">{{$cp->student->FNAME}}{{" "}}{{$cp->student->LNAME}}</td>
+                                            <td style="width: 120px">{{$cp->student->getGradeName()}}</td>
                                             <td>{{$cp->JUMLAHPELANGGARAN}}</td>
                                             <td>
                                                 @if($cp->POINPELANGGARAN < 50)
@@ -372,7 +374,7 @@
 
     $('#tbody-daftar-siswa-yang-ada-pelanggaran').on('click', '.button-detail-pelanggaran', (function(){
         var studentId = $(this).attr('student-id');
-        // console.log(studentId)
+        
         $.ajax({
             url: '{{ route("violationrecord.studentDetailViolation") }}',
             type: 'get',
@@ -397,7 +399,7 @@
                             <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
                             <td style="width: 110px">${obj.DESCRIPTION}</td>
                             <td style="width: 110px">${obj.PUNISHMENT}</td>
-                            <td style="width: 20px">                            
+                            <td style="width: 80px">                            
                                 <a href=${route}  class="btn btn-warning btn-sm">
                                     <i class="fa fa-pencil"></i>
                                 </a>

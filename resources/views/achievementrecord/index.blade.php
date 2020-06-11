@@ -219,9 +219,9 @@
                 dataLabels: {
                     enabled: true
                 },
-                enableMouseTracking: false,
-                pointPadding: 0.1,
-                borderWidth: 0
+                enableMouseTracking: true,
+                pointPadding: 0.08
+                
             }
         },
         series: dataSeries

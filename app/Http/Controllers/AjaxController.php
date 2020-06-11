@@ -69,7 +69,20 @@ class AjaxController extends Controller
                                         ->where('violations.id', $request->violationId)
                                         ->orderBy('violation_records.id', 'DESC')
                                         ->get();
-        }                          
+        }           
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
+            $catatan_pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
+                                        ->join('academic_years', 'violation_records.ACADEMIC_YEAR_ID', 'academic_years.id')
+                                        ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->select('violation_records.*', 'students.FNAME', 'students.LNAME', 'academic_years.*')
+                                        ->where('violations.NAME', 'NOT LIKE', 'TTS%')
+                                        ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->where('violations.id', $request->violationId)
+                                        ->orderBy('violation_records.id', 'DESC')
+                                        ->get();
+        }
         
         return $catatan_pelanggaran;
     }
@@ -82,7 +95,9 @@ class AjaxController extends Controller
                                             ->select('violation_records.id', 'violation_records.DATE' ,'violation_records.PUNISHMENT', 'violations.DESCRIPTION',
                                                      'students.FNAME', 'students.LNAME', 
                                                      'academic_years.TYPE', 'academic_years.NAME')
-                                            ->where('STUDENTS_ID', $request->studentId)->get();
+                                            ->where('STUDENTS_ID', $request->studentId)
+                                            ->orderBy('violation_records.id', 'DESC')
+                                            ->get();
 
         return $pelanggaran_tiap_siswa;
     }

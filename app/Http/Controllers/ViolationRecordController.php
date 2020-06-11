@@ -164,13 +164,15 @@ class ViolationRecordController extends Controller
             $pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
                                         ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                                        ->select('violation_records.*', 
+                                        ->select('violation_records.*',
                                                 DB::raw('COUNT(*) AS JUMLAHPELANGGARAN'), 
                                                 DB::raw('SUM(violation_records.TOTAL) AS POINPELANGGARAN'))
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
                                         ->where('violation_records.ACADEMIC_YEAR_ID', $ay)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->groupBy('violation_records.STUDENTS_ID')
-                                        ->get();                                         
+                                        ->orderBy('JUMLAHPELANGGARAN', 'DESC')
+                                        ->get();                                                          
 
             $count_r = $this->countViolationPerCategoryKepsek($r, $ay, $selected_student)->first()->JMLH;
             $count_b = $this->countViolationPerCategoryKepsek($b, $ay, $selected_student)->first()->JMLH;
@@ -180,29 +182,30 @@ class ViolationRecordController extends Controller
                                         WHEN v.NAME LIKE 'B%' THEN 'BERAT'
                                         WHEN v.NAME LIKE 'SB%' THEN 'SANGATBERAT'
                                    END) AS KATEGORI, 
-                           COUNT(*) AS JUMLAH,
-                           (SELECT 
-                               (CASE 
-                                   WHEN KATEGORI = 'RINGAN' THEN ROUND( $count_r / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'R%') * 100) 
-                                   WHEN KATEGORI = 'BERAT' THEN ROUND( $count_b / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'B%') * 100) 
-                                   WHEN KATEGORI = 'SANGATBERAT' THEN ROUND( $count_sb / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'S%') * 100) 
-                               END)) 
-                           AS PERSENTASE
-                           FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
-                           INNER JOIN students s ON vr.STUDENTS_ID = s.id  
-                           INNER JOIN grades_students gs ON gs.STUDENTS_ID = s.id                                          
-                           WHERE vr.ACADEMIC_YEAR_ID = " . $ay . "  AND v.NAME NOT LIKE 'TTS%' AND gs.ACADEMIC_YEAR_ID = ". $selected_student ." 
-                           GROUP BY KATEGORI
-                           ORDER BY KATEGORI DESC");                
+                                COUNT(*) AS JUMLAH,
+                                (SELECT 
+                                    (CASE 
+                                        WHEN KATEGORI = 'RINGAN' THEN ROUND( $count_r / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'R%') * 100) 
+                                        WHEN KATEGORI = 'BERAT' THEN ROUND( $count_b / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'B%') * 100) 
+                                        WHEN KATEGORI = 'SANGATBERAT' THEN ROUND( $count_sb / (SELECT COUNT(*) FROM violations WHERE violations.NAME LIKE 'S%') * 100) 
+                                    END)) 
+                                AS PERSENTASE
+                                FROM violation_records vr INNER JOIN violations v ON vr.VIOLATIONS_ID = v.id 
+                                INNER JOIN students s ON vr.STUDENTS_ID = s.id  
+                                INNER JOIN grades_students gs ON gs.STUDENTS_ID = s.id                                          
+                                WHERE vr.ACADEMIC_YEAR_ID = " . $ay . "  AND v.NAME NOT LIKE 'TTS%' AND gs.ACADEMIC_YEAR_ID = ". $selected_student ." 
+                                GROUP BY KATEGORI
+                                ORDER BY KATEGORI DESC");       
+                        
         }
         else{
             $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $ay)->orderBy('violation_records.id', 'DESC')->get();
         }
         
+        
         $value["pelanggaran"] = $pelanggaran;
         $value["data"] = $data;
         return $value;  
-        // dd($value)  ;
     }
 
     public function countViolationPerCategory($array, $ay, $gsid, $gsay)
