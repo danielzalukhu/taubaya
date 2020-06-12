@@ -356,7 +356,7 @@
     var totalDayEachAcademicYear = {!! json_encode($count_total_day_each_ay) !!}
     var totalAmountExceptPresent = 0
     var present_percentage = 0
-    
+    console.log(totalDayEachAcademicYear)
     var dataSeries = []
     var obj_present = {}
 
@@ -419,7 +419,7 @@
             }
         },
         series: [{
-            name: 'JENIS ABSEN',
+            name: 'Persentase',
             colorByPoint: true,
             data: dataSeries
         }]
@@ -436,5 +436,6 @@
             'autoWidth'   : false
             })
         })  
+ 
 </script>
 @stop
