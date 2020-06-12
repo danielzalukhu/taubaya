@@ -137,8 +137,8 @@ class AjaxController extends Controller
 
     public function getAchievementRecord(Request $request)
     {
-        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
-
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
+        
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
             

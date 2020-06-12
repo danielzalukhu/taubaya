@@ -200,7 +200,6 @@
                     </div>
                   </div>                  
                   <div class="box-footer clearfix">
-                    <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-info btn-flat pull-left">Buat Daftar Pelanggaran</a>
                     <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-default btn-flat pull-right">Lihat Daftar Pelanggaran</a>
                   </div>
                 <div>
