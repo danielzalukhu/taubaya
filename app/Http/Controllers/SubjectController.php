@@ -152,14 +152,18 @@ class SubjectController extends Controller
                                             ->get();
             
         }  
-        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
-            $siswa = $default_student;
-
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){                            
             $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
-                            ->select('violation_records.*')
-                            ->where('violations.NAME','TTS')
-                            ->get();
+                                            ->select('violation_records.*')
+                                            ->where('violations.NAME','TTS')
+                                            ->get();
         }        
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
+                                            ->select('violation_records.*')
+                                            ->where('violations.NAME','TTS')
+                                            ->get();
+        } 
         
         return view('subject.incomplete', compact('ketidaktuntasan', 'tahun_ajaran', 'academic_year_id'));
     }    

@@ -60,7 +60,7 @@
               <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>LAPORAN KETIDAKTUNTASAN </a></li>
               <li><a href="{{route('subject.assesment')}}"><i class="fa fa-pencil"></i>INPUT PENILAIAN</a></li>              
             @else
-            
+              <li><a href="{{route('subject.incomplete')}}"><i class="fa fa-thumbs-down"></i>LAPORAN KETIDAKTUNTASAN </a></li>
             @endif
           </ul>
         </li>

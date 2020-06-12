@@ -30,8 +30,10 @@
                                 @if(Auth::guard('web')->user()->ROLE === "STAFF")
                                     <div class="row">
                                         <a href="{{ route('subject.createIncomplete') }}" type="button" class="btn btn-primary btn-sm pull-right"  style="margin-right: 15px;">BUAT DAFTAR KETIDAKTUNTASAN</a>
-                                    </div>                                            
-                                @endif    
+                                    </div>                                             
+                                @else
+                                                                                 
+                                @endif
                                 <h5 class="box-header-title"><b>TAHUN AJARAN:</b>                                      
                                     <span>
                                         <div class="btn-group">

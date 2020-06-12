@@ -113,7 +113,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="modalTitle">DAFTAR ABSEN SETIAP TIPE ABSENSI</b></h1>
+                                    <h1 class="modal-title" id="modalTitle">DAFTAR ABSEN </b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -147,7 +147,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="modalTitle">DETAIL ABSEN BERDASARKAN TIPE</b></h1>
+                                    <h1 class="modal-title" id="modalTitle">DETAIL ABSEN</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
