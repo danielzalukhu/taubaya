@@ -261,6 +261,7 @@
                                                 <th>TAHUN AJARAN</th>
                                                 <th>NAMA PELANGGARAN</th>
                                                 <th>HUKUMAN</th>
+                                                <th>POIN PELANGGARAN</th>
                                                 @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
                                                     <th></th>
                                                 @endif
@@ -274,6 +275,7 @@
                                                 <td style="width: 40px">X</td>
                                                 <td style="width: 110px">X</td>
                                                 <td style="width: 110px">X</td>
+                                                <td style="width: 40px">X</td>
                                                 <td>X</td>
                                             </tr>
                                         </tbody>
@@ -305,13 +307,14 @@
         var x = $(this).attr('violation-category')
         var res = x.split("")
         var violationName = res[0]
+        var academicYearId = $('#selector-dropdown-violationrecord-year').val()
         
         $('#detail-pelanggaran-berdasarkan-kategori').show();        
         
         $.ajax({
             url: '{{route("violationrecord.violationItem")}}', 
             type: 'get', 
-            data: {violationName: violationName},
+            data: {violationName: violationName, academicYearId: academicYearId},
 
             success: function(result){
                 $('#tbody-detail-pelanggaran-berdasarkan-kategori').empty()
@@ -341,11 +344,12 @@
 
     $('#tbody-detail-pelanggaran-berdasarkan-kategori').on('click', '.button-detail', (function(){
         var violationId = $(this).attr('violation-id')
-    
+        var academicYearId = $('#selector-dropdown-violationrecord-year').val()
+
         $.ajax({
             url: '{{route("violationrecord.showViolationRecord")}}', 
             type: 'get', 
-            data: {violationId: violationId},
+            data: {violationId: violationId, academicYearId: academicYearId},
 
             success: function(result){
                 $('#tbody-violation-record').empty()
@@ -375,11 +379,12 @@
 
     $('#tbody-daftar-siswa-yang-ada-pelanggaran').on('click', '.button-detail-pelanggaran', (function(){
         var studentId = $(this).attr('student-id');
+        var academicYearId = $('#selector-dropdown-violationrecord-year').val()
         
         $.ajax({
             url: '{{ route("violationrecord.studentDetailViolation") }}',
             type: 'get',
-            data: {studentId: studentId},
+            data: {studentId: studentId, academicYearId: academicYearId},
 
             success: function(result){
                 $('#tbody-student-violation-list').empty()         
@@ -404,6 +409,7 @@
                                 <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
                                 <td style="width: 110px">${obj.DESCRIPTION}</td>
                                 <td style="width: 110px">${obj.PUNISHMENT}</td>
+                                <td style="width: 40px">${obj.POINT}</td>
                                 <td style="width: 80px">                            
                                     <a href=${route}  class="btn btn-warning btn-sm">
                                         <i class="fa fa-pencil"></i>
@@ -429,7 +435,8 @@
                                 <td style="width: 20px">${obj.DATE}</td>
                                 <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
                                 <td style="width: 110px">${obj.DESCRIPTION}</td>
-                                <td style="width: 110px">${obj.PUNISHMENT}</td>                                
+                                <td style="width: 110px">${obj.PUNISHMENT}</td>    
+                                <td style="width: 40px">${obj.POINT}</td>                            
                             </tr>
 
                             `

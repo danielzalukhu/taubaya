@@ -10,6 +10,7 @@ use App\GradeStudent;
 use App\Grade;
 use App\ViolationRecord;
 use App\AchievementRecord;
+use App\Absent;
 use DB;
 use Auth;
 
@@ -17,8 +18,6 @@ class AjaxController extends Controller
 {
     public function showViolationItemByCategory(Request $request)
     {
-        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
-
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
 
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
@@ -30,7 +29,7 @@ class AjaxController extends Controller
                                 ->select('violations.*', DB::raw('COUNT(*) AS JUMLAHPERPELANGGARAN'))
                                 ->where('NAME', 'LIKE', $request->violationName . '%' )
                                 ->where('grades_students.GRADES_ID', $kelas_guru)
-                                ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->where('violation_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                 ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                 ->groupBy('violations.id')
                                 ->get();
@@ -41,7 +40,7 @@ class AjaxController extends Controller
                                 ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                 ->select('violations.*', DB::raw('COUNT(*) AS JUMLAHPERPELANGGARAN'))
                                 ->where('NAME', 'LIKE', $request->violationName . '%' )
-                                ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->where('violation_records.ACADEMIC_YEAR_ID',$request->academicYearId)
                                 ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                 ->groupBy('violations.id')
                                 ->get();
@@ -52,8 +51,6 @@ class AjaxController extends Controller
 
     public function getViolationRecord(Request $request)
     {
-        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
-
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
 
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
@@ -66,7 +63,7 @@ class AjaxController extends Controller
                                         ->select('violation_records.*', 'students.FNAME', 'students.LNAME', 'academic_years.*')
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
-                                        ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('violation_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->where('violations.id', $request->violationId)
                                         ->orderBy('violation_records.id', 'DESC')
@@ -79,7 +76,7 @@ class AjaxController extends Controller
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select('violation_records.*', 'students.FNAME', 'students.LNAME', 'academic_years.*')
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
-                                        ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('violation_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->where('violations.id', $request->violationId)
                                         ->orderBy('violation_records.id', 'DESC')
@@ -94,10 +91,11 @@ class AjaxController extends Controller
         $pelanggaran_tiap_siswa = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
                                             ->join('academic_years', 'violation_records.ACADEMIC_YEAR_ID', 'academic_years.id')
                                             ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
-                                            ->select('violation_records.id', 'violation_records.DATE' ,'violation_records.PUNISHMENT', 'violations.DESCRIPTION',
+                                            ->select('violation_records.id', 'violations.POINT' , 'violation_records.DATE' ,'violation_records.PUNISHMENT', 'violations.DESCRIPTION',
                                                      'students.FNAME', 'students.LNAME', 
                                                      'academic_years.TYPE', 'academic_years.NAME')
                                             ->where('STUDENTS_ID', $request->studentId)
+                                            ->where('violation_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                             ->orderBy('violation_records.id', 'DESC')
                                             ->get();
 
@@ -106,8 +104,6 @@ class AjaxController extends Controller
 
     public function showAchievementItemByGrade(Request $request)
     {
-        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
-
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
 
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
@@ -119,7 +115,7 @@ class AjaxController extends Controller
                                 ->select('achievements.*', DB::raw('COUNT(*) AS JUMLAHPERPENGHARGAAN'))
                                 ->where('GRADE', $request->achievementGrade)
                                 ->where('grades_students.GRADES_ID', $kelas_guru)
-                                ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->where('achievement_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                 ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                 ->groupBy('achievements.id')
                                 ->get();
@@ -130,7 +126,7 @@ class AjaxController extends Controller
                                 ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                 ->select('achievements.*', DB::raw('COUNT(*) AS JUMLAHPERPENGHARGAAN'))
                                 ->where('GRADE', $request->achievementGrade)
-                                ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->where('achievement_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                 ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                 ->groupBy('achievements.id')
                                 ->get();
@@ -143,8 +139,6 @@ class AjaxController extends Controller
     {
         $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
 
-        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
-
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
             
@@ -154,7 +148,7 @@ class AjaxController extends Controller
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select('achievement_records.*', 'students.FNAME', 'students.LNAME', 'academic_years.*')
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
-                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->where('achievements.id', $request->achievementId)
                                         ->orderBy('achievement_records.id', 'DESC')
@@ -166,7 +160,7 @@ class AjaxController extends Controller
                                         ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
                                         ->select('achievement_records.*', 'students.FNAME', 'students.LNAME', 'academic_years.*')
-                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->where('achievements.id', $request->achievementId)
                                         ->orderBy('achievement_records.id', 'DESC')
@@ -182,12 +176,30 @@ class AjaxController extends Controller
                                             ->join('academic_years', 'achievement_records.ACADEMIC_YEAR_ID', 'academic_years.id')
                                             ->join('students', 'achievement_records.STUDENTS_ID', 'students.id')
                                             ->select('achievement_records.id', 'achievement_records.DATE' ,'achievement_records.DESCRIPTION AS DESKRIPSI1', 'achievements.DESCRIPTION AS DESKRIPSI2' ,'achievements.GRADE',
-                                                     'students.FNAME', 'students.LNAME', 
+                                                     'achievements.POINT', 'students.FNAME', 'students.LNAME', 
                                                      'academic_years.TYPE', 'academic_years.NAME')
                                             ->where('STUDENTS_ID', $request->studentId)
+                                            ->where('achievement_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                             ->orderBy('achievement_records.id', 'DESC')
                                             ->get();
         
         return $penghargaan_tiap_siswa;                                            
+    }
+
+    public function absentEachGrade(Request $request)
+    {        
+        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
+
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
+
+        $absen_per_kelas = Absent::join('students', 'absents.STUDENTS_ID', 'students.id')
+                                ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                ->select('absents.TYPE', DB::raw('COUNT(*) ABSENPERTIPE'), 'grades_students.GRADES_ID')
+                                ->where('grades_students.GRADES_ID', $request->gradeId)
+                                ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                ->where('absents.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->groupBy('absents.TYPE')
+                                ->get();                            
+        return $absen_per_kelas;
     }
 }

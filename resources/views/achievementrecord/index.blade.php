@@ -142,7 +142,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="modalTitle">DAFTAR PELANGGARAN TERCATAT</b></h1>
+                                    <h1 class="modal-title" id="modalTitle">DAFTAR PENGHARGAAN TERCATAT</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -265,6 +265,7 @@
                                                 <th>TINGKAT</th>
                                                 <th>NAMA PENGHARGAAN</th>
                                                 <th>DESKRIPSI</th>
+                                                <th>POIN PENGHARGAAN</th>
                                                 @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
                                                     <th></th>
                                                 @endif
@@ -279,6 +280,7 @@
                                                 <td style="width: 20px">X</td>
                                                 <td style="width: 110px">X</td>
                                                 <td style="width: 110px">X</td>
+                                                <td style="width: 20px">X</td>
                                                 <td>X</td>
                                             </tr>
                                         </tbody>
@@ -310,13 +312,14 @@
 
     $('#tbody-persentase-penghargaan').on('click', '.button-detail-persentase', (function(){
         var achievementGrade = $(this).attr('achievement-grade')
-        
+        var academicYearId = $('#selector-dropdown-achievementrecord-year').val();
+
         $('#detail-penghargaan-berdasarkan-tingkat').show();
 
         $.ajax({
             url: '{{route("achievementrecord.achievementItem")}}',
             type: 'get',
-            data: {achievementGrade: achievementGrade},
+            data: {achievementGrade: achievementGrade, academicYearId: academicYearId},
 
             success: function(result){
                 $('#tbody-detail-penghargaan-berdasarkan-tingkat').empty()
@@ -345,15 +348,16 @@
 
     $('#tbody-detail-penghargaan-berdasarkan-tingkat').on('click', '.button-detail', function(){
         var achievementId = $(this).attr('achievement-id')
+        var academicYearId = $('#selector-dropdown-achievementrecord-year').val();
         
         $.ajax({
             url: '{{route("achievementrecord.showAchievementRecord")}}',
             type: 'get',
-            data: {achievementId: achievementId},
+            data: {achievementId: achievementId, academicYearId: academicYearId},
 
             success: function(result){
                 $('#tbody-achievement-record').empty()
-                
+                console.log(result)
                 result.forEach(function(obj){
                     var i = 1
                     $('#tbody-achievement-record').append(                        
@@ -379,12 +383,13 @@
     })
 
     $('#tbody-daftar-siswa-yang-ada-penghargaan').on('click', '.button-detail-penghargaan', (function(){
-        var studentId = $(this).attr('student-id');
+        var studentId = $(this).attr('student-id');   
+        var academicYearId = $('#selector-dropdown-achievementrecord-year').val();   
         
         $.ajax({
             url: '{{ route("achievementrecord.studentDetailAchievement") }}',
             type: 'get',
-            data: {studentId: studentId},
+            data: {studentId: studentId, academicYearId: academicYearId},
 
             success: function(result){
                 $('#tbody-student-achievement-list').empty()         
@@ -410,6 +415,7 @@
                                 <td style="width: 40px">${obj.GRADE}</td>
                                 <td style="width: 200px">${obj.DESKRIPSI2}</td>
                                 <td style="width: 200px">${obj.DESKRIPSI1}</td>
+                                <td style="width: 40px">${obj.POINT}</td>
                                 <td style="width: 80px">                            
                                     <a href=${route}  class="btn btn-warning btn-sm">
                                         <i class="fa fa-pencil"></i>
@@ -435,7 +441,8 @@
                                 <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
                                 <td style="width: 40px">${obj.GRADE}</td>
                                 <td style="width: 200px">${obj.DESKRIPSI2}</td>
-                                <td style="width: 200px">${obj.DESKRIPSI1}</td>                                
+                                <td style="width: 200px">${obj.DESKRIPSI1}</td>        
+                                <td style="width: 40px">${obj.POINT}</td>                        
                             </tr>
                             `
                         )

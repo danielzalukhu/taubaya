@@ -24,6 +24,8 @@ Route::get('ar/achievement-item-by-grade', 'AjaxController@showAchievementItemBy
 Route::get('ar/show-achievement-record', 'AjaxController@getAchievementRecord')->middleware('auth')->name('achievementrecord.showAchievementRecord');
 Route::get('ar/show-student-achievement-detail', 'AjaxController@studentDetailAchievement')->middleware('auth')->name('achievementrecord.studentDetailAchievement');
 
+Route::get('absent/show-absent-each-grade', 'AjaxController@absentEachGrade')->middleware('auth')->name('absent.absentEachGrade');
+
 // STUDENT
 Route::get('achievement/chart', 'StudentController@returnDataAchievementChart')->middleware('auth')->name('student.achievementChart');
 Route::get('violation/chart', 'StudentController@returnDataViolationChart')->middleware('auth')->name('student.violationChart');
