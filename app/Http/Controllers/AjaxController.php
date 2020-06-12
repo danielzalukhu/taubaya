@@ -192,7 +192,8 @@ class AjaxController extends Controller
 
         $absen_per_kelas = Absent::join('students', 'absents.STUDENTS_ID', 'students.id')
                                 ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
-                                ->select('absents.TYPE', DB::raw('COUNT(*) ABSENPERTIPE'), 'grades_students.GRADES_ID')
+                                ->join('grades', 'grades_students.GRADES_ID', 'grades.id')
+                                ->select('absents.TYPE', 'grades.NAME', DB::raw('COUNT(*) ABSENPERTIPE'), 'grades_students.GRADES_ID')
                                 ->where('grades_students.GRADES_ID', $request->gradeId)
                                 ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                 ->where('absents.ACADEMIC_YEAR_ID', $request->academicYearId)

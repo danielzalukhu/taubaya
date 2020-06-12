@@ -113,7 +113,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="modalTitle">DAFTAR ABSEN </b></h1>
+                                    <h1 class="modal-title" id="modalTitle">DAFTAR ABSEN KELAS</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -262,7 +262,7 @@
 
             success: function(result){
                 $('#tbody-absent-each-grade-list').empty()
-
+            
                 result.forEach(function(obj){
                     $('#tbody-absent-each-grade-list').append(
                         `
@@ -293,7 +293,7 @@
         var absentType = $(this).attr('absent-type')
         var gradeId = $(this).attr('grade-id')
         var academicYearId = $('#selector-dropdown-absentrecord-year').val()
-
+        
         $.ajax({
             url: '{{ route("absent.detailAbsentEachType") }}',
             type: 'get',
@@ -301,7 +301,7 @@
 
             success: function(result){
                 $('#tbody-detail-absent-each-type-list').empty()            
-
+                
                 result.forEach(function(obj){
                     var route =  "{{ route('absent.edit', ':id') }}"  
                     route = route.replace(':id', `${obj.id}`)
