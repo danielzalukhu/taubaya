@@ -33,6 +33,8 @@ class AbsentController extends Controller
             $academic_year_id = $maxId;
         }
         
+        $catatan_absen = $this->showAbsent($request->session()->get('session_user_id'), $academic_year_id);
+        
         $type = Absent::select(DB::raw('TYPE AS TIPE'))->groupBy('TYPE')->get();
         
         $count_total_day_each_ay = AcademicYear::select(DB::raw('DATEDIFF(END_DATE, START_DATE) AS TOTALHARI'))
@@ -58,8 +60,6 @@ class AbsentController extends Controller
                             ->whereIn('STUDENTS_ID', $arr_siswa)
                             ->groupBy('TIPE', 'TAHUNAJARAN')
                             ->get();                  
-
-            $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->orderBy('id', 'DESC')->get();
             
         }
         else{
@@ -67,11 +67,39 @@ class AbsentController extends Controller
                              ->where('ACADEMIC_YEAR_ID', $academic_year_id)
                              ->groupBy('TIPE', 'TAHUNAJARAN')
                              ->get();     
-
-            $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->get();   
         }
                                
-        return view('absent.index', compact('absen', 'tahun_ajaran', 'academic_year_id', 'type', 'data', 'count_total_day_each_ay'));
+        return view('absent.index', compact('catatan_absen', 'tahun_ajaran', 'academic_year_id', 'type', 'data', 'count_total_day_each_ay'));
+    }
+
+    public function showAbsent($user_id, $ay)
+    {
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
+
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
+            $kelas_guru = Grade::where('STAFFS_ID', $user_id)->first()->id; 
+
+            $absen = Absent::join('students', 'absents.STUDENTS_ID', 'students.id')
+                        ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                        ->select('absents.TYPE', DB::raw('COUNT(*) ABSENPERTIPE'), 'grades_students.GRADES_ID')
+                        ->where('grades_students.GRADES_ID', $kelas_guru)
+                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                        ->where('absents.ACADEMIC_YEAR_ID', $ay)
+                        ->groupBy('absents.TYPE')
+                        ->get();  
+        }
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){  
+            $absen = Absent::join('students', 'absents.STUDENTS_ID', 'students.id')
+                        ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                        ->join('grades', 'grades_students.GRADES_ID', 'grades.id')
+                        ->select('grades.id AS GRADES_ID', 'grades.NAME AS NAMAKELAS', DB::raw('COUNT(*) AS TOTALKETIDAKHADIRANPERKELAS'))
+                        ->where('absents.ACADEMIC_YEAR_ID', $ay)
+                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                        ->groupBy('grades_students.GRADES_ID')
+                        ->get();                               
+        }
+
+        return $absen;             
     }
 
     /**

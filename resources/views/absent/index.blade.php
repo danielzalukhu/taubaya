@@ -54,37 +54,52 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>NAMA SISWA</th>
-                                            <th>ALASAN</th>
-                                            <th colspan="2">TANGGAL</th>
-                                            <th>DESKRIPSI</th>
-                                            <th></th>
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
+                                                <th>#</th>
+                                                <th>TIPE ABSEN</th>
+                                                <th>TOTAL KETIDAKHADIRAN</th>
+                                                <th></th>
+                                            @else
+                                                <th>#</th>                                                
+                                                <th>NAMA KELAS</th>
+                                                <th>TOTAL KETIDAKHADIRAN</th>
+                                                <th></th>
+                                            @endif
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tbody-daftar-absen">
                                     @php $i=1 @endphp
-                                    @foreach($absen as $a)
+                                    @foreach($catatan_absen as $ca)
                                         <tr>
-                                            <td>{{$i++}}</td>
-                                            <td>{{$a->student->FNAME }}{{" "}}{{$a->student->LNAME}}</td>
-                                            <td>{{$a->TYPE}}</td>
-                                            <td>{{date('d-m-Y', strtotime($a->START_DATE))}}</td>
-                                            <td>{{date('d-m-Y', strtotime($a->END_DATE))}}</td>                                            
-                                            <td>{{$a->DESCRIPTION}}</td>
-                                            <td>
-                                                <a href="{{ route ('absent.edit', $a->id )}}" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                                <form action="{{ route ('absent.destroy', $a->id )}}" method="POST" class="inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>                                            
-                                            </td>
-                                        </td>
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
+                                                <td>{{$i++}}</td>
+                                                <td>{{$ca->TYPE}}</td>
+                                                <td>{{$ca->ABSENPERTIPE}}</td>
+                                                <td>
+                                                    <button type="button" 
+                                                            class="btn btn-primary btn-sm button-detail-tipe-absen" 
+                                                            data-toggle="modal" 
+                                                            data-target="#detailAbsentByType" 
+                                                            grade-id="{{$ca->GRADES_ID}}"
+                                                            absent-type="{{$ca->TYPE}}">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>                                          
+                                                </td>
+                                            @else
+                                                <td>{{$i++}}</td>
+                                                <td>{{$ca->NAMAKELAS}}</td>
+                                                <td>{{$ca->TOTALKETIDAKHADIRANPERKELAS}}</td>
+                                                <td>
+                                                    <button type="button" 
+                                                            class="btn btn-primary btn-sm button-detail-absen-per-kelas" 
+                                                            data-toggle="modal" 
+                                                            data-target="#detailAbsentEachGrade" 
+                                                            grade-id="{{$ca->GRADES_ID}}">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>                                          
+                                                </td>
+                                            @endif
+                                        </tr>
                                     @endforeach
                                     </tbody>
                                     </table>
@@ -92,6 +107,86 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Modal Absen PER Kelas-->
+                    <div class="modal fade bd-example-modal-lg" id="modalAbsentEachGrade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" id="modalTitle">DAFTAR ABSEN SETIAP TIPE ABSENSI</b></h1>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="table-responsive">
+                                        <table id="table-absent-each-grade-list" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>TIPE ABSENSI</th>
+                                                <th>JUMLAH KETIDAKHADIRAN/TIPE</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-absent-each-grade-list">
+                                            <tr>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                            </tr>
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>             
+
+                    <!-- Modal Detail Absen PER Tipe-->
+                    <div class="modal fade bd-example-modal-lg" id="modalDetailAbsentEachType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" id="modalTitle">DETAIL ABSEN BERDASARKAN TIPE</b></h1>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="table-responsive">
+                                        <table id="table-absent-each-grade-list" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>NAMA SISWA</th>
+                                                <th>TIPE ABSENSI</th>
+                                                <th>TAHUN AJARAN</th>
+                                                <th>TANGGAL AWAL</th>
+                                                <th>TANGGAL AKHIR</th>
+                                                <th>KETERANGAN</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-detail-absent-each-type-list">
+                                            <tr>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td>X</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+
                 </div>
             </div>
         </div>
@@ -102,17 +197,151 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 
 <script>
-    $(function () {
-        $('#example1').DataTable()
-            $('#example2').DataTable({
-            'paging'      : true,
-            'lengthChange': false,
-            'searching'   : false,
-            'ordering'    : true,
-            'info'        : true,
-            'autoWidth'   : false
-            })
+    $('#tbody-daftar-absen').on('click', '.button-detail-tipe-absen', (function(){
+        var absentType = $(this).attr('absent-type')
+        var gradeId = $(this).attr('grade-id')
+        var academicYearId = $('#selector-dropdown-absentrecord-year').val()
+        // console.log(absentType, gradeId, academicYearId)
+        $.ajax({
+            url: '{{ route("absent.detailAbsentEachType") }}',
+            type: 'get',
+            data: {absentType: absentType, gradeId: gradeId, academicYearId: academicYearId},
+
+            success: function(result){
+                $('#tbody-detail-absent-each-type-list').empty()            
+
+                result.forEach(function(obj){
+                    var route =  "{{ route('absent.edit', ':id') }}"  
+                    route = route.replace(':id', `${obj.id}`)
+                    
+                    var route_del = "{{ route ('absent.destroy', ':id' )}}"
+                    route_del = route_del.replace(':id', `${obj.id}`)
+
+                    $('#tbody-detail-absent-each-type-list').append(
+                        `
+                        <tr>
+                            <td style="width: 30px">${obj.id}</td>
+                            <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
+                            <td style="width: 80px">${obj.TYPE}</td>
+                            <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
+                            <td style="width: 75px">${obj.START_DATE}</td>
+                            <td style="width: 75px">${obj.END_DATE}</td>
+                            <td style="width: 150px">${obj.DESCRIPTION}</td>      
+                            <td style="width: 70px">                            
+                                <a href=${route}  class="btn btn-warning btn-sm">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form action=${route_del} method="POST" class="inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>                      
+                        </tr>
+                        `
+                    )
+                })
+                $('#modalDetailAbsentEachType').modal('show')
+            },
+            error: function(err){
+                console.log(err)
+            }
         })
+    }))
+
+    $('#tbody-daftar-absen').on('click', '.button-detail-absen-per-kelas', (function(){
+        var gradeId = $(this).attr('grade-id');       
+        var academicYearId = $('#selector-dropdown-absentrecord-year').val()
+
+        $.ajax({
+            url: '{{ route("absent.absentEachGrade") }}',
+            type: 'get',
+            data: {gradeId: gradeId, academicYearId: academicYearId},
+
+            success: function(result){
+                $('#tbody-absent-each-grade-list').empty()
+
+                result.forEach(function(obj){
+                    $('#tbody-absent-each-grade-list').append(
+                        `
+                        <tr>
+                            <td style="width: 50px">${obj.TYPE}</td>
+                            <td style="width: 50px">${obj.ABSENPERTIPE}</td>
+                            <td style="width: 50px">                            
+                                <button type="button" 
+                                        class="btn btn-primary btn-sm button-detail" 
+                                        absent-type=${obj.TYPE} 
+                                        grade-id=${obj.GRADES_ID}>
+                                            <i class="fa fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        `
+                    )                    
+                })
+                $('#modalAbsentEachGrade').modal('show')
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+    }))
+
+    $('#tbody-absent-each-grade-list').on('click', '.button-detail', (function(){
+        var absentType = $(this).attr('absent-type')
+        var gradeId = $(this).attr('grade-id')
+        var academicYearId = $('#selector-dropdown-absentrecord-year').val()
+
+        $.ajax({
+            url: '{{ route("absent.detailAbsentEachType") }}',
+            type: 'get',
+            data: {absentType: absentType, gradeId: gradeId, academicYearId: academicYearId},
+
+            success: function(result){
+                $('#tbody-detail-absent-each-type-list').empty()            
+
+                result.forEach(function(obj){
+                    var route =  "{{ route('absent.edit', ':id') }}"  
+                    route = route.replace(':id', `${obj.id}`)
+                    
+                    var route_del = "{{ route ('absent.destroy', ':id' )}}"
+                    route_del = route_del.replace(':id', `${obj.id}`)
+
+                    $('#tbody-detail-absent-each-type-list').append(
+                        `
+                        <tr>
+                            <td style="width: 30px">${obj.id}</td>
+                            <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
+                            <td style="width: 80px">${obj.TYPE}</td>
+                            <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
+                            <td style="width: 75px">${obj.START_DATE}</td>
+                            <td style="width: 75px">${obj.END_DATE}</td>
+                            <td style="width: 150px">${obj.DESCRIPTION}</td>      
+                            <td style="width: 70px">                            
+                                <a href=${route}  class="btn btn-warning btn-sm">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form action=${route_del} method="POST" class="inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>                      
+                        </tr>
+                        `
+                    )
+                })
+                $('#modalDetailAbsentEachType').modal('show')
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+    }))
 
     $('#selector-dropdown-absentrecord-year').change(function(){
         var academicYearId = $(this).val()
@@ -127,7 +356,7 @@
     var totalDayEachAcademicYear = {!! json_encode($count_total_day_each_ay) !!}
     var totalAmountExceptPresent = 0
     var present_percentage = 0
-
+    
     var dataSeries = []
     var obj_present = {}
 
@@ -195,5 +424,17 @@
             data: dataSeries
         }]
     });
+
+    $(function () {
+        $('#example1').DataTable()
+            $('#example2').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+            })
+        })  
 </script>
 @stop

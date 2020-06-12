@@ -188,8 +188,6 @@ class AjaxController extends Controller
 
     public function absentEachGrade(Request $request)
     {        
-        $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id; 
-
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
 
         $absen_per_kelas = Absent::join('students', 'absents.STUDENTS_ID', 'students.id')
@@ -197,9 +195,26 @@ class AjaxController extends Controller
                                 ->select('absents.TYPE', DB::raw('COUNT(*) ABSENPERTIPE'), 'grades_students.GRADES_ID')
                                 ->where('grades_students.GRADES_ID', $request->gradeId)
                                 ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
-                                ->where('absents.ACADEMIC_YEAR_ID', $academic_year_id)
+                                ->where('absents.ACADEMIC_YEAR_ID', $request->academicYearId)
                                 ->groupBy('absents.TYPE')
                                 ->get();                            
         return $absen_per_kelas;
+    }
+
+    public function detailAbsentEachType(Request $request)
+    {
+        $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
+
+        $detail_absen_per_tipe = Absent::join('academic_years', 'absents.ACADEMIC_YEAR_ID', 'academic_years.id')
+                                    ->join('students', 'absents.STUDENTS_ID', 'students.id')
+                                    ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                    ->select('absents.*', 'students.FNAME', 'students.LNAME', 'academic_years.TYPE AS TIPETHNAJARAN', 'academic_years.NAME')
+                                    ->where('absents.TYPE', $request->absentType)
+                                    ->where('absents.ACADEMIC_YEAR_ID', $request->academicYearId)
+                                    ->where('grades_students.GRADES_ID', $request->gradeId)
+                                    ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                    ->get();
+
+        return $detail_absen_per_tipe;                                    
     }
 }

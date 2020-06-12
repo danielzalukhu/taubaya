@@ -365,7 +365,6 @@
                             <td style="width: 60px">${obj.TYPE} - ${obj.NAME}</td>
                             <td style="width: 110px">${obj.PUNISHMENT}</td>
                         </tr>
-
                         `
                     )
                 })
