@@ -164,7 +164,9 @@
                                                 <th>TANGGAL AWAL</th>
                                                 <th>TANGGAL AKHIR</th>
                                                 <th>KETERANGAN</th>
-                                                <th></th>
+                                                @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
+                                                    <th></th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-detail-absent-each-type-list">
@@ -197,6 +199,7 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 
 <script>
+    // ROLE TEACHER
     $('#tbody-daftar-absen').on('click', '.button-detail-tipe-absen', (function(){
         var absentType = $(this).attr('absent-type')
         var gradeId = $(this).attr('grade-id')
@@ -250,7 +253,9 @@
             }
         })
     }))
+    // END ROLE
 
+    // ROLE HEADMASTER
     $('#tbody-daftar-absen').on('click', '.button-detail-absen-per-kelas', (function(){
         var gradeId = $(this).attr('grade-id');       
         var academicYearId = $('#selector-dropdown-absentrecord-year').val()
@@ -288,6 +293,7 @@
             }
         })
     }))
+    // END ROLE
 
     $('#tbody-absent-each-grade-list').on('click', '.button-detail', (function(){
         var absentType = $(this).attr('absent-type')
@@ -309,31 +315,55 @@
                     var route_del = "{{ route ('absent.destroy', ':id' )}}"
                     route_del = route_del.replace(':id', `${obj.id}`)
 
-                    $('#tbody-detail-absent-each-type-list').append(
-                        `
-                        <tr>
-                            <td style="width: 30px">${obj.id}</td>
-                            <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
-                            <td style="width: 80px">${obj.TYPE}</td>
-                            <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
-                            <td style="width: 75px">${obj.START_DATE}</td>
-                            <td style="width: 75px">${obj.END_DATE}</td>
-                            <td style="width: 150px">${obj.DESCRIPTION}</td>      
-                            <td style="width: 70px">                            
-                                <a href=${route}  class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <form action=${route_del} method="POST" class="inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>                      
-                        </tr>
-                        `
-                    )
+                    var route_del = "{{ route ('achievementrecord.destroy', ':id' )}}"
+                    route_del = route_del.replace(':id', `${obj.id}`)
+
+                    var $role_teacher = "{{ Auth::guard('web')->user()->staff->ROLE === "TEACHER" }}"
+                    var $role_headmaster = "{{ Auth::guard('web')->user()->staff->ROLE === "HEADMASTER" }}"
+
+                    if($role_teacher) {
+                        $('#tbody-detail-absent-each-type-list').append(
+                            `
+                            <tr>
+                                <td style="width: 30px">${obj.id}</td>
+                                <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
+                                <td style="width: 80px">${obj.TYPE}</td>
+                                <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
+                                <td style="width: 75px">${obj.START_DATE}</td>
+                                <td style="width: 75px">${obj.END_DATE}</td>
+                                <td style="width: 150px">${obj.DESCRIPTION}</td>      
+                                <td style="width: 70px">                            
+                                    <a href=${route}  class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <form action=${route_del} method="POST" class="inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>                      
+                            </tr>
+                            `
+                        )
+                    } else if ($role_headmaster) {
+                        $('#tbody-detail-absent-each-type-list').append(
+                            `
+                            <tr>
+                                <td style="width: 30px">${obj.id}</td>
+                                <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
+                                <td style="width: 80px">${obj.TYPE}</td>
+                                <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
+                                <td style="width: 75px">${obj.START_DATE}</td>
+                                <td style="width: 75px">${obj.END_DATE}</td>
+                                <td style="width: 150px">${obj.DESCRIPTION}</td>                           
+                            </tr>
+                            `
+                        )
+                    }
+
+
                 })
                 $('#modalDetailAbsentEachType').modal('show')
             },
