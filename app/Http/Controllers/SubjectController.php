@@ -8,6 +8,7 @@ use App\ViolationRecord;
 use App\Student;
 use App\Staff;
 use App\Violation;
+use App\Activity;
 use App\AcademicYear;
 use App\ActivityStudent;
 use App\SubjectReport;
@@ -295,7 +296,13 @@ class SubjectController extends Controller
         $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
                                 ->first()->NAME; 
         
-        return view('subject.assesment', compact('laporan_mapel', 'kelas_guru'));
+        $get_mapel = new StudentController();   
+        $get_mapel_name = $get_mapel->mapelguru($request);
+        $mapel = $get_mapel_name["subject"];
+        
+        $aktivitas = Activity::all();
+
+        return view('subject.assesment', compact('laporan_mapel', 'kelas_guru' , 'mapel', 'aktivitas'));
     }
 
     public function editAssesment($id)

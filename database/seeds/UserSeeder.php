@@ -195,44 +195,5 @@ class UserSeeder extends Seeder
             'STAFFS_ID' => '23'
         ]);
 
-        // DB::table('users')->insert([
-        //     'NAME' => 'Ahmad Abdul',
-        //     'EMAIL' => 'abdul@student.ac.id',
-        //     'PASSWORD' => Hash::make('abdul'),
-        //     'ROLE' => 'STUDENT',
-        //     'STUDENTS_ID' => '1'
-        // ]);
-
-        // DB::table('users')->insert([
-        //     'NAME' => 'Marion Jola',
-        //     'EMAIL' => 'marion@student.ac.id',
-        //     'PASSWORD' => Hash::make('marion'),
-        //     'ROLE' => 'STUDENT',
-        //     'STUDENTS_ID' => '2'
-        // ]);
-
-        // DB::table('users')->insert([
-        //     'NAME' => 'Wilhelm Mozes',
-        //     'EMAIL' => 'wilmozes@student.ac.id',
-        //     'PASSWORD' => Hash::make('mozes'),
-        //     'ROLE' => 'STUDENT',
-        //     'STUDENTS_ID' => '3'
-        // ]);
-
-        // DB::table('users')->insert([
-        //     'NAME' => 'Alan Walker',
-        //     'EMAIL' => 'alan@student.ac.id',
-        //     'PASSWORD' => Hash::make('alan'),
-        //     'ROLE' => 'STUDENT',
-        //     'STUDENTS_ID' => '4'
-        // ]);
-
-        // DB::table('users')->insert([
-        //     'NAME' => 'Daniel Soeparto',
-        //     'EMAIL' => 'suparto@student.ac.id',
-        //     'PASSWORD' => Hash::make('suparto'),
-        //     'ROLE' => 'STUDENT',
-        //     'STUDENTS_ID' => '5'
-        // ]);
     }
 }
