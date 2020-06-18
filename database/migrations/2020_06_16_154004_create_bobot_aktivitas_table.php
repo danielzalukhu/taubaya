@@ -18,7 +18,7 @@ class CreateBobotAktivitasTable extends Migration
             $table->integer('SUBJECTS_ID')->unsigned();
             $table->foreign('SUBJECTS_ID')->references('id')->on('subjects')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('ACTIVITIES_ID')->unsigned();
-            $table->foreign('ACTIVITIES_ID')->references('id')->on('activites')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('ACTIVITIES_ID')->references('id')->on('activities')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('ACADEMIC_YEAR_ID')->unsigned();
             $table->foreign('ACADEMIC_YEAR_ID')->references('id')->on('academic_years')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('WEIGHT');
