@@ -51,11 +51,11 @@ class StudentImport implements ToCollection
                     $siswa->ACADEMIC_YEAR_ID = $this->request->session()->get("session_academic_year_id");
                     $siswa->save();
 
-                    // $kelas_siswa = GradeStudent::create([
-                    //     'STUDENTS_ID' => $siswa->id,
-                    //     'GRADES_ID' => $id_kelas,
-                    //     'ACADEMIC_YEAR_ID' => $this->request->session()->get("session_academic_year_id")
-                    // ]);
+                    $kelas_siswa = GradeStudent::create([
+                        'STUDENTS_ID' => $siswa->id,
+                        'GRADES_ID' => $id_kelas,
+                        'ACADEMIC_YEAR_ID' => $this->request->session()->get("session_academic_year_id")
+                    ]);
                     
                     $user = User::create([
                         'name' => $student_full_name,

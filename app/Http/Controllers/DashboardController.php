@@ -25,7 +25,7 @@ class DashboardController extends Controller
                                     WHERE id = (SELECT MAX(id) as id 
                                                 FROM academic_years)');           
         
-        $request->session()->put('session_academic_year_id', 3);
+        $request->session()->put('session_academic_year_id', $tahun_ajaran[0]->id);
         $request->session()->put('session_start_ay', $tahun_ajaran[0]->START_DATE);
         $request->session()->put('session_end_ay', $tahun_ajaran[0]->END_DATE);
         
