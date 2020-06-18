@@ -19,6 +19,97 @@
                         <strong>{{ $error }}</strong>
                     </div> 
                 @endif
+                <div class="row" id="setting-bobot">
+                    <div class="col-xs-6">
+                        <div class="panel-heading">
+                            <h3 class="box-title">SETTING BOBOT</h3>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">INPUT BOBOT</h3>
+                            </div>
+                            <div class="box-body">
+                                <form class="form-horizontal" action="" method="POST"  enctype="multipart/form-data">                                    
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                    <div class="form-group{{ $errors->has('weight_subject_name') ? 'has-error' : '' }} ">
+                                        <label class="col-sm-3 control-label">Mapel</label>
+                                        <div class="col-sm-9">
+                                            <select id="weight_subject_name" class="form-control">
+                                                @foreach($mapel as $m)
+                                                    <option value='{{ $m->id }}'>
+                                                        {{ $m->DESCRIPTION }}
+                                                    </option>                                                                        
+                                                @endforeach
+                                            </select>
+                                            @if($errors->has('weight_subject_name'))
+                                                <span class="help-block">{{$errors->first('weight_subject_name')}}</span>
+                                            @endif                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('weight_activity_name') ? 'has-error' : '' }} ">
+                                        <label class="col-sm-3 control-label">Aktivitas</label>
+                                        <div class="col-sm-9">
+                                            <select id="weight_activity_name" class="form-control">
+                                                @foreach($aktivitas as $a)
+                                                    <option value='{{ $a->id }}'>
+                                                        {{ $a->MODULE }}
+                                                    </option>                                                                        
+                                                @endforeach
+                                            </select>
+                                            @if($errors->has('weight_activity_name'))
+                                                <span class="help-block">{{$errors->first('weight_activity_name')}}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('weight_percentage') ? 'has-error' : '' }} ">
+                                        <label class="col-sm-3 control-label">Bobot (%) </label>
+                                        <div class="col-sm-6">
+                                            <input type="number" name="weight_percentage" class="form-control">
+                                            @if($errors->has('weight_percentage'))
+                                                <span class="help-block">{{$errors->first('weight_percentage')}}</span>
+                                            @endif
+                                        </div>        
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>              
+                    </div>
+
+                    <div class="col-xs-6" id="detail-bobot">
+                        <div class="panel-heading">
+                            <h3 class="box-title">DETAIL BOBOT</h3>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">BOBOT MATA PELAJARAN <b>NAMA MAPEL</b></h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table  class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>NAMA AKTIVITAS</th>
+                                                <th>BOBOT</th>   
+                                                <th>TAHUN AJARAN</th>                                      
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-detail-bobot-mapel">
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>              
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
@@ -49,7 +140,7 @@
                     </div>
                 </div>
                 
-                <div class="row">
+                <div class="row" id="table-daftar-nilai-siswa">
                     <div class="col-xs-12">
                         <div class="panel-heading">
                             <h3 class="box-title">DAFTAR NILAI SISWA</h3>            
@@ -60,7 +151,7 @@
                                     <span>
                                         <a href="{{ route('subject.setStatus') }}?status=1" 
                                             class="btn btn-success btn-sm pull-right"  
-                                            id="buttonVerifikasi" 
+                                            id="button-verifikasi" 
                                             onclick="return confirm('Are you sure?')">
                                                 <i class="fa fa-check"></i> VERIFIKASI NILAI
                                         </a> 
@@ -177,7 +268,18 @@
 @stop
 
 @section('footer')
-<script>        
+<script>     
+    $('#setting-bobot').hide()
+    $('#detail-bobot').hide()
+
+    var tbody = $('#table-daftar-nilai-siswa tbody')
+    if(tbody.children().length == 0){
+        $('#button-verifikasi').hide()
+    }
+    else {
+        $('#button-verifikasi').show()
+    }
+
     $(function () {
         $('#table-assesment').DataTable()
             $('#example2').DataTable({

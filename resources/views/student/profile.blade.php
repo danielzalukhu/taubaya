@@ -743,7 +743,7 @@
                 }
             },
             series: [{
-                name: 'JENIS ABSEN',
+                name: 'Persentase',
                 colorByPoint: true,
                 data: dataSeries
             }]
