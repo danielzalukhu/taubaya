@@ -180,14 +180,11 @@ class DashboardController extends Controller
     {
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
             $kelas_guru = Grade::where('STAFFS_ID', $iduser)->first()->id;            
-            
-            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
-                    
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();                    
             $arr_siswa = [];                                
             foreach($siswa as $s){
                 array_push($arr_siswa, $s->STUDENTS_ID);
             }
-
             $siswa = ViolationRecord::join('students', 'violation_records.STUDENTS_ID', 'students.id')                           
                                 ->select('students.*', 
                                         DB::raw('COUNT(*) as BANYAKPELANGGARAN'), 
@@ -214,9 +211,6 @@ class DashboardController extends Controller
 
     public function showStudentIncompleteness($iduser, $selected_student)
     {
-        // asumsikan:
-        // role teacher -> tampilin siswa siapa aja (yg dikelasnya) ada catatan daftar ketidaktuntasan 
-        // role headmaster -> tampilin jumlah kelas mana yang paling banyak daftar ketidaktuntasannya 
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
             $kelas_guru = Grade::where('STAFFS_ID', $iduser)->first()->id;            
             
@@ -262,10 +256,6 @@ class DashboardController extends Controller
     
     public function studentAchievements($iduser)
     {
-        // asumsikan:
-        // role headmaster -> tampilin yang sering dapet penghargaan prestasi dan nilai nya selalu tertinggi dikelas
-        // role teacher -> tampilin siswa dikelasnya yang berprestasi dari nilai tertinggi dan dapet penghargaan 
-        // role student -> tampilin daftar penghargaannya dia sendiri
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){
             $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;
 
@@ -316,10 +306,6 @@ class DashboardController extends Controller
 
     public function violationListOftenOccur($iduser)
     {
-        // asumsikan
-        // role heademaster -> pelanggaran apa yang paling sering siswa lakuin filter tahun ajaran
-        // role teacher -> pelanggaran apa yang paling sering siswa dikelasnya lakuin filter tahun ajaran
-        // role student -> tampilin daftar pelanggaran yang dia miliki
         $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         $kategori = DB::select("SELECT (CASE WHEN v.NAME LIKE 'R%' THEN 'RINGAN'
