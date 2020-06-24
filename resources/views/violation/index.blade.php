@@ -35,7 +35,9 @@
                                             <th>NAMA PELANGGARAN</th>
                                             <th>DESKRIPSI</th>
                                             <th>POIN</th>
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                            
                                             <th></th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -46,6 +48,7 @@
                                             <td>{{$pl->NAME}}</td>
                                             <td>{{$pl->DESCRIPTION}}</td>
                                             <td>{{$pl->POINT}}</td>
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                            
                                             <td>
                                                 <a href="{{ route ('violation.edit', $pl->id )}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pencil"></i>
@@ -58,6 +61,7 @@
                                                     </button>
                                                 </form>                                            
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                     </tbody>

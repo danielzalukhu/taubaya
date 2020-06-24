@@ -317,7 +317,14 @@ class SubjectController extends Controller
     public function updateAssesment(Request $request, $id)
     {
         $laporan_mapel = SubjectReport::find($id);
-       
+        
+        // $request->validate([
+        //     'a_nilai_tugas' => 'required|integer|min:0|max:100',
+        //     'a_nilai_ph' => 'required|integer|min:0|max:100',
+        //     'a_nilai_pts' => 'required|integer|min:0|max:100',
+        //     'a_nilai_pas' => 'required|integer|min:0|max:100',
+        // ]);
+
         $array_tugas = $request->get('a_nilai_tugas');
         $array_ph = $request->get('a_nilai_ph');
         $array_pts = $request->get('a_nilai_pts');

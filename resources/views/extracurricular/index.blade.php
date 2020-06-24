@@ -38,7 +38,9 @@
                                             <th>#</th>
                                             <th>NAMA EKSKUL</th>
                                             <th>DESKRIPSI</th>
-                                            <th></th>
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                            
+                                                <th></th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -48,6 +50,7 @@
                                             <td>{{ $i++ }}</td>
                                             <td>{{ $e->NAME }}</td>
                                             <td>{{ $e->DESCRIPTION }}</td>
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")     
                                             <td>
                                                 <a href="{{ route ('extracurricular.edit', $e->id )}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pencil"></i>
@@ -60,6 +63,7 @@
                                                     </button>
                                                 </form>                                            
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                     </tbody>

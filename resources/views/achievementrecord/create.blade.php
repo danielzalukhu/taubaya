@@ -34,7 +34,7 @@
                                         <label>Tanggal</label>
                                         <input name="ar_date" type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{old('ar_date')}}">            
                                         @if($errors->has('ar_date'))
-                                            <span class="help-block">{{$errors->first('ar_date')}}</span>
+                                            <span class="help-block" style="color: red">*Tanggal wajib diisi</span>
                                         @endif
                                     </div>
 
@@ -47,7 +47,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
-                                            <span class="help-block">{{$errors->first('ar_student_name')}}</span>
+                                            <span class="help-block" style="color: red">*Pilih minimal 1 kelas</span>
                                         @endif
                                     </div>
                                     @endif
@@ -60,7 +60,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
-                                            <span class="help-block">{{$errors->first('ar_student_name')}}</span>
+                                            <span class="help-block" style="color: red">*Pilih minimal 1 daftar penghargaan</span>
                                         @endif
                                     </div>
 
@@ -80,7 +80,7 @@
                                         <label>Deskripsi</label>            
                                         <textarea name="ar_desc" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('ar_desc')}}</textarea>
                                         @if($errors->has('ar_desc'))
-                                            <span class="help-block">{{$errors->first('ar_desc')}}</span>
+                                            <span class="help-block" style="color: red">*Deksripsi wajib diisi</span>
                                         @endif
                                     </div>
                                     

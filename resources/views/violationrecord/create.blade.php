@@ -34,7 +34,7 @@
                                         <label>Tanggal</label>
                                         <input name="vr_date" type="date" class="form-control input-violation-date" aria-describedby="emailHelp" value="{{old('vr_date')}}">            
                                         @if($errors->has('vr_date'))
-                                            <span class="help-block">{{$errors->first('vr_date')}}</span>
+                                            <span class="help-block" style="color: red">*Tanggal wajib diisi</span>
                                         @endif
                                     </div>
 
@@ -47,7 +47,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
-                                            <span class="help-block"></span>
+                                            <span class="help-block" style="color: red">*Wajib pilih 1 kelas</span>
                                         @endif
                                     </div>
                                     @endif
@@ -60,7 +60,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
-                                            <span class="help-block">{{$errors->first('vr_student_name')}}</span>
+                                            <span class="help-block" style="color: red">*Wajib pilih 1 siswa</span>
                                         @endif
                                     </div>
 
@@ -72,7 +72,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('vr_violation_name'))
-                                            <span class="help-block">{{$errors->first('vr_violation_name')}}</span>
+                                            <span class="help-block" style="color: red">*Wajib pilih 1 daftar pelanggaran</span>
                                         @endif
                                     </div>
 
@@ -80,7 +80,7 @@
                                         <label>Deskripsi</label>            
                                         <textarea name="vr_desc" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_desc')}}</textarea>
                                         @if($errors->has('vr_desc'))
-                                            <span class="help-block">{{$errors->first('vr_desc')}}</span>
+                                            <span class="help-block" style="color: red">*Deksripsi wajib diisi</span>
                                         @endif
                                     </div>
 
@@ -88,7 +88,7 @@
                                         <label>Hukuman</label>
                                         <textarea name="vr_punishment" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_punishment')}}</textarea>
                                         @if($errors->has('vr_punishment'))
-                                            <span class="help-block">{{$errors->first('vr_punishment')}}</span>
+                                            <span class="help-block" style="color: red">*Hukuman wajib diisi</span>
                                         @endif
                                     </div>
 

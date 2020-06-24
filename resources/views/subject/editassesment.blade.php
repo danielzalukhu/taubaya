@@ -69,7 +69,7 @@
                                                 <br>
                                             @endforeach
                                         @if($errors->has('a_nilai_tugas'))
-                                            <span class="help-block">{{$errors->first('a_nilai_tugas')}}</span>
+                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
                                         @endif
                                     </div>
 
@@ -83,7 +83,7 @@
                                                 <br>
                                             @endforeach
                                         @if($errors->has('a_nilai_ph'))
-                                            <span class="help-block">{{$errors->first('a_nilai_ph')}}</span>
+                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
                                         @endif
                                     </div>
 
@@ -96,7 +96,7 @@
                                                 <input name="a_nilai_pts[]" type="number" class="form-control" value="{{ $score }}">            
                                             @endforeach
                                         @if($errors->has('a_nilai_pts'))
-                                            <span class="help-block">{{$errors->first('a_nilai_pts')}}</span>
+                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
                                         @endif
                                     </div>
 
@@ -109,7 +109,7 @@
                                                 <input name="a_nilai_pas[]" type="number" class="form-control" value="{{ $score }}">            
                                             @endforeach
                                         @if($errors->has('a_nilai_pas'))
-                                            <span class="help-block">{{$errors->first('a_nilai_pas')}}</span>
+                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
                                         @endif
                                     </div>
 

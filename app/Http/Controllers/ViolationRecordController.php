@@ -280,6 +280,14 @@ class ViolationRecordController extends Controller
      */
     public function store(Request $request)
     {   
+        $request->validate([
+            'vr_date' => 'required',
+            'vr_desc' => 'required',
+            'vr_punishment' => 'required',
+            'vr_student_name' => 'required',
+            'vr_violation_name' => 'required',
+        ]);
+        
         $tahun_ajaran = DB::select('SELECT *
                                     FROM `academic_years`
                                     WHERE id = (SELECT MAX(id) as id 
@@ -385,6 +393,14 @@ class ViolationRecordController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'vr_date' => 'required',
+            'vr_desc' => 'required',
+            'vr_punishment' => 'required',
+            'vr_student_name' => 'required',
+            'vr_violation_name' => 'required',
+        ]);
+        
         $catatan_pelanggaran = ViolationRecord::find($id);
 
         $pelanggaran = Violation::all();

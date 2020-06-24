@@ -142,7 +142,7 @@ class ExtracurricularController extends Controller
         $this->validate($request, [
             'e_ekskul_name' => 'required',
             'e_student_name' => 'required',
-            'e_nilai' => 'required',
+            'e_nilai' => 'required|integer|min:0|max:100',
             'e_desc' => 'required',
             ]);
          

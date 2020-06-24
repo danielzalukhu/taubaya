@@ -31,7 +31,7 @@
                                         <label>Tanggal</label>
                                         <input name="vr_date" type="date" class="form-control"  value="{{$catatan_pelanggaran->DATE}}">            
                                         @if($errors->has('vr_date'))
-                                            <span class="help-block">{{$errors->first('vr_date')}}</span>
+                                            <span class="help-block" style="color: red">*Tanggal wajib diisi</span>
                                         @endif
                                     </div>
 
@@ -77,7 +77,7 @@
                                         <label>Deskripsi</label>            
                                         <textarea name="vr_desc" class="form-control" rows="3">{{ $catatan_pelanggaran->DESCRIPTION }}</textarea>
                                         @if($errors->has('vr_desc'))
-                                            <span class="help-block">{{$errors->first('vr_desc')}}</span>
+                                            <span class="help-block" style="color: red">*Deskripsi wajib diisi</span>
                                         @endif
                                     </div>
 
@@ -85,7 +85,7 @@
                                         <label>Hukuman</label>
                                         <textarea name="vr_punishment" class="form-control" rows="3">{{ $catatan_pelanggaran->PUNISHMENT }}</textarea>
                                         @if($errors->has('vr_punishment'))
-                                            <span class="help-block">{{$errors->first('vr_punishment')}}</span>
+                                            <span class="help-block" style="color: red">*Hukuman wajib diisi</span>
                                         @endif
                                     </div>
 

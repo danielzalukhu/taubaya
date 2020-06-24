@@ -36,7 +36,9 @@
                                         <th>DEKSRIPSI</th>
                                         <th>TINGKAT</th>
                                         <th>POIN</th>
+                                        @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                                                                    
                                         <th></th>
+                                        @endif
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -48,6 +50,7 @@
                                             <td>{{$pe->DESCRIPTION}}</td>
                                             <td>{{$pe->GRADE}}</td>
                                             <td>{{$pe->POINT}}</td>
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                            
                                             <td>
                                                 <a href="{{ route ('achievement.edit', $pe->id )}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pencil"></i>
@@ -60,6 +63,7 @@
                                                     </button>
                                                 </form>                                            
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                     </tbody>

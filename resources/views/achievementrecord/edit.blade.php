@@ -35,7 +35,7 @@
                                         <label>Tanggal</label>
                                         <input name="ar_date" type="date" class="form-control"  value="{{$catatan_penghargaan->DATE}}">            
                                         @if($errors->has('ar_date'))
-                                            <span class="help-block">{{$errors->first('ar_date')}}</span>
+                                            <span class="help-block" style="color: red">*Tanggal wajib diisi</span>
                                         @endif
                                     </div>
 
@@ -81,7 +81,7 @@
                                         <label>Deskripsi</label>            
                                         <textarea name="ar_desc" class="form-control" rows="3">{{ $catatan_penghargaan->DESCRIPTION }}</textarea>
                                         @if($errors->has('ar_desc'))
-                                            <span class="help-block">{{$errors->first('ar_desc')}}</span>
+                                            <span class="help-block" style="color: red">*Deskripsi wajib diisi</span>
                                         @endif
                                     </div>
 

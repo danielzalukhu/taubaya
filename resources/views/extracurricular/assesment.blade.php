@@ -45,7 +45,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('e_ekskul_name'))
-                                            <span class="help-block">{{$errors->first('e_ekskul_name')}}</span>
+                                            <span class="help-block" style="color:red">*Wajib memilih satu ekskul</span>
                                         @endif
                                     </div>                                
 
@@ -58,7 +58,7 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
-                                            <span class="help-block">{{$errors->first('ar_student_name')}}</span>
+                                            <span class="help-block" style="color:red">*Wajib memilih satu kelas</span>
                                         @endif
                                     </div>
                                     @endif
@@ -71,15 +71,15 @@
                                             @endforeach
                                         </select>
                                         @if($errors->has('a_type'))
-                                            <span class="help-block">{{$errors->first('e_student_name')}}</span>
+                                            <span class="help-block" style="color:red">*Wajib memilih satu siswa</span>
                                         @endif
                                     </div>
 
                                     <div class="form-group{{ $errors->has('e_nilai') ? 'has-error' : '' }} ">
                                         <label>Nilai</label>
-                                        <input name="e_nilai" type="number" class="form-control" value="">            
+                                        <input name="e_nilai" type="number" class="form-control" value="{{old('e_nilai')}}">            
                                         @if($errors->has('e_nilai'))
-                                            <span class="help-block">{{$errors->first('e_nilai')}}</span>
+                                            <span class="help-block" style="color:red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
                                         @endif
                                     </div>
 
@@ -87,7 +87,7 @@
                                         <label>Deskripsi</label>            
                                         <textarea name="e_desc" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('e_desc')}}</textarea>
                                         @if($errors->has('e_desc'))
-                                            <span class="help-block">{{$errors->first('e_desc')}}</span>
+                                            <span class="help-block" style="color:red">*Deskripsi wajib diisi</span>
                                         @endif
                                     </div>
 

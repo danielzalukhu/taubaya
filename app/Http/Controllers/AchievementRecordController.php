@@ -282,6 +282,13 @@ class AchievementRecordController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'ar_student_name' => 'required',
+            'ar_achievement_name' => 'required',
+            'ar_date' => 'required',
+            'ar_desc' => 'required',
+        ]);
+
         $date = $request->get('ar_date');
         $request_date = Carbon::parse($date);
 
@@ -360,6 +367,13 @@ class AchievementRecordController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'ar_student_name' => 'required',
+            'ar_achievement_name' => 'required',
+            'ar_date' => 'required',
+            'ar_desc' => 'required',
+        ]);
+        
         $catatan_penghargaan = AchievementRecord::find($id);
 
         $date = $request->get('ar_date');
