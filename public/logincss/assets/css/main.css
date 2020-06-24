@@ -1004,7 +1004,8 @@ ul.activity-list > li {
     width: 42%;
     height: 100%;
     padding: 0 30px;
-    text-align: center; }
+    color: white;
+    text-align: center;}
     .auth-box .left:before {
       display: inline-block;
       vertical-align: middle;
@@ -1056,7 +1057,8 @@ ul.activity-list > li {
   .auth-box .lead {
     margin-top: 5px;
     font-size: 18px;
-    text-align: center; }
+    text-align: center; 
+    color: orange}
   .auth-box .form-auth-small .btn {
     margin-top: 20px; }
   .auth-box .form-auth-small .element-left {

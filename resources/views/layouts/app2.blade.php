@@ -30,22 +30,36 @@
 					<div class="left">
 						<div class="content">
 							<div class="header">
-								<div class="logo text-center"><img src="{{ asset('logincss/logo-sma.png') }}" alt="Klorofil Logo"></div>
-								<p class="lead">SELAMAT DATANG</p>
+								<!-- <div class="logo text-center"><img src="{{ asset('logincss/logo-sma.png') }}" alt="Klorofil Logo"></div> -->
+								<h1><b>SELAMAT DATANG</b></h1>
+								<?php date_default_timezone_set('Asia/Jakarta'); ?>
+								<p class="lead">{{date("D")}}, {{ date("d-m-Y H:i:s") }}</p>
 							</div>
-							<form class="form-auth-small" action="{{ route ('login') }}" method="post">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-								<div class="form-group">
-									<label for="signin-email" class="control-label sr-only">Email</label>
-									<input name="email" type="email" class="form-control" id="signin-email"  placeholder="Email">
+							<form method="POST" action="{{ route('login') }}">
+								@csrf
+								<div class="form-group row">
+									<div class="col-md-12">
+										<input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus
+										placeholder="Email">										
+									</div>
 								</div>
-								<div class="form-group">
-									<label for="signin-password" class="control-label sr-only">Password</label>
-									<input name="password" type="password" class="form-control" id="signin-password"  placeholder="Password">
-								</div>								
+								<div class="form-group row">
+									<div class="col-md-12">
+										<input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required
+										placeholder="Password">
+										@if ($errors->has('password'))
+											<span class="invalid-feedback" role="alert">
+												<strong>{{ $errors->first('password') }}</strong>
+											</span>
+										@endif
+									</div>
+								</div>
+								@if ($errors->has('email'))
+									<span class="invalid-feedback" role="alert" style="color: red">
+										{{ $errors->first('email') }}
+									</span>
+								@endif 
 								<button type="submit" class="btn btn-primary btn-lg btn-block">LOGIN</button>
-								
 							</form>
 						</div>
 					</div>
