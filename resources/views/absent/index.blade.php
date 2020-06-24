@@ -204,7 +204,6 @@
         var absentType = $(this).attr('absent-type')
         var gradeId = $(this).attr('grade-id')
         var academicYearId = $('#selector-dropdown-absentrecord-year').val()
-        // console.log(absentType, gradeId, academicYearId)
         $.ajax({
             url: '{{ route("absent.detailAbsentEachType") }}',
             type: 'get',
@@ -293,7 +292,6 @@
             }
         })
     }))
-    // END ROLE
 
     $('#tbody-absent-each-grade-list').on('click', '.button-detail', (function(){
         var absentType = $(this).attr('absent-type')
@@ -309,61 +307,19 @@
                 $('#tbody-detail-absent-each-type-list').empty()            
                 
                 result.forEach(function(obj){
-                    var route =  "{{ route('absent.edit', ':id') }}"  
-                    route = route.replace(':id', `${obj.id}`)
-                    
-                    var route_del = "{{ route ('absent.destroy', ':id' )}}"
-                    route_del = route_del.replace(':id', `${obj.id}`)
-
-                    var route_del = "{{ route ('achievementrecord.destroy', ':id' )}}"
-                    route_del = route_del.replace(':id', `${obj.id}`)
-
-                    var $role_teacher = "{{ Auth::guard('web')->user()->staff->ROLE === "TEACHER" }}"
-                    var $role_headmaster = "{{ Auth::guard('web')->user()->staff->ROLE === "HEADMASTER" }}"
-
-                    if($role_teacher) {
-                        $('#tbody-detail-absent-each-type-list').append(
-                            `
-                            <tr>
-                                <td style="width: 30px">${obj.id}</td>
-                                <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
-                                <td style="width: 80px">${obj.TYPE}</td>
-                                <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
-                                <td style="width: 75px">${obj.START_DATE}</td>
-                                <td style="width: 75px">${obj.END_DATE}</td>
-                                <td style="width: 150px">${obj.DESCRIPTION}</td>      
-                                <td style="width: 70px">                            
-                                    <a href=${route}  class="btn btn-warning btn-sm">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <form action=${route_del} method="POST" class="inline">
-                                        @method('delete')
-                                        @csrf
-                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" value="DELETE">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>                      
-                            </tr>
-                            `
-                        )
-                    } else if ($role_headmaster) {
-                        $('#tbody-detail-absent-each-type-list').append(
-                            `
-                            <tr>
-                                <td style="width: 30px">${obj.id}</td>
-                                <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
-                                <td style="width: 80px">${obj.TYPE}</td>
-                                <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
-                                <td style="width: 75px">${obj.START_DATE}</td>
-                                <td style="width: 75px">${obj.END_DATE}</td>
-                                <td style="width: 150px">${obj.DESCRIPTION}</td>                           
-                            </tr>
-                            `
-                        )
-                    }
-
-
+                    $('#tbody-detail-absent-each-type-list').append(
+                        `
+                        <tr>
+                            <td style="width: 30px">${obj.id}</td>
+                            <td style="width: 110px">${obj.FNAME} ${obj.LNAME}</td>
+                            <td style="width: 80px">${obj.TYPE}</td>
+                            <td style="width: 100px">${obj.TIPETHNAJARAN}-${obj.NAME}</td>
+                            <td style="width: 75px">${obj.START_DATE}</td>
+                            <td style="width: 75px">${obj.END_DATE}</td>
+                            <td style="width: 150px">${obj.DESCRIPTION}</td>                           
+                        </tr>
+                        `
+                    )
                 })
                 $('#modalDetailAbsentEachType').modal('show')
             },
@@ -372,6 +328,7 @@
             }
         })
     }))
+    // END ROLE
 
     $('#selector-dropdown-absentrecord-year').change(function(){
         var academicYearId = $(this).val()
@@ -382,14 +339,11 @@
 
     var types = {!! json_encode($type) !!}
     var dataGraph = {!! json_encode($data) !!}
-   
     var totalDayEachAcademicYear = {!! json_encode($count_total_day_each_ay) !!}
     var totalAmountExceptPresent = 0
     var present_percentage = 0
-    console.log(totalDayEachAcademicYear)
     var dataSeries = []
     var obj_present = {}
-
     types.forEach(function(item){   
         dataGraph.forEach(function(obj){
             if(obj.TIPE == item.TIPE){
@@ -397,13 +351,11 @@
                     name: item.TIPE,
                     y: obj.JUMLAH
                 })
-                
                 totalAmountExceptPresent = totalAmountExceptPresent + obj.JUMLAH
                 present_percentage = totalDayEachAcademicYear - totalAmountExceptPresent
             }
         })          
     })   
-
     if(Array.isArray(dataGraph) == dataGraph.length){
         obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
         dataSeries.push(obj_present)           
@@ -412,11 +364,9 @@
         obj_present = {name: 'PRESENT', y: totalDayEachAcademicYear, sliced: true, selected: true}        
         dataSeries.push(obj_present)      
     }  
-
     Highcharts.setOptions({
         colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
     });
-
     Highcharts.chart('absentChartStatistic', {
         chart: {
             plotBackgroundColor: null,
