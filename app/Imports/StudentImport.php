@@ -26,7 +26,6 @@ class StudentImport implements ToCollection
 
     public function collection(Collection $collection)
     {
-        // dd($collection);
         foreach($collection as $key => $row)
         {          
             if($key >= 3)
@@ -42,8 +41,8 @@ class StudentImport implements ToCollection
                 if($key >= 5)
                 {
                     $student_full_name = $row[5];
-                    $studentName = explode(" ", $row[5], 2); 
-
+                    $studentName = explode(" ", $student_full_name, 2); 
+                    
                     $siswa = new Student();
                     $siswa->NISN = $row[4];
                     $siswa->FNAME = $studentName[0];
@@ -78,3 +77,4 @@ class StudentImport implements ToCollection
         return $kelas;                            
     }
 }
+

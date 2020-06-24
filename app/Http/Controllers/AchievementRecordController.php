@@ -38,7 +38,7 @@ class AchievementRecordController extends Controller
         }
 
         $catatan_penghargaan = $this->showAchievement($request->session()->get('session_user_id'), $academic_year_id);        
-
+        // dd($catatan_penghargaan);
         // UNTUK GRAFIK
 
         $type = Achievement::select(DB::raw('GRADE AS TINGKAT'))->groupBy('TINGKAT')->get();          
@@ -123,6 +123,7 @@ class AchievementRecordController extends Controller
                                         ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->groupBy('achievement_records.STUDENTS_ID')
+                                        ->orderBy('achievement_records.id', 'DESC')
                                         ->get();
             
             $count_nasional = $this->countAchievementPerGrade($nasional, $ay, $kelas_guru, $selected_student)->first()->JMLH;
@@ -163,6 +164,7 @@ class AchievementRecordController extends Controller
                                         ->where('achievement_records.ACADEMIC_YEAR_ID', $ay)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->groupBy('achievement_records.STUDENTS_ID')
+                                        ->orderBy('achievement_records.id', 'DESC')
                                         ->get();   
                                         
             $count_nasional = $this->countAchievementPerGradeKepsek($nasional, $ay, $selected_student)->first()->JMLH;
@@ -302,7 +304,7 @@ class AchievementRecordController extends Controller
 
         if($check == false)
         {
-            return redirect('achievementrecord')->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+            return redirect(action('AchievementRecordController@create'))->with('error', 'Input tanggal ' .  $request->get('ar_date') . ' tidak sesuai dengan tahun ajaran yang berlaku');
         }
         else
         {
@@ -317,7 +319,7 @@ class AchievementRecordController extends Controller
         }
 
         $catatan_penghargaan->save();
-        return redirect('achievementrecord')->with('sukses', 'Daftar penghargaan baru berhasil dibuat');
+        return redirect('achievementrecord')->with('sukses', 'Data penghargaan id siswa ' . $request->get('ar_student_name') . ' berhasil dicatat');
     }
 
     /**
@@ -389,7 +391,7 @@ class AchievementRecordController extends Controller
 
         if($check == false)
         {
-            return redirect(action('AchievementRecordController@edit', $catatan_penghargaan->id))->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+            return redirect(action('AchievementRecordController@edit', $catatan_penghargaan->id))->with('error', 'Input tanggal ' . $request->get('ar_date') . ' tidak sesuai dengan tahun ajaran yang berlaku');
         }
         else
         {                                

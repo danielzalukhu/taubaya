@@ -8,16 +8,16 @@
 @section('content')
     <div class="main">
         <div class="main-content">
-            @if(session('sukses'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('sukses') }}
-                </div>
-            @elseif(session('error'))
-                <div class="alert alert-warning" role="alert">
-                    {{ session('error') }}
-                </div>
-            @endif
             <div class="container-fluid">
+                @if(session('sukses'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('sukses') }}
+                    </div>
+                @elseif(session('error'))                    
+                    <div class="alert alert-warning" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
@@ -34,7 +34,7 @@
                                     <div class="form-group{{ $errors->has('ar_date') ? 'has-error' : '' }} ">
                                         <label>Tanggal</label>
                                         <input name="ar_date" type="date" class="form-control"  value="{{$catatan_penghargaan->DATE}}">            
-                                        @if($errors->has('ar_date'))
+                                        @if($errors->has('ar_date'))          
                                             <span class="help-block" style="color: red">*Tanggal wajib diisi</span>
                                         @endif
                                     </div>
