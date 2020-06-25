@@ -194,7 +194,7 @@ class DashboardController extends Controller
                                 ->groupBy('students.id')
                                 ->orderBy('violation_records.id', 'DESC')->take(5)
                                 ->having('TOTALPOIN', ">=", 50 )
-                                ->get();                             
+                                ->get();                
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
             $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;   
@@ -383,16 +383,10 @@ class DashboardController extends Controller
                                 ->groupBy('KATEGORI')->groupBy('BULAN')
                                 ->orderBy('BULAN', 'ASC')->get();
         }
-
-        // dd($data);
     }
 
     public function showAbsent($iduser)
     {
-        // asumsikan:
-        // role student -> beri peringatan jika KEHADIRANNYA hampir atau sudah kurang dari 90% dan grafiknya
-        // role headmaster -> 
-        // role teacher -> samain aja kyk halaman absent index role teacher
         $academic_year_id = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         $count_total_day_each_ay = AcademicYear::select(DB::raw('DATEDIFF(END_DATE, START_DATE) AS TOTALHARI'))
@@ -419,7 +413,7 @@ class DashboardController extends Controller
                             ->where('ACADEMIC_YEAR_ID', $academic_year_id)
                             ->whereIn('STUDENTS_ID', $arr_siswa)
                             ->groupBy('TIPE', 'TAHUNAJARAN')
-                            ->get();                  
+                            ->get();                                     
             
             $absen = Absent::where('ACADEMIC_YEAR_ID', $academic_year_id)->whereIn('STUDENTS_ID', $arr_siswa)->get();
         }
@@ -427,7 +421,7 @@ class DashboardController extends Controller
             $data = Absent::select(DB::raw('TYPE AS TIPE'), DB::raw('ACADEMIC_YEAR_ID AS TAHUNAJARAN'), DB::raw('COUNT(*) AS JUMLAH'))                                    
                             ->where('ACADEMIC_YEAR_ID', $academic_year_id)                            
                             ->groupBy('TIPE', 'TAHUNAJARAN')
-                            ->get();  
+                            ->get();      
         }       
         
         // $value["count_total_day_each_ay"] = $count_total_day_each_ay;
