@@ -27,7 +27,7 @@
                         </div>                                                 
                         <div class="box">                                                      
                             <div class="box-header">                             
-                                @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                                @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
                                     <div class="row">
                                         <a href="{{ route('subject.createIncomplete') }}" type="button" class="btn btn-primary btn-sm pull-right"  style="margin-right: 15px;">BUAT DAFTAR KETIDAKTUNTASAN</a>
                                     </div>                                             

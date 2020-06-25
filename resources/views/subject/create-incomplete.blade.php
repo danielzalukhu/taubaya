@@ -37,6 +37,7 @@
                                     @endif
                                 </div>
 
+                                @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")
                                 <div class="form-group">
                                     <label>Kelas</label>                
                                     <select id="selected_grade" class="form-control select2" style="width: 100%;">
@@ -48,7 +49,8 @@
                                         <span class="help-block"></span>
                                     @endif
                                 </div>
-                                
+                                @endif
+
                                 <div class="form-group{{ $errors->has('vr_student_name') ? 'has-error' : '' }} ">
                                     <label>Nama Siswa</label>
                                     <select name="vr_student_name" class="form-control select2" style="width: 100%;">

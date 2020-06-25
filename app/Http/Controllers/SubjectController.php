@@ -111,9 +111,22 @@ class SubjectController extends Controller
             $siswa = GradeStudent::where('GRADES_ID', $request->gradeId)
                                         ->where('ACADEMIC_YEAR_ID', $selected_student)                            
                                         ->get();
+            
         }        
         else{
             $siswa = GradeStudent::where('GRADES_ID', 1)->where('ACADEMIC_YEAR_ID', $selected_student) ->get();
+        }
+
+        if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){ 
+            $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id; 
+
+            $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
+        }  
+        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+            $siswa = $default_student;
+        }
+        else{
+            $siswa = $default_student;
         }
 
         return view('subject.create-incomplete', compact('tahun_ajaran', 'kelas', 'siswa', 'pelanggaran'));
@@ -138,7 +151,7 @@ class SubjectController extends Controller
             $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))->first()->id;            
             
             $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
-        
+            
             $arr_siswa = [];                                
             foreach($siswa as $s){
                 array_push($arr_siswa, $s->STUDENTS_ID);
@@ -228,7 +241,7 @@ class SubjectController extends Controller
             ]);
 
             $ketidaktuntasan->save();
-            return redirect('incomplete')->with('sukses', 'Incomplete Report has been created');
+            return redirect('incomplete')->with('sukses', 'Catatan ketidaktuntasan berhasil dibuat');
         }
     }
     
