@@ -4,13 +4,15 @@
     <div class="main">
         <div class="main-content">
             <div class="container-fluid">
-                @if(session('sukses'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('sukses') }}
+                @if ($sukses = Session::get('sukses'))
+                    <div class="alert alert-success alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button> 
+                        <strong>{{ $sukses }}</strong>
                     </div>
-                @elseif(session('error'))
-                    <div class="alert alert-warning" role="alert">
-                        {{ session('error') }}
+                @elseif($error = Session::get('error'))    
+                    <div class="alert alert-warning alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button> 
+                        <strong>{{ $error }}</strong>
                     </div> 
                 @endif
                 <div class="row">
@@ -30,7 +32,7 @@
                                         <label>Tanggal</label>
                                         <input name="vr_date" type="date" class="form-control"  value="{{$ketidaktuntasan->DATE}}">            
                                         @if($errors->has('vr_date'))
-                                            <span class="help-block">{{$errors->first('vr_date')}}</span>
+                                            <span class="help-block" style="color: red">*Tanggal wajib diisi</span>
                                         @endif
                                     </div>
 
@@ -62,7 +64,7 @@
                                         <label>Deskripsi</label>            
                                         <textarea name="vr_desc" class="form-control" rows="3">{{ $ketidaktuntasan->DESCRIPTION }}</textarea>
                                         @if($errors->has('vr_desc'))
-                                            <span class="help-block">{{$errors->first('vr_desc')}}</span>
+                                            <span class="help-block" style="color: red">*Deskripsi wajib diisi</span>
                                         @endif
                                     </div>
 

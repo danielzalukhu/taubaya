@@ -345,7 +345,7 @@
 
             success: function(result){
                 $('#tbody-violation-academic-year').empty()
-                
+                console.log(result)
                 result.forEach(function(obj){
                     $('#tbody-violation-academic-year').append(                        
                         `
@@ -353,6 +353,7 @@
                             <td>${obj.DATE}</td>
                             <td>${obj.NAME}</td>
                             <td>${obj.DESCRIPTION}</td>
+                            <td>${obj.PUNISHMENT}</td>
                             <td>${obj.TOTAL}</td>
                         </tr>
 

@@ -97,6 +97,7 @@ class StudentController extends Controller
                                             ->where('STUDENTS_ID', '=', $id)
                                             ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'))
                                             ->where('violations.NAME', 'NOT LIKE', 'TTS%')
+                                            ->orderBy('violation_records.DATE', 'DESC')
                                             ->get();
 
         $violation_point = ViolationRecord::select(DB::raw('SUM(TOTAL) AS POINT'))                        
@@ -112,6 +113,7 @@ class StudentController extends Controller
                                             ->select('achievements.*', 'achievement_records.*')
                                             ->where('STUDENTS_ID', '=', $id)
                                             ->where('ACADEMIC_YEAR_ID', '=', $request->session()->get('session_academic_year_id'))
+                                            ->orderBy('achievement_records.DATE', 'DESC')
                                             ->get();
             
         $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;

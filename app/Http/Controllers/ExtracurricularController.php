@@ -159,7 +159,7 @@ class ExtracurricularController extends Controller
 
         $ekskul_report->save();
         
-        return redirect('extracurricular/assesment')->with('sukses', 'Berhasil menambah nilai ekskul siswa');
+        return redirect('extracurricular')->with('sukses', 'Berhasil menambah nilai ekskul siswa');
     }
 
     public function editAssesment($id)

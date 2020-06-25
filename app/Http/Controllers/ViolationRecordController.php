@@ -469,10 +469,11 @@ class ViolationRecordController extends Controller
     public function ajaxChangeViolationRecord(Request $request)
     {        
         $ajaxPelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')                                       
-                                        ->select('violation_records.DATE', 'violations.NAME', 'violations.DESCRIPTION', 'violation_records.TOTAL')
+                                        ->select('violation_records.*', 'violations.*')
                                         ->where('violation_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                         ->where('violation_records.STUDENTS_ID', $request->studentId)
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
+                                        ->orderBy('violation_records.DATE', 'DESC')
                                         ->get();
 
         return $ajaxPelanggaran;

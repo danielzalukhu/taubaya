@@ -172,8 +172,8 @@
                           <tr>
                             <th>NISN</th>
                             <th>NAMA SISWA</th>
-                            @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
-                                <th>KELAS</th>
+                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                              <th>KELAS</th>
                             @endif
                             <th>TOTAL PELANGGARAN</th>
                             <th>TOTAL POIN</th>
@@ -184,7 +184,7 @@
                             <tr>
                               <td>{{ $sb->NISN }}</td>
                               <td>{{ $sb->FNAME }}{{" "}}{{ $sb->LNAME }}</td>
-                              @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+                              @if(Auth::guard('web')->user()->ROLE === "STAFF")
                                 <td>{{ $sb->NAMAKELAS }}</td>
                               @endif
                               <td>{{ $sb->BANYAKPELANGGARAN }}</td>
@@ -240,9 +240,9 @@
                             <th>TANGGAL</th>
                             <th>NISN</th>
                             <th>NAMA SISWA</th>
-                              @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
-                                <th>KELAS</th>
-                              @endif
+                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                              <th>KELAS</th>
+                            @endif
                             <th>KETERANGAN</th>                            
                           </tr>
                         </thead>
@@ -254,7 +254,7 @@
                             <td><b>{{date('d-m-Y', strtotime($dk->DATE))}}</b></td>
                             <td>{{ $dk->student->NISN }}</td>
                             <td>{{ $dk->student->FNAME }}{{" "}}{{ $dk->student->LNAME }}</td>
-                            @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
+                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
                               <td>{{ $dk->NAMAKELAS }}</td>
                             @endif
                             <td>{{ $dk->DESCRIPTION }}</td>
@@ -298,8 +298,8 @@
                           <tr>
                             <th>#</th>
                             <th>NAMA SISWA</th>
-                            @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
-                                <th>KELAS</th>
+                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                              <th>KELAS</th>
                             @endif
                             <th>JUMLAH PENGHARGAAN</th>
                             <th>POIN PENGHARGAAN</th>      
@@ -312,8 +312,8 @@
                           <tr>
                             <td>{{ $i++ }}</td>
                             <td>{{ $gad->student->FNAME }}{{" "}}{{ $gad->student->LNAME }}</td>
-                            @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")
-                                <td>{{ $gad->NAMAKELAS }}</td>
+                            @if(Auth::guard('web')->user()->ROLE === "STAFF")
+                              <td>{{ $gad->NAMAKELAS }}</td>
                             @endif
                             <td>{{ $gad->BANYAKPENGHARGAAN }}</td>
                             <td>{{ $gad->POINPENGHARGAAN }}</td>

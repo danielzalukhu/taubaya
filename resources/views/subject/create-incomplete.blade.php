@@ -7,18 +7,18 @@
 @section('content')
     <div class="main">
         <div class="main-content">
-            @if ($sukses = Session::get('sukses'))
-                <div class="alert alert-success alert-block">
-                    <button type="button" class="close" data-dismiss="alert">×</button> 
-                    <strong>{{ $sukses }}</strong>
-                </div>
-            @elseif($error = Session::get('error'))    
-                <div class="alert alert-danger alert-block">
-                    <button type="button" class="close" data-dismiss="alert">×</button> 
-                    <strong>{{ $error }}</strong>
-                </div> 
-            @endif
             <div class="container-fluid">
+                @if ($sukses = Session::get('sukses'))
+                    <div class="alert alert-success alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button> 
+                        <strong>{{ $sukses }}</strong>
+                    </div>
+                @elseif($error = Session::get('error'))    
+                    <div class="alert alert-warning alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button> 
+                        <strong>{{ $error }}</strong>
+                    </div> 
+                @endif
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="panel-heading">
@@ -33,7 +33,7 @@
                                     <label>Tanggal</label>
                                     <input name="vr_date" type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{old('vr_date')}}">            
                                     @if($errors->has('vr_date'))
-                                        <span class="help-block">{{$errors->first('vr_date')}}</span>
+                                        <span class="help-block" style="color: red">*Tanggal wajib diisi</span>
                                     @endif
                                 </div>
 
@@ -79,7 +79,7 @@
                                     <label>Deskripsi</label>
                                     <textarea name="vr_description" class="form-control" id="exampleFormControlTextarea1" rows="3">{{old('vr_desc')}}</textarea>
                                     @if($errors->has('vr_description'))
-                                        <span class="help-block">{{$errors->first('vr_description')}}</span>
+                                        <span class="help-block" style="color: red">*Deskripsi wajib diisi</span>
                                     @endif
                                 </div>
 

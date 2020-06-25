@@ -208,7 +208,14 @@ class SubjectController extends Controller
     }
 
     public function storeIncomplete(Request $request)
-    {           
+    {   
+        $this->validate($request, [
+            'vr_date' => 'required',
+            'vr_student_name' => 'required',
+            'vr_violation_name' => 'required',
+            'vr_description' => 'required',
+        ]);
+
         $point = 0;
         $hukuman = "-";
 
@@ -225,7 +232,7 @@ class SubjectController extends Controller
 
         if($check == false)
         {
-            return redirect('incomplete')->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+            return redirect(action('SubjectController@createIncomplete'))->with('error', 'Input tanggal ' . $request->get('vr_date')  . ' tidak sesuai dengan tahun ajaran yang berlaku');
         }
         else
         {
@@ -239,7 +246,7 @@ class SubjectController extends Controller
                 'TOTAL' => $point,
                 'ACADEMIC_YEAR_ID' => $request->session()->get('session_academic_year_id')
             ]);
-
+            
             $ketidaktuntasan->save();
             return redirect('incomplete')->with('sukses', 'Catatan ketidaktuntasan berhasil dibuat');
         }
@@ -259,6 +266,13 @@ class SubjectController extends Controller
 
     public function updateIncomplete(Request $request, $id)
     {
+        // $this->validate($request, [
+        //     'vr_date' => 'required',
+        //     'vr_student_name' => 'required',
+        //     'vr_violation_name' => 'required',
+        //     'vr_description' => 'required',
+        // ]);
+
         $ketidaktuntasan = ViolationRecord::find($id);
         
         $point = 0;
@@ -277,7 +291,7 @@ class SubjectController extends Controller
 
         if($check == false)
         {
-            return redirect(action('SubjectController@editIncomplete', $ketidaktuntasan->id))->with('error', 'Input tanggal tidak sesuai dengan tahun ajaran yang berlaku');
+            return redirect(action('SubjectController@editIncomplete', $ketidaktuntasan->id))->with('error', 'Input tanggal ' . $request->get('vr_date') . ' tidak sesuai dengan tahun ajaran yang berlaku');
         }
         else{
             $ketidaktuntasan->DATE = $request->get('vr_date');
