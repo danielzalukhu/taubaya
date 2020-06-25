@@ -317,13 +317,6 @@ class SubjectController extends Controller
     public function updateAssesment(Request $request, $id)
     {
         $laporan_mapel = SubjectReport::find($id);
-        
-        // $request->validate([
-        //     'a_nilai_tugas' => 'required|integer|min:0|max:100',
-        //     'a_nilai_ph' => 'required|integer|min:0|max:100',
-        //     'a_nilai_pts' => 'required|integer|min:0|max:100',
-        //     'a_nilai_pas' => 'required|integer|min:0|max:100',
-        // ]);
 
         $array_tugas = $request->get('a_nilai_tugas');
         $array_ph = $request->get('a_nilai_ph');
@@ -336,8 +329,15 @@ class SubjectController extends Controller
         $sum_nilai_tugas = 0;
         $rata_nilai_tugas = 0;
         $final_nilai_tugas = 0;
-        foreach($array_tugas as $tugas){
-            $sum_nilai_tugas = $sum_nilai_tugas + $tugas;
+        foreach($array_tugas as $tugas){                 
+            if($tugas < 0 || $tugas > 100){
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error', 'Nilai tidak boleh kurang dari 0 atau lebih dari 100');
+            } elseif ($tugas == null) {
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error_kosong', 'Nilai tidak boleh kosong');
+            }
+            else {
+                $sum_nilai_tugas = $sum_nilai_tugas + $tugas;
+            }            
         }
         $rata_nilai_tugas = $sum_nilai_tugas / count($array_tugas);
         $final_nilai_tugas = $rata_nilai_tugas * 0.1;
@@ -346,7 +346,13 @@ class SubjectController extends Controller
         $rata_nilai_ph = 0;
         $final_nilai_ph = 0;
         foreach($array_ph as $ph){
-            $sum_nilai_ph = $sum_nilai_ph + $ph;
+            if($tugas < 0 || $tugas > 100){
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error', 'Nilai tidak boleh kurang dari 0 atau lebih dari 100');
+            } elseif ($ph == null) {
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error_kosong', 'Nilai tidak boleh kosong');
+            } else {
+                $sum_nilai_ph = $sum_nilai_ph + $ph;
+            }    
         }
         $rata_nilai_ph = $sum_nilai_ph / count($array_ph);
         $final_nilai_ph = $rata_nilai_ph * 0.2;
@@ -355,7 +361,13 @@ class SubjectController extends Controller
         $rata_nilai_pts = 0;
         $final_nilai_pts = 0;
         foreach($array_pts as $pts){
-            $sum_nilai_pts = $sum_nilai_pts + $pts;
+            if($tugas < 0 || $tugas > 100){
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error', 'Nilai tidak boleh kurang dari 0 atau lebih dari 100');
+            } elseif ($tugas == null) {
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error_kosong', 'Nilai tidak boleh kosong');
+            } else {
+                $sum_nilai_pts = $sum_nilai_pts + $pts;
+            }
         }
         $rata_nilai_pts = $sum_nilai_pts / count($array_pts);
         $final_nilai_pts = $rata_nilai_pts * 0.3;
@@ -364,7 +376,13 @@ class SubjectController extends Controller
         $rata_nilai_pas = 0;
         $final_nilai_pas = 0;
         foreach($array_pas as $pas){
-            $sum_nilai_pas = $sum_nilai_pas + $pas;
+            if($tugas < 0 || $tugas > 100){
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error', 'Nilai tidak boleh kurang dari 0 atau lebih dari 100');
+            } elseif ($tugas == null) {
+                return redirect(action('SubjectController@editAssesment', $laporan_mapel->id))->with('error_kosong', 'Nilai tidak boleh kosong');
+            } else {
+                $sum_nilai_pas = $sum_nilai_pas + $pas;
+            }
         }
         $rata_nilai_pas = $sum_nilai_pas / count($array_pas);
         $final_nilai_pas = $rata_nilai_pas * 0.4;

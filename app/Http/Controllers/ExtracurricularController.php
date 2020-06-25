@@ -144,7 +144,7 @@ class ExtracurricularController extends Controller
             'e_student_name' => 'required',
             'e_nilai' => 'required|integer|min:0|max:100',
             'e_desc' => 'required',
-            ]);
+        ]);
          
         $ekskul_record = new ExtracurricularRecord();
         $ekskul_record->ACADEMIC_YEAR_ID = $request->session()->get('session_academic_year_id');

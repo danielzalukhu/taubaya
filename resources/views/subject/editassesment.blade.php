@@ -9,8 +9,12 @@
                         {{ session('sukses') }}
                     </div>
                 @elseif(session('error'))
-                    <div class="alert alert-warning" role="alert">
+                    <div class="alert alert-danger" role="alert">
                         {{ session('error') }}
+                    </div> 
+                @elseif(session('error_kosong'))
+                    <div class="alert alert-info" role="alert">
+                        {{ session('error_kosong') }}
                     </div> 
                 @endif
                 <div class="row">
@@ -61,55 +65,61 @@
 
                                     <div class="form-group{{ $errors->has('a_nilai_tugas') ? 'has-error' : '' }} ">
                                         <label>Nilai Tugas</label>
-                                            @php
-                                                $scores = json_decode($laporan_mapel->TUGAS);
-                                            @endphp
-                                            @foreach($scores as $score)
-                                                <input name="a_nilai_tugas[]" type="number" class="form-control" value="{{ $score }}">            
-                                                <br>
-                                            @endforeach
-                                        @if($errors->has('a_nilai_tugas'))
-                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
+                                        @php
+                                            $scores = json_decode($laporan_mapel->TUGAS);
+                                        @endphp
+                                        @foreach($scores as $score)
+                                            <input name="a_nilai_tugas[]" type="number" class="form-control" value="{{ $score }}">            
+                                        @endforeach                                        
+                                        @if(session('error'))   
+                                            <span class="help-block" style="color: red">*Ada salah satu nilai yang tidak valid</span>
+                                        @elseif(session('error_kosong'))
+                                            <span class="help-block" style="color: blue">*Ada salah satu input kosong</span>
                                         @endif
                                     </div>
 
                                     <div class="form-group{{ $errors->has('a_nilai_ph') ? 'has-error' : '' }} ">
                                         <label>Nilai PH</label>
-                                            @php
-                                                $scores = json_decode($laporan_mapel->PH);
-                                            @endphp
-                                            @foreach($scores as $score)
-                                                <input name="a_nilai_ph[]" type="number" class="form-control" value="{{ $score }}">            
-                                                <br>
-                                            @endforeach
-                                        @if($errors->has('a_nilai_ph'))
-                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
+                                        @php
+                                            $scores = json_decode($laporan_mapel->PH);
+                                        @endphp
+                                        @foreach($scores as $score)
+                                            <input name="a_nilai_ph[]" type="number" class="form-control" value="{{ $score }}">                                                       
+                                        @endforeach
+                                        @if(session('error'))   
+                                            <span class="help-block" style="color: red">*Ada salah satu nilai yang tidak valid</span>
+                                        @elseif(session('error_kosong'))
+                                            <span class="help-block" style="color: blue">*Ada salah satu input kosong</span>
                                         @endif
                                     </div>
 
                                     <div class="form-group{{ $errors->has('a_nilai_pts') ? 'has-error' : '' }} ">
                                         <label>Nilai PTS</label>
-                                            @php
-                                                $scores = json_decode($laporan_mapel->PTS);
-                                            @endphp
-                                            @foreach($scores as $score)
-                                                <input name="a_nilai_pts[]" type="number" class="form-control" value="{{ $score }}">            
-                                            @endforeach
-                                        @if($errors->has('a_nilai_pts'))
-                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
+                                        @php
+                                            $scores = json_decode($laporan_mapel->PTS);
+                                        @endphp
+                                        @foreach($scores as $score)
+                                            <input name="a_nilai_pts[]" type="number" class="form-control" value="{{ $score }}">            
+                                        @endforeach
+                                        @if(session('error'))   
+                                            <span class="help-block" style="color: red">*Input nilai pts tidak valid</span>
+                                        @elseif(session('error_kosong'))
+                                            <span class="help-block" style="color: blue">*Ada salah satu input kosong</span>                                            
                                         @endif
                                     </div>
 
                                     <div class="form-group{{ $errors->has('a_nilai_pas') ? 'has-error' : '' }} ">
                                         <label>Nilai PAS</label>
-                                            @php
-                                                $scores = json_decode($laporan_mapel->PAS);
-                                            @endphp
-                                            @foreach($scores as $score)
-                                                <input name="a_nilai_pas[]" type="number" class="form-control" value="{{ $score }}">            
-                                            @endforeach
-                                        @if($errors->has('a_nilai_pas'))
-                                            <span class="help-block" style="color: red">*Nilai tidak boleh kurang dari 0 atau lebih dari 100</span>
+                                        @php
+                                            $scores = json_decode($laporan_mapel->PAS);
+                                        @endphp
+                                        @foreach($scores as $score)
+                                            <input name="a_nilai_pas[]" type="number" class="form-control" value="{{ $score }}">            
+                                        @endforeach
+                                        @if(session('error'))   
+                                            <span class="help-block" style="color: red">*Input nilai pas tidak valid</span>
+                                        @elseif(session('error_kosong'))
+                                            <span class="help-block" style="color: blue">*Ada salah satu input kosong</span>
                                         @endif
                                     </div>
 
