@@ -27,13 +27,6 @@
                         </div>                                                 
                         <div class="box">                                                      
                             <div class="box-header">                             
-                                @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
-                                    <div class="row">
-                                        <a href="{{ route('subject.createIncomplete') }}" type="button" class="btn btn-primary btn-sm pull-right"  style="margin-right: 15px;">BUAT DAFTAR KETIDAKTUNTASAN</a>
-                                    </div>                                             
-                                @else
-                                                                                 
-                                @endif
                                 <h5 class="box-header-title"><b>TAHUN AJARAN:</b>                                      
                                     <span>
                                         <div class="btn-group">
@@ -45,9 +38,9 @@
                                                 @endforeach
                                             </select>                                            
                                         </div>                                        
-                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
-                                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
-                                        <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
+                                        @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER")                                        
+                                            <a href="{{ route('subject.createIncomplete') }}" type="button" class="btn btn-primary btn-sm pull-right">BUAT DAFTAR KETIDAKTUNTASAN</a>
+                                        @endif
                                     </span>       
                                 </h5>
                             </div>

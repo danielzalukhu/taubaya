@@ -177,6 +177,7 @@
                             @endif
                             <th>TOTAL PELANGGARAN</th>
                             <th>TOTAL POIN</th>
+                            <th></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -195,6 +196,11 @@
                                       <div class="btn btn-danger btn-sm">{{ $sb->TOTALPOIN }}</div>
                                   @endif 
                               </td>
+                              <td>
+                                <a href="{{ route('student.profile', ['id'=>$sb->id]) }}" title="Profil Siswa" class="btn btn-default btn-sm">
+                                  <i class="fa fa-user"></i>
+                                </a> 
+                              </td>
                             </tr>
                           @empty
                             <tr>
@@ -206,9 +212,20 @@
                     </div>
                   </div>                  
                   <div class="box-footer clearfix">
-                    <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-default  pull-right">Lihat Daftar Pelanggaran</a>
+                    <a href="{{route('violationrecord.index')}}" class="btn btn-sm btn-info  pull-right">Catatan Pelanggaran Lainnya..</a>
                   </div>
                 <div>
+              </div>
+            @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
+              <div class="col-lg-12">
+                @if( $grafik_absen_data["kehadiran"] < 95)
+                  <div class="alert alert-warning alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> PERHATIAN!</h4>
+                    Harap perhatikan kehadiaran Anda! Persentase kehadiran sekarang {{ $grafik_absen_data["kehadiran"] }} %, 
+                    jangan sampai dibawah 90%
+                  </div>
+                @endif
               </div>
             @endif
             </div>
@@ -269,7 +286,7 @@
                     </div>
                   </div> 
                   <div class="box-footer clearfix">
-                    <a href="{{route('subject.incompleteku')}}" class="btn btn-sm btn-default pull-right">Lihat Daftar Ketidaktuntasan</a>
+                    <a href="{{route('subject.incompleteku')}}" class="btn btn-sm btn-info pull-right">Daftar Catatan Ketidaktuntasan Lainnya ..</a>
                   </div>   
                 </div>
               </div>
@@ -318,8 +335,8 @@
                             <td>{{ $gad->BANYAKPENGHARGAAN }}</td>
                             <td>{{ $gad->POINPENGHARGAAN }}</td>
                             <td>
-                              <a href="{{ route('student.profile', ['id'=>$gad->student->id]) }}" title="Profil Siswa" class="btn btn-info btn-sm">
-                                <i class="fa fa-eye"></i>
+                              <a href="{{ route('student.profile', ['id'=>$gad->student->id]) }}" title="Profil Siswa" class="btn btn-default btn-sm">
+                                <i class="fa fa-user"></i>
                               </a> 
                             </td>
                           </tr>
@@ -333,7 +350,7 @@
                     </div>
                   </div>   
                   <div class="box-footer clearfix">
-                    <a href="{{route('achievementrecord.index')}}" class="btn btn-sm btn-default pull-right">Lihat Daftar Penghargaan</a>
+                    <a href="{{route('achievementrecord.index')}}" class="btn btn-sm btn-info pull-right">Daftar Penghargaan Lainnya ..</a>
                   </div>  
                 </div>
               </div>
@@ -407,80 +424,6 @@
 @stop
 
 @section('footer')
-<script src="https://code.highcharts.com/highcharts.js"></script>
 
-<script>
-    var datas = {!! json_encode($grafik_absen_data) !!}    
-
-    var types = datas.type
-    var dataGraph = datas.data
-    var totalDayEachAcademicYear = datas.count_total_day_each_ay
-    
-    var totalAmountExceptPresent = 0
-    var present_percentage = 0
-
-    var dataSeries = []
-    var obj_present = {}
-
-    types.forEach(function(item){   
-        dataGraph.forEach(function(obj){
-            if(obj.TIPE == item.TIPE){
-                dataSeries.push({
-                    name: item.TIPE,
-                    y: obj.JUMLAH
-                })
-
-                totalAmountExceptPresent = totalAmountExceptPresent + obj.JUMLAH
-                present_percentage = totalDayEachAcademicYear - totalAmountExceptPresent
-            }
-        })
-    })
-
-    obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
-    dataSeries.push(obj_present)      
-
-    Highcharts.setOptions({
-        colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
-    });
-
-    Highcharts.chart('dashboardAbsentChart', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        credits: {
-            enabled: false
-        },
-        title: {
-            text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                showInLegend: true
-            }
-        },
-        series: [{
-            name: 'JENIS ABSEN',
-            colorByPoint: true,
-            data: dataSeries
-        }]
-    });
-    
-</script>
 @stop 
 

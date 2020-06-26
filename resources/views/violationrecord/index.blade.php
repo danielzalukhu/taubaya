@@ -487,7 +487,7 @@
     })
     
     Highcharts.setOptions({
-        colors: ['#F21402', '#028CF2 ', '#E4F202 ', '028CF2']
+        colors: ['#F21402', '#D1EE18', '#000000']
     });
     
     Highcharts.chart('violationChartStatistic', {

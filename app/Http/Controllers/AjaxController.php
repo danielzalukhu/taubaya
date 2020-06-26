@@ -95,6 +95,7 @@ class AjaxController extends Controller
                                                      'students.FNAME', 'students.LNAME', 
                                                      'academic_years.TYPE', 'academic_years.NAME')
                                             ->where('STUDENTS_ID', $request->studentId)
+                                            ->where('violations.NAME', 'NOT LIKE', 'TTS%')
                                             ->where('violation_records.ACADEMIC_YEAR_ID', $request->academicYearId)
                                             ->orderBy('violation_records.id', 'DESC')
                                             ->get();

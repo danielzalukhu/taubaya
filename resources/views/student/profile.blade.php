@@ -345,7 +345,7 @@
 
             success: function(result){
                 $('#tbody-violation-academic-year').empty()
-                console.log(result)
+                
                 result.forEach(function(obj){
                     $('#tbody-violation-academic-year').append(                        
                         `
@@ -480,7 +480,7 @@
             data: {academicYearId: academicYearId, studentId: studentId},
 
             success: function(result){
-                // console.log(result)
+                console.log(result)
                 chartViolation(result['category'], result['dataViolation'], result['selected_tahun_ajaran'])
             },
             error: function(err){
@@ -522,7 +522,10 @@
             })
         })
 
-
+        Highcharts.setOptions({
+            colors: ['#F21402', '#D1EE18', '#000000']
+        });
+        
         Highcharts.chart('chartViolation', {
             chart: {
                 type: 'column'
@@ -536,24 +539,22 @@
             },
             yAxis: {
                 min: 0,
-                tickInterval: 1,
+                allowDecimals: false,
                 title: {
                     text: 'JUMLAH PELANGGARAN TERCATAT'
                 }
             },
-            colors: 
-                ['#F21402', '#028CF2 ', '#E4F202 ', '028CF2'],
             credits: {
                 enabled: false,
             },
             plotOptions: {
                 column: {
-                    pointPadding: 0.1,
+                    pointPadding: 0.08,
                     borderWidth: 0
                 }
             },
             series: dataSeries
-        });
+        });         
     }
     
     // TAB ACHIEVEMENT GRAFIK

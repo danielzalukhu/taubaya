@@ -324,7 +324,9 @@ class ViolationRecordController extends Controller
                               
                 if($check == false)
                 {
-                    return redirect(action('ViolationRecordController@create'))->with('error', 'Input tanggal ' . $request->get('vr_date') . ' tidak sesuai dengan tahun ajaran yang berlaku');
+                    return redirect(action('ViolationRecordController@create'))->with('error', 
+                    'Input tanggal ' . $request->get('vr_date') . 
+                    ' tidak sesuai dengan tahun ajaran yang berlaku (' . $session_start_ay . 's.d' . $session_end_ay . ')' );
                 }
                 else
                 {
@@ -433,7 +435,9 @@ class ViolationRecordController extends Controller
 
                 if($check == false)
                 {
-                    return redirect(action('ViolationRecordController@edit', $catatan_pelanggaran->id))->with('error', 'Input tanggal ' . $request->get('vr_date') . ' tidak sesuai dengan tahun ajaran yang berlaku');
+                    return redirect(action('ViolationRecordController@edit', $catatan_pelanggaran->id))->with('error', 
+                    'Input tanggal ' . $request->get('vr_date') . 
+                    ' tidak sesuai dengan tahun ajaran yang berlaku (' . $session_start_ay . 's.d' . $session_end_ay . ')' );
                 }
                 else
                 {
