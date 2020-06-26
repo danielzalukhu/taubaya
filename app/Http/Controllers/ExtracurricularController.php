@@ -124,7 +124,7 @@ class ExtracurricularController extends Controller
 
             $siswa = GradeStudent::where('GRADES_ID', $kelas_guru)->where('ACADEMIC_YEAR_ID', $selected_student)->get();
         }        
-        elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
+        elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){                
             $siswa = $default_student;
         }
         else{
@@ -242,7 +242,7 @@ class ExtracurricularController extends Controller
 
             $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
                                         ->join('students', 'extracurricular_records.STUDENTS_ID', 'students.id')
-                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')                                        
                                         ->select('extracurricular_records.*', 'extracurricular_reports.*')
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
@@ -253,7 +253,8 @@ class ExtracurricularController extends Controller
             $ekskul = ExtracurricularRecord::join('extracurricular_reports', 'extracurricular_records.id', 'extracurricular_reports.EXTRACURRICULAR_RECORD_ID')
                                         ->join('students', 'extracurricular_records.STUDENTS_ID', 'students.id')
                                         ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
-                                        ->select('extracurricular_records.*', 'extracurricular_reports.*')
+                                        ->join('grades', 'grades_students.GRADES_ID', 'grades.id')
+                                        ->select('extracurricular_records.*', 'extracurricular_reports.*', 'grades.NAME AS NAMAKELAS')
                                         ->where('extracurricular_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->get();

@@ -158,24 +158,38 @@ class SubjectController extends Controller
             }
             
             $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
-                                            ->select('violation_records.*')
+                                            ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                            ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                            ->join('grades', 'grades_students.GRADES_ID', 'grades.id')
+                                            ->select('violation_records.*', 'grades.NAME AS NAMAKELAS')
                                             ->where('violations.NAME','TTS')
                                             ->whereIn('violation_records.STUDENTS_ID', $arr_siswa)
                                             ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                            ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                             ->orderBy('violation_records.id', 'DESC')
                                             ->get();
             
         }  
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){                            
             $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
-                                            ->select('violation_records.*')
+                                            ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                            ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                            ->join('grades', 'grades_students.GRADES_ID', 'grades.id')
+                                            ->select('violation_records.*', 'grades.NAME AS NAMAKELAS')
                                             ->where('violations.NAME','TTS')
+                                            ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                            ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                             ->get();
         }        
         elseif(Auth::guard('web')->user()->staff->ROLE == "ADVISOR"){                
             $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
-                                            ->select('violation_records.*')
+                                            ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
+                                            ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                            ->join('grades', 'grades_students.GRADES_ID', 'grades.id')
+                                            ->select('violation_records.*', 'grades.NAME AS NAMAKELAS')
                                             ->where('violations.NAME','TTS')
+                                            ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                            ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                             ->get();
         } 
         
@@ -318,7 +332,13 @@ class SubjectController extends Controller
 
     public function assesmentImport(Request $request) 
     {    
-        $laporan_mapel = SubjectReport::where('IS_VERIFIED', '=', 0)->get();
+        $laporan_mapel = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                ->join('grades_students', 'grades_students.STUDENTS_ID', 'students.id')
+                                ->join('grades', 'grades_students.GRADES_ID', 'grades.id')
+                                ->select('subject_reports.*')
+                                ->where('grades.STAFFS_ID', $request->session()->get('session_user_id'))
+                                ->where('subject_reports.IS_VERIFIED', '=', 0)->get();
         
         $kelas_guru = Grade::where('STAFFS_ID', $request->session()->get('session_user_id'))
                                 ->first()->NAME; 

@@ -286,7 +286,7 @@
                     </div>
                   </div> 
                   <div class="box-footer clearfix">
-                    <a href="{{route('subject.incompleteku')}}" class="btn btn-sm btn-info pull-right">Daftar Catatan Ketidaktuntasan Lainnya ..</a>
+                    <a href="{{route('subject.incomplete')}}" class="btn btn-sm btn-info pull-right">Daftar Catatan Ketidaktuntasan Lainnya ..</a>
                   </div>   
                 </div>
               </div>

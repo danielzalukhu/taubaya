@@ -32,7 +32,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>NAMA PELANGGARAN</th>
+                                            <th>KODE PELANGGARAN</th>
                                             <th>DESKRIPSI</th>
                                             <th>POIN</th>
                                             @if(Auth::guard('web')->user()->staff->ROLE === "ADMIN")                                            

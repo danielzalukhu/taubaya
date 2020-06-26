@@ -99,6 +99,7 @@
                                                 <a href="{{ route('subject.studentSubject', [$s->student->id, $s->grade->NAME]) }}" title="Mata Pelajaran" class="btn btn-info btn-sm">
                                                     <i class="fa fa-book"></i>                                                    
                                                 </a>    
+                                                @if(Auth::guard('web')->user()->staff->ROLE != "HEADMASTER")
                                                 <form action="{{ route ('student.destroy', $s->student->id )}}" method="POST" class="inline">
                                                     @method('delete')
                                                     @csrf
@@ -106,6 +107,7 @@
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </form> 
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

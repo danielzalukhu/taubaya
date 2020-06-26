@@ -51,9 +51,12 @@
                                     <tr>
                                         <th>#</th>
                                         <th>TANGGAL</th>
+                                        <th>KELAS</th>
                                         <th>NAMA SISWA</th>                                        
                                         <th colspan="2">KODE - DEKSRIPSI</th>
-                                        <th></th>
+                                        @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER") 
+                                            <th></th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -62,9 +65,11 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td><b>{{date('d-m-Y', strtotime($tts->DATE))}}</b></td>
+                                        <td>{{$tts->NAMAKELAS}}</td>
                                         <td>{{$tts->student->FNAME}}{{" "}}{{$tts->student->LNAME}}</td>
                                         <td>{{$tts->violation->NAME}}</td>
                                         <td>{{$tts->DESCRIPTION}}</td>
+                                        @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER") 
                                         <td>
                                             <a href="{{ route ('subject.editIncomplete', $tts->id )}}" class="btn btn-warning btn-sm">
                                                 <i class="fa fa-pencil"></i>
@@ -77,6 +82,7 @@
                                                 </button>
                                             </form>                                            
                                         </td>
+                                        @endif
                                     </tr>
                                     @endforeach
                                 </tbody>

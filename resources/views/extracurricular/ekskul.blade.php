@@ -44,6 +44,11 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            @if(Auth::guard('web')->user()->ROLE === "STAFF") 
+                                                @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")     
+                                                    <th>KELAS</th>
+                                                @endif
+                                            @endif
                                             <th>NAMA SISWA</th>
                                             <th>EKSKUL</th>
                                             <th>TAHUN AJARAN</th>
@@ -55,6 +60,11 @@
                                     @foreach($ekskul as $e)
                                         <tr>
                                             <td>{{$i++}}</td>
+                                            @if(Auth::guard('web')->user()->ROLE === "STAFF") 
+                                                @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER")     
+                                                    <td>{{ $e->NAMAKELAS }}</td>
+                                                @endif
+                                            @endif
                                             <td>{{ $e->student->FNAME }}{{" "}}{{ $e->student->LNAME }}</td>
                                             <td>{{ $e->getEkskulName() }}</td>
                                             <td>
