@@ -613,6 +613,9 @@
         })
 
         // console.log(dataSeries)
+        Highcharts.setOptions({
+            colors: ['#fc0202', '#3fe13a', '#e9eb6a', '#4e45d5']
+        });
         
         Highcharts.chart('chartAchievement', {
             chart: {
