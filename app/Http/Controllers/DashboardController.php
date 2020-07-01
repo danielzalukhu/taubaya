@@ -31,14 +31,17 @@ class DashboardController extends Controller
         
         if(Auth::guard('web')->user()->ROLE === "STAFF"){
             $request->session()->put('session_user_id', Auth::user()->staff->id);
+            $request->session()->put('session_user_email', Auth::user()->email);
         }
         elseif(Auth::guard('web')->user()->ROLE === "PARENT"){
             $request->session()->put('session_guardian_id', Auth::user()->guardian->student->id);            
             $request->session()->put('session_guardian_student_class', Auth::user()->guardian->student->getGradeName());
+            $request->session()->put('session_user_email', Auth::user()->email);
         }
         else{
             $request->session()->put('session_student_class', Auth::user()->student->getGradeName());
             $request->session()->put('session_student_id', Auth::user()->student->id);
+            $request->session()->put('session_user_email', Auth::user()->email);
         }        
         // dd($request->session()->get('session_guardian_student_class'));
         //END GLOBAL SESSION 
