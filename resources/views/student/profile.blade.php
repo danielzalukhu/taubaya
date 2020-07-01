@@ -27,6 +27,8 @@
                     <h5 class="text-muted text-center">
                         @if(Auth::guard('web')->user()->ROLE === "STUDENT")
                             <b> {{ Auth::user()->student->getGradeName() }} - {{ $siswa->NISN }} </b>
+                        @elseif(Auth::guard('web')->user()->ROLE === "PARENT")
+                            <b> {{ $student_grade_name }} - {{ $siswa->NISN }} </b>
                         @else
                             <b> {{ $student_grade_name }} - {{ $siswa->NISN }} </b>
                         @endif

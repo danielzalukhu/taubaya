@@ -28,6 +28,11 @@ class Student extends Model
         return $this->belongsTo('App\Religion', 'RELIGIONS_ID');
     }
 
+    public function guardian()
+    {
+        return $this->hasMany('App\Guardian');
+    }
+
     public function gradestudent()
     {
         return $this->hasMany('App\GradeStudent');
@@ -73,7 +78,7 @@ class Student extends Model
 
     public function user()
     {
-        return $this->hasOne('App\User', 'USERS_EMAIL');
+        return $this->hasOne('App\User');
     }
 
     public function token()

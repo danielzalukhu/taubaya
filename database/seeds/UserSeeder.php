@@ -195,5 +195,12 @@ class UserSeeder extends Seeder
             'STAFFS_ID' => '23'
         ]);
 
+        // DB::table('users')->insert([
+        //     'NAME' => 'Meliana Yunus',
+        //     'EMAIL' => 'mel.yunus@gmail.com',
+        //     'PASSWORD' => Hash::make('meliana'),
+        //     'ROLE' => 'PARENT',
+        //     'GUARDIANS_ID' => '1'
+        // ]);
     }
 }

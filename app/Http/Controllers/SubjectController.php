@@ -197,11 +197,7 @@ class SubjectController extends Controller
     }    
 
     public function incompleteku(Request $request)
-    {
-        $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $request->session()->get('session_student_id')) ->first()->AY_ID;                        
-
-        $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
-
+    {        
         $maxId = AcademicYear::select(DB::raw('MAX(id) as id'))->get()[0]->id;
 
         if($request->has('academicYearId')){
@@ -211,13 +207,31 @@ class SubjectController extends Controller
             $academic_year_id = $maxId;
         }
 
-        $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
-                                            ->select('violation_records.*')
-                                            ->where('violations.NAME','TTS')
-                                            ->where('violation_records.STUDENTS_ID', $request->session()->get('session_student_id'))
-                                            ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
-                                            ->get();
-        
+        if(Auth::guard('web')->user()->ROLE === "STUDENT"){
+            $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $request->session()->get('session_student_id')) ->first()->AY_ID;                        
+
+            $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
+
+            $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
+                                                ->select('violation_records.*')
+                                                ->where('violations.NAME','TTS')
+                                                ->where('violation_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                                ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                                ->get();
+        }
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT") {
+            $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $request->session()->get('session_guardian_id')) ->first()->AY_ID;                        
+
+            $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
+
+            $ketidaktuntasan = ViolationRecord::join('violations','violation_records.VIOLATIONS_ID','=','violations.id')
+                                                ->select('violation_records.*')
+                                                ->where('violations.NAME','TTS')
+                                                ->where('violation_records.STUDENTS_ID', $request->session()->get('session_guardian_id'))
+                                                ->where('violation_records.ACADEMIC_YEAR_ID', $academic_year_id)
+                                                ->get();
+        }
+        // dd($academic_year_id);
         return view('subject.incomplete', compact('ketidaktuntasan', 'tahun_ajaran', 'academic_year_id'));                                            
     }
 
@@ -543,6 +557,49 @@ class SubjectController extends Controller
                     $siswa_dibawah_rata = []; 
             }
         }
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT"){
+            $siswa = Student::find($request->session()->get('session_guardian_id'));
+
+            $selected_student_ay = Student::select('ACADEMIC_YEAR_ID AS AY_ID')->where('id', $request->session()->get('session_guardian_id')) ->first()->AY_ID;                        
+
+            $tahun_ajaran = AcademicYear::where('id', '>=', $selected_student_ay)->get(); 
+
+            $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                        ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                        ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
+                                        ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
+                                        ->where('subject_records.STUDENTS_ID', $request->session()->get('session_guardian_id'))
+                                        ->get();  
+            
+            $data_final_score = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                        ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                        ->select('subject_records.*', 'subject_reports.*')
+                                        ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)                                        
+                                        ->where('subject_records.STUDENTS_ID', $request->session()->get('session_guardian_id'))                                        
+                                        ->get();
+    
+            if(isset($url)){
+                $select_grade_id = Grade::select('id')->where('NAME', $get_url_param[1])->first()->id;
+                $selected_student_in_ay = GradeStudent::select('ACADEMIC_YEAR_ID')
+                                                    ->where('STUDENTS_ID', $request->session()->get('session_guardian_id'))
+                                                    ->where('GRADES_ID', $select_grade_id)->first()->ACADEMIC_YEAR_ID;
+            }
+            else{
+                $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
+                $selected_student_in_ay = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
+            }
+                                        
+            $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')                            
+                                        ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                        ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
+                                        ->join('grades_students', 'students.id', 'grades_students.STUDENTS_ID')
+                                        ->select(DB::raw('ROUND(SUM(subject_reports.FINAL_SCORE)/COUNT(subject_records.STUDENTS_ID), 2) AS RATAKELAS'), 'subject_records.*')
+                                        ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
+                                        ->where('grades_students.GRADES_ID', '=', $select_grade_id)
+                                        ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student_in_ay)
+                                        ->groupBy('subject_records.ACADEMIC_YEAR_ID')
+                                        ->get();                                
+        }
         else{
             $siswa = Student::find($request->session()->get('session_student_id'));
 
@@ -594,6 +651,10 @@ class SubjectController extends Controller
             return view('student.detail-subject-guru', 
                    compact('mapel', 'detail_mapel', 'tahun_ajaran', 'academic_year_id',
                            'kkm', 'rata_kelas', 'siswa_dibawah_rata'));
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT")
+            return view('student.detail-subject-ku', 
+                   compact('mapel', 'siswa', 'academic_year_id', 'tahun_ajaran', 'kkm',
+                           'detail_mapel_ku', 'data_final_score', 'rata_kelas'));  
         else            
             return view('student.detail-subject-ku', 
                    compact('mapel', 'siswa', 'academic_year_id', 'tahun_ajaran', 'kkm',

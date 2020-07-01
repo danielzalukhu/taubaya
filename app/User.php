@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Staff', 'STAFFS_ID');
     }
+
+    public function guardian()
+    {
+        return $this->belongsTo('App\Guardian', 'GUARDIANS_ID');
+    }
 }

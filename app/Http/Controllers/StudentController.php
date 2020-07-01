@@ -191,6 +191,13 @@ class StudentController extends Controller
                                                    'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
                                                    'type', 'dataAchievement',
                                                    'tipeAbsen', 'dataAbsen', 'count_total_day_each_ay'));
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT")
+            return view('student.profile', compact('siswa', 'absen', 'student_grade_name' , 'catatan_absen', 'kehadiran', 'tahun_ajaran',
+                                                'catatan_pelanggaran', 'violation_point',
+                                                'catatan_penghargaan', 'achievement_point',
+                                                'kategori', 'data', 'selected_tahun_ajaran', 'academic_year_id',
+                                                'type', 'dataAchievement',
+                                                'tipeAbsen', 'dataAbsen', 'count_total_day_each_ay'));        
         else                                               
             return view('student.profile', compact('siswa', 'absen', 'catatan_absen', 'kehadiran', 'tahun_ajaran',
                                                    'catatan_pelanggaran', 'violation_point',
@@ -291,12 +298,22 @@ class StudentController extends Controller
 
     public function mapelku(Request $request)
     {                        
-        $grade_record = GradeStudent::select('GRADES_ID')
+        if(Auth::guard('web')->user()->ROLE === "STUDENT"){
+            $grade_record = GradeStudent::select('GRADES_ID')
                                 ->where('ACADEMIC_YEAR_ID', '<=', $request->session()->get('session_academic_year_id'))
                                 ->where('STUDENTS_ID', $request->session()->get('session_student_id'))
-                                ->get();                        
-        
-        $student_class = $request->session()->get('session_student_class');
+                                ->get();    
+
+            $student_class = $request->session()->get('session_student_class');                                
+        }
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT"){
+            $grade_record = GradeStudent::select('GRADES_ID')
+                                ->where('ACADEMIC_YEAR_ID', '<=', $request->session()->get('session_academic_year_id'))
+                                ->where('STUDENTS_ID', $request->session()->get('session_guardian_id'))
+                                ->get();           
+            
+            $student_class = $request->session()->get('session_guardian_student_class');      
+        }
         
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
 

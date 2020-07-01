@@ -32,11 +32,15 @@ class DashboardController extends Controller
         if(Auth::guard('web')->user()->ROLE === "STAFF"){
             $request->session()->put('session_user_id', Auth::user()->staff->id);
         }
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT"){
+            $request->session()->put('session_guardian_id', Auth::user()->guardian->student->id);            
+            $request->session()->put('session_guardian_student_class', Auth::user()->guardian->student->getGradeName());
+        }
         else{
             $request->session()->put('session_student_class', Auth::user()->student->getGradeName());
             $request->session()->put('session_student_id', Auth::user()->student->id);
         }        
-        
+        // dd($request->session()->get('session_guardian_student_class'));
         //END GLOBAL SESSION 
         
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;      
@@ -62,6 +66,20 @@ class DashboardController extends Controller
                                                    'daftar_ketidaktuntasan', 'grafik_absen_data',
                                                    'daftar_penghargaan_siswa'));
         }
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT"){
+            $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_guardian_id'));
+            
+            $jumlah_pelanggaran = $this->countViolationKu($request->session()->get('session_guardian_id'));
+
+            $daftar_ketidaktuntasan = $this->myIncompleteness($request->session()->get('session_guardian_id'), $request->session()->get('session_academic_year_id'));
+            
+            $grafik_absen_data = $this->showAbsentKu($request->session()->get('session_guardian_id'));
+            
+            $daftar_penghargaan_siswa = $this->myAchievement($request->session()->get('session_guardian_id'), $request->session()->get('session_academic_year_id'));            
+            
+            return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'daftar_ketidaktuntasan',
+                                                   'grafik_absen_data', 'daftar_penghargaan_siswa'));
+        }
         else{
             $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_student_id'));
 
@@ -70,7 +88,7 @@ class DashboardController extends Controller
             $daftar_ketidaktuntasan = $this->myIncompleteness($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));
             
             $grafik_absen_data = $this->showAbsentKu($request->session()->get('session_student_id'));
-
+            
             $daftar_penghargaan_siswa = $this->myAchievement($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));            
             
             return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'daftar_ketidaktuntasan',

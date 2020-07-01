@@ -40,6 +40,8 @@
               <li><a href="{{route('student.index')}}"><i class="fa fa-user-plus"></i>DAFTAR SISWA</a></li>            
             @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
               <li><a href="{{route('student.profile', [ 'id'=>request()->session()->get('session_student_id') ])}} "><i class="fa fa-user"></i>PROFIL-KU</a></li>
+            @elseif(Auth::guard('web')->user()->ROLE === "PARENT")
+              <li><a href="{{route('student.profile', [ 'id'=>request()->session()->get('session_guardian_id') ])}} "><i class="fa fa-user"></i>PROFIL-SISWA</a></li>
             @endif                    
           </ul>
         </li>
@@ -54,6 +56,9 @@
           <ul class="treeview-menu">          
             @if((Auth::guard('web')->user()->ROLE === "STUDENT"))
               <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-KU</a></li>
+              <li><a href="{{route('subject.incompleteku')}}"><i class="fa fa-thumbs-down"></i>LAPORAN KETIDAKTUNTASAN </a></li>
+            @elseif((Auth::guard('web')->user()->ROLE === "PARENT"))
+              <li><a href="{{route('student.mapelku')}}"><i class="fa fa-book"></i>MAPEL-SISWA</a></li>
               <li><a href="{{route('subject.incompleteku')}}"><i class="fa fa-thumbs-down"></i>LAPORAN KETIDAKTUNTASAN </a></li>
             @elseif(Auth::guard('web')->user()->staff->ROLE === "TEACHER")
               <li><a href="{{route('student.mapelguru')}}"><i class="fa fa-book"></i>MAPEL-GURU</a></li> 
@@ -88,6 +93,8 @@
               @endif
             @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
               <li><a href="{{route('extracurricular.ekskulKu')}}"><i class="fa fa-eye"></i>EKSKUL-KU</a></li>              
+            @elseif(Auth::guard('web')->user()->ROLE === "PARENT")
+              <li><a href="{{route('extracurricular.ekskulKu')}}"><i class="fa fa-eye"></i>EKSKUL-SISWA</a></li>              
             @endif
           </ul>
         </li>
