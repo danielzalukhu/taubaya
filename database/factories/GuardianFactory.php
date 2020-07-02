@@ -4,10 +4,15 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Guardian::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => Str::random(10),
+        'FIRST_NAME' => $faker->name,
+        'LAST_NAME' => $faker->name,
+        'B_YEAR' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'STATUS' => $faker->randomElement(['FATHER' ,'MOTHER', 'OTHER']), 
+        'JOB' => $faker->randomElement(['PNS' ,'WIRAUSAHA', 'MANAJER']),
+        'EDUACTION' => $faker->randomElement(['SMA' ,'S1', 'S2']),
+        'PHONE' => $faker->phoneNumber,
+        'EMAIL' => $faker->address,
+        'ADDRESS' => $faker->address,
+        'STUDENTS_ID' => App\Student::all()->random()->id ,
     ];
 });
