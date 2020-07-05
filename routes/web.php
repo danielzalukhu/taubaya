@@ -11,13 +11,10 @@
 |
 */
 
-// AUTH
-Auth::routes();
-
-// DASHBOARD
-Route::get('/', 'DashboardController@index')->name('dashboard.index');
-
 Route::group(['middleware' => 'auth'], function(){
+
+    // DASHBOARD
+    Route::get('/', 'DashboardController@index')->name('dashboard.index');
     
     // STUDENT
     Route::get('achievement/chart', 'StudentController@returnDataAchievementChart')->name('student.achievementChart');
@@ -97,4 +94,5 @@ Route::group(['middleware' => 'cekrole'], function(){
     Route::resource('extracurricular', 'ExtracurricularController');
 });
 
-
+// AUTH
+Auth::routes();

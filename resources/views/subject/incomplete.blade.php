@@ -54,14 +54,14 @@
                                         <th>#</th>
                                         <th>TANGGAL</th>
                                         @if(Auth::guard('web')->user()->ROLE === "STAFF")       
-                                            @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER") 
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER") 
                                                 <th>KELAS</th>
                                             @endif
                                         @endif
                                         <th>NAMA SISWA</th>                                        
                                         <th colspan="2">KODE - DEKSRIPSI</th>
                                         @if(Auth::guard('web')->user()->ROLE === "STAFF")    
-                                            @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER") 
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER") 
                                                 <th></th>
                                             @endif
                                         @endif
@@ -74,7 +74,7 @@
                                         <td>{{ $i++ }}</td>
                                         <td><b>{{date('d-m-Y', strtotime($tts->DATE))}}</b></td>
                                         @if(Auth::guard('web')->user()->ROLE === "STAFF")       
-                                            @if(Auth::guard('web')->user()->staff->ROLE === "TEACHER") 
+                                            @if(Auth::guard('web')->user()->staff->ROLE === "HEADMASTER") 
                                                 <td>{{$tts->NAMAKELAS}}</td>
                                             @endif
                                         @endif
