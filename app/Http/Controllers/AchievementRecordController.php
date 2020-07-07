@@ -304,7 +304,10 @@ class AchievementRecordController extends Controller
 
         if($check == false)
         {
-            return redirect(action('AchievementRecordController@create'))->with('error', 'Input tanggal ' .  $request->get('ar_date') . ' tidak sesuai dengan tahun ajaran yang berlaku');
+            // return redirect(action('AchievementRecordController@create'))->with('error', 'Input tanggal ' .  $request->get('ar_date') . ' tidak sesuai dengan tahun ajaran yang berlaku');
+            return redirect(action('AchievementRecordController@create'))->with('error', 
+                    'Input tanggal ' . $request->get('ar_date') . 
+                    ' tidak sesuai dengan tahun ajaran yang berlaku (' . $session_start_ay . ' s.d ' . $session_end_ay . ')' );
         }
         else
         {

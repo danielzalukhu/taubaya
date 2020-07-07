@@ -326,7 +326,7 @@ class ViolationRecordController extends Controller
                 {
                     return redirect(action('ViolationRecordController@create'))->with('error', 
                     'Input tanggal ' . $request->get('vr_date') . 
-                    ' tidak sesuai dengan tahun ajaran yang berlaku (' . $session_start_ay . 's.d' . $session_end_ay . ')' );
+                    ' tidak sesuai dengan tahun ajaran yang berlaku (' . $session_start_ay . ' s.d ' . $session_end_ay . ')' );
                 }
                 else
                 {
