@@ -707,17 +707,21 @@
 
         if(Array.isArray(dataGraph) == dataGraph.length){
             obj_present = {name: 'PRESENT', y: present_percentage, sliced: true, selected: true}        
-            dataSeries.push(obj_present)           
+            dataSeries.push(obj_present)    
+
+            Highcharts.setOptions({
+                colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
+            });       
         }
         else {
             obj_present = {name: 'PRESENT', y: totalDayEachAcademicYear, sliced: true, selected: true}        
             dataSeries.push(obj_present)                 
+
+            Highcharts.setOptions({
+                colors: ['#2874A6']
+            });
         }
-
-        Highcharts.setOptions({
-            colors: ['#F21402', '#2ECC71 ', '#E4F202 ', '#2874A6']
-        });
-
+        
         Highcharts.chart('chartAbsent', {
             chart: {
                 plotBackgroundColor: null,
