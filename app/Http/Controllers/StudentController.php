@@ -422,7 +422,7 @@ class StudentController extends Controller
 
         $x = explode("-", $mapel->CODE, 3);
         $y = $x[0] . "-" . $x[1];
-                
+        
         $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
         
         $url = parse_url(url()->previous(), PHP_URL_QUERY);    
@@ -438,7 +438,7 @@ class StudentController extends Controller
             $select_grade_id = Grade::select('id')->where('NAME', $y)->first()->id;
             $selected_student_in_ay = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;                      
         }
-
+        
         $rata_kelas = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                                 ->join('students', 'subject_records.STUDENTS_ID', 'students.id')
                                 ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')

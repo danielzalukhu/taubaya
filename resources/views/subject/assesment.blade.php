@@ -19,7 +19,7 @@
                         <strong>{{ $error }}</strong>
                     </div> 
                 @endif
-                <div class="row" id="setting-bobot">
+                <!-- <div class="row" id="setting-bobot">
                     <div class="col-xs-6">
                         <div class="panel-heading">
                             <h3 class="box-title">SETTING BOBOT</h3>
@@ -108,7 +108,7 @@
                             </div>
                         </div>              
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row">
                     <div class="col-xs-12">
