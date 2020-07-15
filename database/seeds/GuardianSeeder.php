@@ -18,7 +18,7 @@ class GuardianSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
  
-    	for($i = 1; $i <= 1; $i++){
+    	for($i = 1; $i <= 6; $i++){
             $student = Student::all();
 
             $guardian = Guardian::create([
