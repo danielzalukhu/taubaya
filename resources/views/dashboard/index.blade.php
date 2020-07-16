@@ -292,6 +292,13 @@
                     Harap perhatikan kehadiaran Anda! Persentase kehadiran sekarang {{ $grafik_absen_data["kehadiran"] }} %, 
                     jangan sampai dibawah 90%
                   </div>
+                @elseif( $grafik_absen_data["kehadiran"] < 90 )
+                  <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> PERHATIAN!</h4>
+                    Persentase kehadiran sekarang {{ $grafik_absen_data["kehadiran"] }} %, 
+                    Silahkan konsulatasikan dengan wali kelas Anda.
+                  </div>
                 @endif
               </div>
             @endif

@@ -51,9 +51,9 @@ class DashboardController extends Controller
         if(Auth::guard('web')->user()->ROLE === "STAFF"){            
             $jumlah_siswa = $this->countStudent($request->session()->get('session_user_id'));
 
-            $jumlah_penghargaan = $this->countAchievement($request->session()->get('session_user_id'));
+            $jumlah_penghargaan = $this->countAchievement($request->session()->get('session_user_id'), $request->session()->get('session_academic_year_id'));
 
-            $jumlah_pelanggaran = $this->countViolation($request->session()->get('session_user_id'));
+            $jumlah_pelanggaran = $this->countViolation($request->session()->get('session_user_id'), $request->session()->get('session_academic_year_id'));
 
             $siswa_bermasalah = $this->getTroubleStudent($request->session()->get('session_user_id'), $selected_student, $request->session()->get('session_academic_year_id'));                                
 
@@ -70,9 +70,9 @@ class DashboardController extends Controller
                                                    'daftar_penghargaan_siswa'));
         }
         elseif(Auth::guard('web')->user()->ROLE === "PARENT"){
-            $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_guardian_id'));
+            $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_guardian_id'), $request->session()->get('session_academic_year_id'));
             
-            $jumlah_pelanggaran = $this->countViolationKu($request->session()->get('session_guardian_id'));
+            $jumlah_pelanggaran = $this->countViolationKu($request->session()->get('session_guardian_id'), $request->session()->get('session_academic_year_id'));
 
             $daftar_ketidaktuntasan = $this->myIncompleteness($request->session()->get('session_guardian_id'), $request->session()->get('session_academic_year_id'));
             
@@ -84,9 +84,9 @@ class DashboardController extends Controller
                                                    'grafik_absen_data', 'daftar_penghargaan_siswa'));
         }
         else{
-            $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_student_id'));
+            $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));
 
-            $jumlah_pelanggaran = $this->countViolationKu($request->session()->get('session_student_id'));
+            $jumlah_pelanggaran = $this->countViolationKu($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));
 
             $daftar_ketidaktuntasan = $this->myIncompleteness($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));
             
@@ -123,7 +123,7 @@ class DashboardController extends Controller
         return $siswa;
     }
 
-    public function countAchievement($user_id)
+    public function countAchievement($user_id, $id_thn_ajaran)
     {
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
             $kelas_guru = Grade::where('STAFFS_ID', $user_id)
@@ -136,29 +136,31 @@ class DashboardController extends Controller
                                         ->select(DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'))
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
+                                        ->where('achievement_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)
                                         ->first()->BANYAKPENGHARGAAN;
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
-            $penghargaan = AchievementRecord::all()->count();
+            $penghargaan = AchievementRecord::where('achievement_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)->count();
         }
         else{
-            $penghargaan = AchievementRecord::all()->count();
+            $penghargaan = AchievementRecord::where('achievement_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)->count();
         }
         
         return $penghargaan;
     }
 
-    public function countAchievementKu($student_id)
+    public function countAchievementKu($student_id, $id_thn_ajaran)
     {
         $penghargaan = AchievementRecord::join('students', 'achievement_records.STUDENTS_ID', 'students.id')
                                     ->select(DB::raw('COUNT(*) AS BANYAKPENGHARGAAN'))
                                     ->where('students.id', $student_id)
+                                    ->where('achievement_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)
                                     ->first()->BANYAKPENGHARGAAN;
 
         return $penghargaan;
     }
 
-    public function countViolation($user_id)
+    public function countViolation($user_id, $id_thn_ajaran)
     {        
         if(Auth::guard('web')->user()->staff->ROLE == "TEACHER"){  
             $kelas_guru = Grade::where('STAFFS_ID', $user_id)
@@ -173,25 +175,27 @@ class DashboardController extends Controller
                                         ->where('grades_students.GRADES_ID', $kelas_guru)
                                         ->where('grades_students.ACADEMIC_YEAR_ID', $selected_student)
                                         ->where('violations.NAME', 'NOT LIKE', 'TTS%')
+                                        ->where('violation_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)
                                         ->first()->BANYAKPELANGGARAN;
         }
         elseif(Auth::guard('web')->user()->staff->ROLE == "HEADMASTER"){
-            $pelanggaran = ViolationRecord::all()->count();
+            $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)->count();
         }
         else{
-            $pelanggaran = ViolationRecord::all()->count();
+            $pelanggaran = ViolationRecord::where('violation_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)->count();
         }
         
         return $pelanggaran;
     }
 
-    public function countViolationKu($student_id)
+    public function countViolationKu($student_id, $id_thn_ajaran)
     {
         $pelanggaran = ViolationRecord::join('violations', 'violation_records.VIOLATIONS_ID', 'violations.id')
                                     ->join('students', 'violation_records.STUDENTS_ID', 'students.id')
                                     ->select(DB::raw('COUNT(*) AS BANYAKPELANGGARAN'))
                                     ->where('students.id', $student_id)
                                     ->where('violations.NAME', 'NOT LIKE', 'TTS%')
+                                    ->where('violation_records.ACADEMIC_YEAR_ID', $id_thn_ajaran)
                                     ->first()->BANYAKPELANGGARAN;
 
         return $pelanggaran;                                            
