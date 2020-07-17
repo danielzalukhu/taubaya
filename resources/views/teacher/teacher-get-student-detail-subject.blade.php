@@ -59,6 +59,7 @@
                                             <th>ULANGAN HARIAN</th>
                                             <th style="width:10%">UJIAN TENGAH SEMESTER</th>
                                             <th style="width:10%">UJIAN AKHIR SEMESTER</th>
+                                            <th>KKM</th>
                                             <th>NILAI AKHIR</th>                                            
                                         </tr>
                                     </thead>
@@ -120,7 +121,8 @@
                                                             </tr>
                                                             @endforeach
                                                         </table>
-                                                    </td>                                                
+                                                    </td>      
+                                                    <td>{{ $dm->MINIMALPOIN }}</td>                                          
                                                     <td>
                                                         @if( $dm->FINAL_SCORE < $dm->MINIMALPOIN )
                                                             <div class="btn btn-warning btn-sm">{{ $dm->FINAL_SCORE }}</div>

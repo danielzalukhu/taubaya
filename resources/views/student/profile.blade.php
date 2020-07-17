@@ -58,7 +58,7 @@
                   <ul class="nav nav-tabs">
                     <li class="active"><a href="#violation" data-toggle="tab">PELANGGARAN</a></li>
                     <li><a href="#achievement" data-toggle="tab">PENGHARGAAN</a></li>
-                    <li><a href="#absent" data-toggle="tab">ABSEN</a></li>
+                    <li><a href="#absent" data-toggle="tab">PRESENSI</a></li>
                   </ul>
 
                   <div class="tab-content">
@@ -288,7 +288,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="exampleModalLabel">DETAIL ABSEN: <b>{{$siswa->FNAME}}{{" "}}{{$siswa->LNAME}}</b></h1>
+                                    <h1 class="modal-title" id="exampleModalLabel">DETAIL PRESENSI: <b>{{$siswa->FNAME}}{{" "}}{{$siswa->LNAME}}</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -733,7 +733,7 @@
                 enabled: false
             },
             title: {
-                text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
+                text: 'PERSENTASE PRESENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

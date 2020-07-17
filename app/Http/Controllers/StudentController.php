@@ -324,9 +324,23 @@ class StudentController extends Controller
             $grade_name = $student_class;
         }
         
+        // $subject = Subject::select('subjects.*')
+        //                 ->join('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+        //                 ->join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+        //                 ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
+        //                 ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+        //                 ->get();
+
         $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
                         ->where('CODE', 'LIKE', '%' . $grade_name . '%')
                         ->get();
+    
+        // $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+        //                 ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+        //                 ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
+        //                 ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
+        //                 ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+        //                 ->get(); 
                 
         return view('student.mapel-ku', compact('subject', 'grade_record', 'grade_name'));
     }

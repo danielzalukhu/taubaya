@@ -172,7 +172,7 @@
                       <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                       </div>
-                      <a href="{{route('absent.index')}}" class="small-box-footer">Daftar Absensi..<i class="fa fa-arrow-circle-right"></i></a>
+                      <a href="{{route('absent.index')}}" class="small-box-footer">Daftar Presensi..<i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 @elseif(Auth::guard('web')->user()->ROLE === "PARENT")
@@ -439,9 +439,9 @@
                 <div class="box box-info">
                   <div class="box-header with-border">
                     @if(Auth::guard('web')->user()->ROLE === "STAFF")
-                      <h3 class="box-title">Absensi Kelas</h3>
+                      <h3 class="box-title">Presensi Kelas</h3>
                     @else
-                      <h3 class="box-title">Absen-Ku</h3>
+                      <h3 class="box-title">Presensi-Ku</h3>
                     @endif
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -458,7 +458,7 @@
                           <thead>
                             <tr>
                               <th>#</th>
-                              <th>TIPE ABSESNI</th>
+                              <th>TIPE PRESENSI</th>
                               <th>JUMLAH</th>
                               <th></th>                      
                             </tr>
@@ -472,7 +472,7 @@
                               <td>{{ $gad->JUMLAH }}</td>
                               @if(Auth::guard('web')->user()->ROLE === "STAFF")
                               <td>
-                                <a href="{{ route('absent.index') }}" title="Daftar Absen" class="btn btn-info btn-sm">
+                                <a href="{{ route('absent.index') }}" title="Daftar Presensi" class="btn btn-info btn-sm">
                                   <i class="fa fa-eye"></i>
                                 </a> 
                               </td>

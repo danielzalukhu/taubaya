@@ -132,13 +132,13 @@
         @if(Auth::guard('web')->user()->ROLE === "STAFF")
         <li class="treeview">
           <a href="#">
-              <i class="fa fa-hand-paper-o"></i> <span>ABSEN</span>
+              <i class="fa fa-hand-paper-o"></i> <span>PRESENSI</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('absent.index')}}"><i class="fa fa-list-ol"></i>DAFTAR ABSEN</a></li>
+            <li><a href="{{route('absent.index')}}"><i class="fa fa-list-ol"></i>DAFTAR PRESENSI</a></li>
           </ul>
         </li>
         @endif
