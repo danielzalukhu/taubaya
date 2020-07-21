@@ -611,7 +611,6 @@ class SubjectController extends Controller
                                         ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                                         ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
                                         ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
-                                        // ->where('subject_records.ACADEMIC_YEAR_ID', $academic_year_id)
                                         ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
                                         ->get();  
             

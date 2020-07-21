@@ -34,6 +34,9 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
+                                            <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
+                                            <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
                                         </span>        
                                     </h5>                           
                                 </div>
@@ -46,6 +49,12 @@
                                             <th>#</th>
                                             <th>KODE MAPEL</th>
                                             <th>NAMA MAPEL</th>
+                                            <th>KKM</th>
+                                            <th width="100px">TUGAS</th>
+                                            <th width="100px">UH</th>
+                                            <th>UTS</th>
+                                            <th>UAS</th>
+                                            <th>NA</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -56,8 +65,76 @@
                                             <td>{{ $i++ }}</td>
                                             <td>{{ $s->CODE }}</td>
                                             <td>{{ $s->DESCRIPTION }}</td>
+                                            <td>{{ $s->MINIMALPOIN }}</td>
                                             <td>
-                                                <a href="{{route('subject.studentDetailSubject', [$siswa->id, $s->id])}}"  class="btn btn-info btn-sm">
+                                                <table class="table table-hover">
+                                                    @php
+                                                        $scores = json_decode($s->TUGAS);
+                                                    @endphp
+                                                    @if(is_array($scores))
+                                                        @foreach($scores as $score)
+                                                        <tr>
+                                                            <tr>{{ $score }}{{" | "}}</tr>    
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover">
+                                                    @php
+                                                        $scores = json_decode($s->PH);
+                                                    @endphp
+                                                    @if(is_array($scores))
+                                                        @foreach($scores as $score)
+                                                        <tr>
+                                                            <tr>{{ $score }}{{" | "}}</tr>    
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover">
+                                                    @php
+                                                        $scores = json_decode($s->PTS);
+                                                    @endphp
+                                                    @if(is_array($scores))
+                                                        @foreach($scores as $score)
+                                                        <tr>
+                                                            <tr>{{ $score }}</tr>    
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table class="table table-hover">
+                                                    @php
+                                                        $scores = json_decode($s->PAS);
+                                                    @endphp
+                                                    @if(is_array($scores))
+                                                        @foreach($scores as $score)
+                                                        <tr>
+                                                            <tr>{{ $score }}</tr>    
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </table>
+                                            </td>
+                                            <td>
+                                                @if( $s->FINAL_SCORE == NULL )
+                                                    
+                                                @elseif( $s->FINAL_SCORE < $s->MINIMALPOIN )
+                                                    <div class="btn btn-warning btn-sm">{{ $s->FINAL_SCORE }}</div>
+                                                @elseif( $s->FINAL_SCORE == $s->MINIMALPOIN )
+                                                    <div class="btn btn-primary btn-sm">{{ $s->FINAL_SCORE }}</div>
+                                                @elseif( $s->FINAL_SCORE > $s->MINIMALPOIN )
+                                                    <div class="btn btn-success btn-sm">{{ $s->FINAL_SCORE }}</div>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{route('subject.studentDetailSubject', [$siswa->id, $s->ID])}}"  class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>                                         
                                             </td>

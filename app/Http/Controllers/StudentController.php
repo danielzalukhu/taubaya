@@ -323,25 +323,55 @@ class StudentController extends Controller
         else{
             $grade_name = $student_class;
         }
-        
-        // $subject = Subject::select('subjects.*')
-        //                 ->join('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
-        //                 ->join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-        //                 ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
-        //                 ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
-        //                 ->get();
 
-        $subject = Subject::select('id', 'CODE', 'DESCRIPTION')
-                        ->where('CODE', 'LIKE', '%' . $grade_name . '%')
-                        ->get();
-    
-        // $detail_mapel_ku = SubjectReport::join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
-        //                 ->join('subjects', 'subject_reports.SUBJECTS_ID', 'subjects.id')
-        //                 ->select('subjects.*', 'subject_records.*', 'subject_reports.*')
-        //                 ->where('subjects.DESCRIPTION', $mapel->DESCRIPTION)
-        //                 ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
-        //                 ->get(); 
+        $get_grade_id = Grade::select('id')
+                            ->where('NAME', $grade_name)
+                            ->first()->id;
                 
+        $first_query = Subject::leftJoin('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                            ->select('subjects.id AS ID', 'subjects.CODE', 'subjects.DESCRIPTION', 'subjects.MINIMALPOIN',
+                                     'subject_reports.TUGAS', 'subject_reports.PH', 
+                                     'subject_reports.PTS', 'subject_reports.PAS', 'subject_reports.FINAL_SCORE')
+                            ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
+                            ->whereNull('subject_reports.SUBJECTS_ID');
+        
+        if(Auth::guard('web')->user()->ROLE === "STUDENT"){
+            $sub_query = GradeStudent::select(DB::raw('grades_students.ACADEMIC_YEAR_ID + 1 AS LASTID'))
+                                    ->where('grades_students.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                    ->where('grades_students.GRADES_ID', $get_grade_id)
+                                    ->first()->LASTID;
+            
+            $subject = Subject::leftJoin('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                    ->join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                    ->select('subjects.id AS ID', 'subjects.CODE', 'subjects.DESCRIPTION', 'subjects.MINIMALPOIN',
+                                            'subject_reports.TUGAS', 'subject_reports.PH', 
+                                            'subject_reports.PTS', 'subject_reports.PAS', 'subject_reports.FINAL_SCORE')
+                                    ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
+                                    ->where('subject_records.STUDENTS_ID', $request->session()->get('session_student_id'))
+                                    ->where('subject_records.ACADEMIC_YEAR_ID', $sub_query)
+                                    ->union($first_query)
+                                    ->orderBy('ID')
+                                    ->get();                                    
+        }
+        elseif(Auth::guard('web')->user()->ROLE === "PARENT"){
+            $sub_query = GradeStudent::select(DB::raw('grades_students.ACADEMIC_YEAR_ID + 1 AS LASTID'))
+                                    ->where('grades_students.STUDENTS_ID', $request->session()->get('session_guardian_id'))
+                                    ->where('grades_students.GRADES_ID', $get_grade_id)
+                                    ->first()->LASTID;
+            
+            $subject = Subject::leftJoin('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                    ->join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                                    ->select('subjects.id AS ID', 'subjects.CODE', 'subjects.DESCRIPTION', 'subjects.MINIMALPOIN',
+                                            'subject_reports.TUGAS', 'subject_reports.PH', 
+                                            'subject_reports.PTS', 'subject_reports.PAS', 'subject_reports.FINAL_SCORE')
+                                    ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
+                                    ->where('subject_records.STUDENTS_ID', $request->session()->get('session_guardian_id'))
+                                    ->where('subject_records.ACADEMIC_YEAR_ID', $sub_query)
+                                    ->union($first_query)
+                                    ->orderBy('ID')
+                                    ->get();
+        }
+        
         return view('student.mapel-ku', compact('subject', 'grade_record', 'grade_name'));
     }
 
@@ -406,14 +436,40 @@ class StudentController extends Controller
         foreach($grade_record as $gr){
             if($request->has('filterGrade')){
                 $grade_name = $request->filterGrade;            
-                $subject = Subject::select('id', 'CODE', 'DESCRIPTION')->where('CODE', 'LIKE', '%' . $grade_name . '%')->get();
             }
             else{
                 $grade_name = $gr->grade->NAME;
-                $subject = Subject::select('id', 'CODE', 'DESCRIPTION')->where('CODE', 'LIKE', '%' . $kodelkelas . '%')->get();
             }  
+
+            $get_grade_id = Grade::select('id')
+                                ->where('NAME', $grade_name)
+                                ->first()->id;
+
+            $first_query = Subject::leftJoin('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                                ->select('subjects.id AS ID', 'subjects.CODE', 'subjects.DESCRIPTION', 'subjects.MINIMALPOIN',
+                                        'subject_reports.TUGAS', 'subject_reports.PH', 
+                                        'subject_reports.PTS', 'subject_reports.PAS', 'subject_reports.FINAL_SCORE')
+                                ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
+                                ->whereNull('subject_reports.SUBJECTS_ID');
+
+            $sub_query = GradeStudent::select(DB::raw('grades_students.ACADEMIC_YEAR_ID + 1 AS LASTID'))
+                                    ->where('grades_students.STUDENTS_ID', $siswa->id)
+                                    ->where('grades_students.GRADES_ID', $get_grade_id)
+                                    ->first()->LASTID;
+                
+            $subject = Subject::leftJoin('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                            ->join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                            ->select('subjects.id AS ID', 'subjects.CODE', 'subjects.DESCRIPTION', 'subjects.MINIMALPOIN',
+                                    'subject_reports.TUGAS', 'subject_reports.PH', 
+                                    'subject_reports.PTS', 'subject_reports.PAS', 'subject_reports.FINAL_SCORE')
+                            ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
+                            ->where('subject_records.STUDENTS_ID', $siswa->id)
+                            ->where('subject_records.ACADEMIC_YEAR_ID', $sub_query)
+                            ->union($first_query)
+                            ->orderBy('ID')
+                            ->get();                  
         }
-                          
+        
         return view('teacher.teacher-get-student-subject', compact('siswa', 'subject', 'grade_record', 'grade_name'));
     }    
 
