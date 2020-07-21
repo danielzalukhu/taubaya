@@ -93,6 +93,8 @@ class DashboardController extends Controller
             $grafik_absen_data = $this->showAbsentKu($request->session()->get('session_student_id'));
             
             $daftar_penghargaan_siswa = $this->myAchievement($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));            
+
+            $warning_subject = $this->showAndCountIncompleteSubject();
             
             return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'daftar_ketidaktuntasan',
                                                    'grafik_absen_data', 'daftar_penghargaan_siswa'));
@@ -501,5 +503,11 @@ class DashboardController extends Controller
         
         return $value;
     }
+
+    public function showAndCountIncompleteSubject()
+    {        
+ 
+    }
+
 }
 

@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-xs-12">
                         <div class="panel-heading">
-                            <h3 class="box-title">DAFTAR ABSEN</h3>            
+                            <h3 class="box-title">DAFTAR PRESENSI</h3>            
                         </div>
                         <div class="box">
                             <div class="box-body">
@@ -381,7 +381,7 @@
             enabled: false
         },
         title: {
-            text: 'PERSENTASE ABSENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
+            text: 'PERSENTASE PRESENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

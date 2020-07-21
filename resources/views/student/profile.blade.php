@@ -210,7 +210,7 @@
                     <div class="tab-pane" id="absent">
                         <div class="panel">
                             <div class="panel-heading">
-                                <h1 class="panel-title">CATATAN ABSENSI SISWA</h1>
+                                <h1 class="panel-title">CATATAN PRESENSI SISWA</h1>
                             </div>
                             <div class="panel-heading">                                
                                 <h5 class="panel-title"><b>TAHUN AJARAN:</b>
@@ -254,7 +254,7 @@
                                         </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="12" class="text-center p-5">Belum ada data absensi</td>
+                                                <td colspan="12" class="text-center p-5">Belum ada data presensi</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
