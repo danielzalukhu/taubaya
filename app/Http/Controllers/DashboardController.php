@@ -11,6 +11,7 @@ use App\Grade;
 use App\GradeStudent;
 use App\AcademicYear;
 use App\Absent;
+use App\Subject;
 use Session;
 use DB;
 
@@ -43,7 +44,7 @@ class DashboardController extends Controller
             $request->session()->put('session_student_id', Auth::user()->student->id);
             $request->session()->put('session_user_email', Auth::user()->email);
         }        
-        // dd($request->session()->get('session_guardian_student_class'));
+        // dd($request->session()->get('session_student_class'));
         //END GLOBAL SESSION 
         
         $selected_student = GradeStudent::select(DB::raw('MAX(ACADEMIC_YEAR_ID) AS id'))->limit(1)->first()->id;      
@@ -94,10 +95,10 @@ class DashboardController extends Controller
             
             $daftar_penghargaan_siswa = $this->myAchievement($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));            
 
-            $warning_subject = $this->showAndCountIncompleteSubject();
+            $warning_subject = $this->showAndCountIncompleteSubject($request->session()->get('session_student_class'), $request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));
             
             return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'daftar_ketidaktuntasan',
-                                                   'grafik_absen_data', 'daftar_penghargaan_siswa'));
+                                                   'grafik_absen_data', 'daftar_penghargaan_siswa', 'warning_subject'));
         }            
     }
 
@@ -494,9 +495,6 @@ class DashboardController extends Controller
                                 ->first()->JUMLAHKETIDAKHADIRAN;
         
         $kehadiran = (($count_total_day_each_ay - $ketidakhadiran) / $count_total_day_each_ay) * 100; 
-        
-        // $value["count_total_day_each_ay"] = $count_total_day_each_ay;
-        // $value["type"] = $type;        
             
         $value["data"] = $data;
         $value["kehadiran"] = $kehadiran;
@@ -504,10 +502,20 @@ class DashboardController extends Controller
         return $value;
     }
 
-    public function showAndCountIncompleteSubject()
-    {        
- 
+    public function showAndCountIncompleteSubject($namakelas, $idsiswa, $idtahunajaran)
+    {                     
+        $subject = Subject::leftJoin('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
+                        ->join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
+                        ->select('subjects.id', 'subjects.CODE', 'subjects.DESCRIPTION', 
+                                'subjects.MINIMALPOIN as KKM', 'subject_reports.FINAL_SCORE')
+                        ->where('subjects.CODE', 'LIKE', '%' . $namakelas . '%')
+                        ->where('subject_records.STUDENTS_ID', $idsiswa)
+                        ->where('subject_records.ACADEMIC_YEAR_ID', $idtahunajaran)
+                        ->whereRaw('subject_reports.FINAL_SCORE < subjects.MINIMALPOIN')
+                        ->groupBy('subjects.id')
+                        ->get();                              
+        
+        return $subject;
     }
-
 }
 

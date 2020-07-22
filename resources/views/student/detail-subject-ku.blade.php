@@ -45,7 +45,7 @@
                             <div class="box-header">                                
                                 <!-- <h5 class="box-header-title"><b>TAHUN AJARAN:</b> -->
                                     <span>
-                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
+                                        <button type="button" class="btn btn-danger btn-sm pull-right" style="margin: 1px;">KURANG</button>
                                         <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
                                         <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
                                     </span>        
@@ -128,7 +128,7 @@
                                                     <td>{{ $dm->MINIMALPOIN }}</td>                                          
                                                     <td>
                                                         @if( $dm->FINAL_SCORE < $dm->MINIMALPOIN )
-                                                            <div class="btn btn-warning btn-sm">{{ $dm->FINAL_SCORE }}</div>
+                                                            <div class="btn btn-danger btn-sm">{{ $dm->FINAL_SCORE }}</div>
                                                         @elseif( $dm->FINAL_SCORE == $dm->MINIMALPOIN )
                                                             <div class="btn btn-primary btn-sm">{{ $dm->FINAL_SCORE }}</div>
                                                         @elseif( $dm->FINAL_SCORE > $dm->MINIMALPOIN )

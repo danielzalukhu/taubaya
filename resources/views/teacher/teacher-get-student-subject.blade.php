@@ -34,7 +34,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <button type="button" class="btn btn-warning btn-sm pull-right" style="margin: 1px;">KURANG</button>
+                                            <button type="button" class="btn btn-danger btn-sm pull-right" style="margin: 1px;">KURANG</button>
                                             <button type="button" class="btn btn-primary btn-sm pull-right" style="margin: 1px;">CUKUP</button>                                                                              
                                             <button type="button" class="btn btn-success btn-sm pull-right" style="margin: 1px;">BAIK</button>  
                                         </span>        
@@ -126,7 +126,7 @@
                                                 @if( $s->FINAL_SCORE == NULL )
                                                     
                                                 @elseif( $s->FINAL_SCORE < $s->MINIMALPOIN )
-                                                    <div class="btn btn-warning btn-sm">{{ $s->FINAL_SCORE }}</div>
+                                                    <div class="btn btn-danger btn-sm">{{ $s->FINAL_SCORE }}</div>
                                                 @elseif( $s->FINAL_SCORE == $s->MINIMALPOIN )
                                                     <div class="btn btn-primary btn-sm">{{ $s->FINAL_SCORE }}</div>
                                                 @elseif( $s->FINAL_SCORE > $s->MINIMALPOIN )

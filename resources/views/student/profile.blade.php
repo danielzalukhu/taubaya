@@ -44,7 +44,7 @@
                         <p class="pull-right">{{$achievement_point}}</p>
                       </li>
                       <li class="list-group-item">
-                        ABSENSI
+                        PRESENSI
                         <p class="pull-right"><b>{{ $kehadiran["kehadiran"] }} %</b></p>
                       </li>
                     </ul>
@@ -733,7 +733,7 @@
                 enabled: false
             },
             title: {
-                text: 'PERSENTASE PRESENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
+                text: 'PERSENTASE PRESENSI DALAM SATU PERIODE BERDASARKAN JENIS PRESENSI'
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

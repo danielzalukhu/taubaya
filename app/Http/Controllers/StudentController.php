@@ -451,7 +451,7 @@ class StudentController extends Controller
                                         'subject_reports.PTS', 'subject_reports.PAS', 'subject_reports.FINAL_SCORE')
                                 ->where('subjects.CODE', 'LIKE', '%' . $grade_name . '%')
                                 ->whereNull('subject_reports.SUBJECTS_ID');
-
+            
             $sub_query = GradeStudent::select(DB::raw('grades_students.ACADEMIC_YEAR_ID + 1 AS LASTID'))
                                     ->where('grades_students.STUDENTS_ID', $siswa->id)
                                     ->where('grades_students.GRADES_ID', $get_grade_id)
@@ -467,7 +467,8 @@ class StudentController extends Controller
                             ->where('subject_records.ACADEMIC_YEAR_ID', $sub_query)
                             ->union($first_query)
                             ->orderBy('ID')
-                            ->get();                  
+                            ->get();     
+            
         }
         
         return view('teacher.teacher-get-student-subject', compact('siswa', 'subject', 'grade_record', 'grade_name'));
