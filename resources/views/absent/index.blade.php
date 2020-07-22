@@ -113,7 +113,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="modalTitle">DAFTAR ABSEN KELAS</b></h1>
+                                    <h1 class="modal-title" id="modalTitle">DAFTAR PRESENSI KELAS</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -123,7 +123,7 @@
                                         <table id="table-absent-each-grade-list" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>TIPE ABSENSI</th>
+                                                <th>TIPE PRESENSI</th>
                                                 <th>JUMLAH KETIDAKHADIRAN/TIPE</th>
                                                 <th></th>
                                             </tr>
@@ -147,7 +147,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title" id="modalTitle">DETAIL ABSEN</b></h1>
+                                    <h1 class="modal-title" id="modalTitle">DETAIL PRESENSI</b></h1>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -381,7 +381,7 @@
             enabled: false
         },
         title: {
-            text: 'PERSENTASE PRESENSI DALAM SATU PERIODE BERDASARKAN JENIS ABSENSI'
+            text: 'PERSENTASE PRESENSI DALAM SATU PERIODE BERDASARKAN JENIS PRESENSI'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

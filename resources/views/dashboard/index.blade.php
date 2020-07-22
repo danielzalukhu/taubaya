@@ -283,6 +283,58 @@
                   </div>
                 @endif
               </div>
+
+              <div class="col-lg-12"> 
+                <div class="box box-danger">
+                  <div class="box-header with-border">
+                      <h3 class="box-title">Mata Pelajaran Dibawah KKM</h3>
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove">
+                          <i class="fa fa-times"></i>
+                        </button>
+                      </div>
+                  </div>
+                  <div class="box-body">
+                    <div class="table-responsive">
+                      <table class="table no-margin">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>KODE MAPEL</th>
+                            <th>NAMA MAPEL</th>
+                            <th>KKM</th>
+                            <th>NA</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @php $i=1 @endphp
+                          @forelse($warning_subject as $ws)
+                            <tr>
+                              <td>{{ $i++ }}</td>
+                              <td>{{ $ws->CODE }}</td>
+                              <td>{{ $ws->DESCRIPTION }}</td>
+                              <td>{{ $ws->KKM }}</td>
+                              <td>
+                                <div class="btn btn-danger btn-sm">{{ $ws->FINAL_SCORE }}</div>
+                              </td>
+                            </tr>
+                          @empty
+                            <tr>
+                                <td colspan="6" class="text-center p-5">Tidak ada nilai yang dibawah KKM</td>
+                            </tr>
+                          @endforelse
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>                  
+                  <div class="box-footer clearfix">
+                    <a href="{{route('student.mapelku')}}" class="btn btn-sm btn-warning  pull-right">Lihat Mata Pelajaran-Ku</a>
+                  </div>
+                <div>
+              </div>              
             @elseif(Auth::guard('web')->user()->ROLE === "STUDENT")
               <div class="col-lg-12">
                 @if( $grafik_absen_data["kehadiran"] < 95)

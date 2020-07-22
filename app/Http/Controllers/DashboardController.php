@@ -81,8 +81,10 @@ class DashboardController extends Controller
             
             $daftar_penghargaan_siswa = $this->myAchievement($request->session()->get('session_guardian_id'), $request->session()->get('session_academic_year_id'));            
             
+            $warning_subject = $this->showAndCountIncompleteSubject($request->session()->get('session_guardian_student_class'), $request->session()->get('session_guardian_id'), $request->session()->get('session_academic_year_id'));
+
             return view('dashboard.index', compact('tahun_ajaran', 'jumlah_penghargaan', 'jumlah_pelanggaran', 'daftar_ketidaktuntasan',
-                                                   'grafik_absen_data', 'daftar_penghargaan_siswa'));
+                                                   'grafik_absen_data', 'daftar_penghargaan_siswa', 'warning_subject'));
         }
         else{
             $jumlah_penghargaan = $this->countAchievementKu($request->session()->get('session_student_id'), $request->session()->get('session_academic_year_id'));
@@ -492,6 +494,7 @@ class DashboardController extends Controller
         $ketidakhadiran = Absent::select(DB::raw('SUM(TYPE) AS JUMLAHKETIDAKHADIRAN'))
                                 ->where('ACADEMIC_YEAR_ID', $academic_year_id)
                                 ->where('STUDENTS_ID', $idsiswa)
+                                ->where('TYPE', 'NOT LIKE', '%LEAVE%')
                                 ->first()->JUMLAHKETIDAKHADIRAN;
         
         $kehadiran = (($count_total_day_each_ay - $ketidakhadiran) / $count_total_day_each_ay) * 100; 
@@ -503,7 +506,7 @@ class DashboardController extends Controller
     }
 
     public function showAndCountIncompleteSubject($namakelas, $idsiswa, $idtahunajaran)
-    {                     
+    {        
         $subject = Subject::leftJoin('subject_reports', 'subject_reports.SUBJECTS_ID', 'subjects.id')
                         ->join('subject_records', 'subject_reports.SUBJECT_RECORD_ID', 'subject_records.id')
                         ->select('subjects.id', 'subjects.CODE', 'subjects.DESCRIPTION', 
@@ -513,8 +516,8 @@ class DashboardController extends Controller
                         ->where('subject_records.ACADEMIC_YEAR_ID', $idtahunajaran)
                         ->whereRaw('subject_reports.FINAL_SCORE < subjects.MINIMALPOIN')
                         ->groupBy('subjects.id')
-                        ->get();                              
-        
+                        ->get(); 
+
         return $subject;
     }
 }
