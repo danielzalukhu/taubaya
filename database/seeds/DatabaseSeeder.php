@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TokenSeeder::class);
         // $this->call(StudentSeeder::class);
         // $this->call(GradeStudentSeeder::class);
-        // $this->call(UserSeeder::class);
+        $this->call(UserSeeder::class);
         $this->call(ViolationSeeder::class);
         $this->call(AchievementSeeder::class);
         $this->call(SubjectSeeder::class);
