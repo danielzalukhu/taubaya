@@ -97,19 +97,20 @@ class SubjectImport implements ToCollection, WithCalculatedFormulas
 
     public function formula($mapel_id)
     {                    
-        $tmp_nilai = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
-                                ->select('students.*', 'activities_students.*')
-                                ->where('activities_students.SUBJECTS_ID', $mapel_id)
-                                ->where('activities_students.ACADEMIC_YEAR_ID', $this->request->session()->get("session_academic_year_id"))
-                                ->get();  
-        
+                
         $arrayOfStudent = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
                                 ->select('students.*', 'activities_students.*')
                                 ->where('activities_students.SUBJECTS_ID', $mapel_id)
                                 ->where('activities_students.ACADEMIC_YEAR_ID', $this->request->session()->get("session_academic_year_id"))
                                 ->groupBy('activities_students.STUDENTS_ID')
-                                ->get();        
-              
+                                ->get(); 
+
+        $tmp_nilai = ActivityStudent::join('students', 'activities_students.STUDENTS_ID', 'students.id')
+                                ->select('students.*', 'activities_students.*')
+                                ->where('activities_students.SUBJECTS_ID', $mapel_id)
+                                ->where('activities_students.ACADEMIC_YEAR_ID', $this->request->session()->get("session_academic_year_id"))
+                                ->get();  
+       
         foreach ($arrayOfStudent as $student) 
         {
             $tmp_nama = $student->FNAME ." ". $student->LNAME;
